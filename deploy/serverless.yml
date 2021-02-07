@@ -1,0 +1,43 @@
+service: todo-app
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage}
+  region: us-east-1
+  memorySize: 128
+  timeout: 10
+  logRetentionInDays: 14
+  deploymentBucket:
+    blockPublicAccess: true
+    name: todo-app-1498571
+    maxPreviousDeploymentArtifacts: 3
+  versionFunctions: false
+  endpointType: edge
+  apiGateway:
+    shouldStartNameWithService: true
+
+functions:
+  api:
+    handler: lambda.handler
+    memorySize: 512
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+
+# resources:
+#   Resources:
+#     usersTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: usersTable
+#         AttributeDefinitions:
+#           - AttributeName: email
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: email
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
