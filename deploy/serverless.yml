@@ -23,6 +23,9 @@ functions:
     memorySize: 512
     events:
       - http:
+          path: /
+          method: get
+      - http:
           path: /{proxy+}
           method: any
 

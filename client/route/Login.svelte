@@ -25,3 +25,5 @@
 		</button>
 	</p>
 </form>
+
+<pre>{JSON.stringify(parameters, undefined, 2)}</pre>

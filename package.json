@@ -2,11 +2,13 @@
   "name": "todo-app",
   "version": "0.0.0",
   "scripts": {
-    "setup": "npm run symlink && npm-run-all --parallel glob:*",
+    "setup": "rimraf deploy/public && npm run symlink && npm-run-all --parallel glob:*",
+    "symlink": "rimraf client/node_modules && mkdirp client/node_modules && cd client/node_modules && symlink ../component/ component && symlink ../lib/ lib  && symlink ../api/ api && cd ../.. && symlink public server/public",
     "glob:client": "glob-module-file --cwd='./client' --pattern='route/**/*.route.js' --format=es --exportWithPath --pathPrefix='./' --outputPath=client/globbed-routes.js",
     "glob:server": "glob-module-file --cwd='./server' --pattern='route/**/*.route.js' --format=es --exportWithPath --importStar --pathPrefix='./' --outputPath=server/globbed-routes.js",
     "prebuild": "npm run setup",
     "build": "rollup -c",
+    "postbuild": "ncp public deploy/public",
     "predeploy": "npm run build",
     "deploy": "cd deploy && serverless deploy --stage=dev",
     "dev": "npm run setup && npm-run-all --parallel watch:js watch:glob-client watch:glob-server",
@@ -14,8 +16,7 @@
     "start": "node -r esm server/local-development.js",
     "watch:js": "rollup -c -w",
     "watch:glob-client": "watch 'npm run glob:client' client/route",
-    "watch:glob-server": "watch 'npm run glob:server' server/route",
-    "symlink": "rimraf client/node_modules && mkdirp client/node_modules && cd client/node_modules && symlink ../component/ component && symlink ../lib/ lib  && symlink ../api/ api && cd ../.. && symlink public server/public"
+    "watch:glob-server": "watch 'npm run glob:server' server/route"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -26,6 +27,7 @@
     "esm": "^3.2.25",
     "glob-module-file": "^3.0.2",
     "mkdirp": "^1.0.4",
+    "ncp": "^2.0.0",
     "npm-run-all": "^4.1.5",
     "polka": "^0.5.2",
     "rimraf": "^3.0.2",

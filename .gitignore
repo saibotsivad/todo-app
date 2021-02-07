@@ -8,4 +8,5 @@
 /server/public
 /deploy/.serverless
 /deploy/build.js
+/deploy/public
 /secrets.sh
