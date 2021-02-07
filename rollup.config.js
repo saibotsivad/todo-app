@@ -1,6 +1,8 @@
 import svelte from 'rollup-plugin-svelte'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
+import run from '@rollup/plugin-run'
+import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
@@ -71,10 +73,14 @@ export default [
 		}
 	},
 	{
-		input: 'server/lambda.js',
+		input: production
+			? 'server/lambda.js'
+			: 'server/local-development.js',
 		output: {
 			format: 'cjs',
-			exports: 'default',
+			exports: production
+				? 'default'
+				: undefined,
 			file: 'deploy/build.js'
 		},
 		plugins: [
@@ -84,13 +90,16 @@ export default [
 			// consult the documentation for details:
 			// https://github.com/rollup/plugins/tree/master/packages/commonjs
 			resolve({
-				browser: false
+				browser: false,
+				preferBuiltins: true
 			}),
 			commonjs(),
 
+			json(),
+
 			// In dev mode, call `npm run start` once
 			// the API bundle has been generated
-			// !production && serve(),
+			!production && run(),
 
 			// If we're building for production (npm run build
 			// instead of npm run dev), minify
