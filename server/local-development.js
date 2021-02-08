@@ -1,7 +1,7 @@
 import { setupServer } from './setup-server.js'
 import polka from 'polka'
 
-let api = polka()
+const api = polka()
 
 setupServer(api, true)
 

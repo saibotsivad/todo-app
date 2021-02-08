@@ -77,6 +77,7 @@ export default [
 			? 'server/lambda.js'
 			: 'server/local-development.js',
 		output: {
+			sourcemap: true,
 			format: 'cjs',
 			exports: production
 				? 'default'

@@ -23,11 +23,11 @@ export const html = `<!DOCTYPE html>
 
 	<title>todo app</title>
 
-	<link rel="icon" type="image/png" href="/asset/favicon.png">
-	<link rel="stylesheet" href="/asset/global.css">
-	<link rel="stylesheet" href="/build/bundle.css">
+	<link rel="icon" type="image/png" href="./asset/favicon.png">
+	<link rel="stylesheet" href="./asset/global.css">
+	<link rel="stylesheet" href="./build/bundle.css">
 
-	<script defer type="module" src="/build/main.js"></script>
+	<script defer type="module" src="./build/main.js"></script>
 </head>
 
 <body>

@@ -30,8 +30,16 @@ export const security = [
 ]
 
 export const handler = async (req, res) => {
-	console.log('hello?')
 	// console.log('request user', req.currentUser)
 	// res.end(`the user was ${req.currentUser ? '' : 'not '} found`)
-	res.end('hello?')
+	res.end(JSON.stringify({
+		data: {
+			id: '001',
+			type: 'user',
+			attributes: {
+				firstName: 'John',
+				lastName: 'Jingleheimerschmidt'
+			}
+		}
+	}))
 }

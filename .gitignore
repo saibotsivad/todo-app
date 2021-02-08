@@ -6,7 +6,9 @@
 /server/globbed-*
 /server/node_modules
 /server/public
+/deploy/node_modules
 /deploy/.serverless
 /deploy/build.js
+/deploy/build.js.map
 /deploy/public
 /secrets.sh
