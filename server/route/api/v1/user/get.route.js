@@ -1,3 +1,5 @@
+import { name as cookie } from 'security/cookie.js'
+
 export const summary = `
 	Fetch \`user\` object for authenticated request.
 `
@@ -26,7 +28,10 @@ export const responses = {
 }
 
 export const security = [
-	{ cookie: [] }
+	{
+		type: cookie,
+		scopes: []
+	}
 ]
 
 export const handler = async (req, res) => {

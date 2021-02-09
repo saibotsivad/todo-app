@@ -16,6 +16,8 @@ provider:
   endpointType: edge
   apiGateway:
     shouldStartNameWithService: true
+  environment:
+    TABLE_NAME: todo-app-${opt:stage}
 
 functions:
   api:
