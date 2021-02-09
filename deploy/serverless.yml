@@ -7,11 +7,11 @@ provider:
   region: us-east-1
   memorySize: 128
   timeout: 10
-  logRetentionInDays: 14
+  logRetentionInDays: 7
   deploymentBucket:
     blockPublicAccess: true
     name: todo-app-1498571
-    maxPreviousDeploymentArtifacts: 3
+    maxPreviousDeploymentArtifacts: 1
   versionFunctions: false
   endpointType: edge
   apiGateway:
@@ -20,7 +20,6 @@ provider:
 functions:
   api:
     handler: lambda.handler
-    memorySize: 512
     events:
       - http:
           path: /
@@ -29,18 +28,20 @@ functions:
           path: /{proxy+}
           method: any
 
-# resources:
-#   Resources:
-#     usersTable:
-#       Type: AWS::DynamoDB::Table
-#       Properties:
-#         TableName: usersTable
-#         AttributeDefinitions:
-#           - AttributeName: email
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: email
-#             KeyType: HASH
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: todo-app-${opt:stage}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
