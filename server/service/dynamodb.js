@@ -1,5 +1,4 @@
 import { createAwsSigner } from 'sign-aws-requests'
-import { post } from 'httpie'
 import got from 'got'
 
 const config = {

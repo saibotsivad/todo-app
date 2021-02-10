@@ -1,6 +1,7 @@
 .DS_Store
 /node_modules
 /public/build
+/public/docs
 /client/globbed-*
 /client/node_modules
 /server/globbed-*
