@@ -15,14 +15,14 @@
     "generate-openapi": "ncp node_modules/swagger-ui-dist public/docs && node generate-openapi.js",
     "prebuild": "npm run setup && cd deploy && npm ci && cd ..",
     "build": "rollup -c",
-    "postbuild": "npm run generate-openapi && ncp public deploy/public",
+    "postbuild": "node generate-openapi.js && ncp public deploy/public",
     "predeploy": "npm run build",
     "deploy": "cd deploy && serverless deploy --stage=$STAGE",
     "dev": "npm run setup && npm-run-all --parallel watch:js watch:glob-client watch:glob-server",
     "start": "node server/local-development.js",
     "watch:js": "rollup -c -w",
     "watch:glob-client": "watch 'npm run glob:client' client/route",
-    "watch:glob-server": "watch 'npm run glob:server' server/route"
+    "watch:glob-server": "watch 'npm run glob:server && node generate-openapi.js' server/route"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",

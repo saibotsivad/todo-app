@@ -4,11 +4,10 @@ import compression from 'compression'
 
 const compress = compression()
 
-const staticPublicFiles = sirv('./public', {
-	maxAge: 60
-})
+export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
+	const { verbose, maxAge } = options
+	const staticPublicFiles = sirv('./public', { maxAge })
 
-export const setupServer = (api, verbose) => {
 	if (verbose) { console.log('Adding routes:') }
 
 	api.use(compress, staticPublicFiles)

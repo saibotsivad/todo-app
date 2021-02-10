@@ -3,7 +3,7 @@ import polka from 'polka'
 
 const api = polka()
 
-setupServer(api, true)
+setupServer(api, { verbose: true, maxAge: 0 })
 
 api.listen(3000, err => {
 	if (err) throw err;
