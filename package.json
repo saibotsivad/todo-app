@@ -5,7 +5,7 @@
     "setup": "rimraf deploy/public && npm-run-all --parallel symlink:* && npm-run-all --parallel glob:*",
     "symlink:client": "rimraf client/node_modules && mkdirp client/node_modules && cd client/node_modules && symlink ../component/ component && symlink ../lib/ lib  && symlink ../api/ api",
     "symlink:dev": "symlink public server/public",
-    "symlink:server": "rimraf server/node_modules mkdirp server/node_modules && cd server/node_modules && symlink ../security security && symlink ../service service && symlink ../lib lib",
+    "symlink:server": "rimraf server/node_modules && mkdirp server/node_modules && cd server/node_modules && symlink ../security security && symlink ../service service && symlink ../lib lib",
     "glob:client": "glob-module-file --cwd='./client' --pattern='route/**/*.route.js' --format=es --exportWithPath --pathPrefix='./' --outputPath=client/globbed-routes.js",
     "glob:server": "glob-module-file --cwd='./server' --pattern='route/**/*.route.js' --format=es --exportWithPath --importStar --pathPrefix='./' --outputPath=server/globbed-routes.js",
     "generate-openapi": "ncp node_modules/swagger-ui-dist public/docs && node -r esm generate-openapi.js",
