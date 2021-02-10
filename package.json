@@ -1,6 +1,10 @@
 {
   "name": "todo-app",
   "version": "0.0.0",
+  "engines": {
+    "node": "14.15.4"
+  },
+  "type": "module",
   "scripts": {
     "setup": "rimraf deploy/public && npm-run-all --parallel symlink:* && npm-run-all --parallel glob:*",
     "symlink:client": "rimraf client/node_modules && mkdirp client/node_modules && cd client/node_modules && symlink ../component/ component && symlink ../lib/ lib  && symlink ../api/ api",
@@ -8,14 +12,14 @@
     "symlink:server": "rimraf server/node_modules && mkdirp server/node_modules && cd server/node_modules && symlink ../security security && symlink ../service service && symlink ../lib lib",
     "glob:client": "glob-module-file --cwd='./client' --pattern='route/**/*.route.js' --format=es --exportWithPath --pathPrefix='./' --outputPath=client/globbed-routes.js",
     "glob:server": "glob-module-file --cwd='./server' --pattern='route/**/*.route.js' --format=es --exportWithPath --importStar --pathPrefix='./' --outputPath=server/globbed-routes.js",
-    "generate-openapi": "ncp node_modules/swagger-ui-dist public/docs && node -r esm generate-openapi.js",
+    "generate-openapi": "ncp node_modules/swagger-ui-dist public/docs && node generate-openapi.js",
     "prebuild": "npm run setup && cd deploy && npm ci && cd ..",
     "build": "rollup -c",
     "postbuild": "npm run generate-openapi && ncp public deploy/public",
     "predeploy": "npm run build",
     "deploy": "cd deploy && serverless deploy --stage=$STAGE",
     "dev": "npm run setup && npm-run-all --parallel watch:js watch:glob-client watch:glob-server",
-    "start": "node -r esm server/local-development.js",
+    "start": "node server/local-development.js",
     "watch:js": "rollup -c -w",
     "watch:glob-client": "watch 'npm run glob:client' client/route",
     "watch:glob-server": "watch 'npm run glob:server' server/route"
@@ -26,7 +30,6 @@
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-run": "^2.0.2",
     "compression": "^1.7.4",
-    "esm": "^3.2.25",
     "glob-module-file": "^3.0.2",
     "got": "^11.8.1",
     "mkdirp": "^1.0.4",
