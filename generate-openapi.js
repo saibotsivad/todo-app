@@ -2,6 +2,7 @@ import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { readFileSync, writeFileSync } from 'fs'
 import routes from './server/globbed-routes.js'
+import * as tags from './server/lib/tags.js'
 
 const pathToRepo = dirname(fileURLToPath(import.meta.url))
 const swaggerHtmlPath = join(pathToRepo, 'public/docs/index.html')
@@ -15,47 +16,28 @@ const clean = string => string && string
 	.join(' ')
 	.trim()
 
+// Note: this counts on tag descriptions being unique.
+const tagDescriptionToKey = Object
+	.keys(tags)
+	.reduce((map, name) => {
+		map[tags[name]] = name
+		return map
+	}, {})
+
 const openapi = {
-		swagger: '2.0',
-		info: {
-				version,
-				title
-		},
-		tags: [
-				// {
-				//     name: 'some-tag',
-				//     description: 'description'
-				// }
-		],
-		paths: {
-		// '/example/path': {
-	//           post: {
-	//               summary: 'short',
-	//               description: 'long',
-	//               tags: [ 'some-tag' ],
-	//               parameters: [{
-	//                   in: 'body',
-	//                   name: 'body',
-	//                   description: 'long',
-	//                   required: true,
-	//                   schema: {
-	//                       $ref: '#/definitions/NameOfProperty'
-	//                   }
-	//               }],
-	//               responses: {
-	//                   200: {
-	//                       description: 'OK'
-	//                   },
-	//                   401: {
-	//                       description: 'The request is being made with a token that is not authorized.'
-	//                   }
-	//               },
-	//               security: [
-	//               	{ name: [ 'scope' ] }
-	//               ]
-	//           }
-	//       }
-		}
+	swagger: '2.0',
+	info: {
+		version,
+		title,
+		description: readFileSync('./openapi-description.md', 'utf8')
+	},
+	tags: Object
+		.keys(tags)
+		.map(name => ({
+			name,
+			description: clean(tags[name])
+		})),
+	paths: {}
 }
 
 routes.forEach(({ path: routePath, export: route }) => {
@@ -68,12 +50,14 @@ routes.forEach(({ path: routePath, export: route }) => {
 	const method = path.pop().toLowerCase()
 	path = '/' + path.join('/')
 
+	if (!path.startsWith('/api/')) return
+
 	openapi.paths[path] = openapi.paths[path] || {}
 	openapi.paths[path][method] = {
 		summary: clean(route.summary),
 		description: clean(route.description),
-		tags: route.tags,
-		parameters: route.parameters, // probably a transform required
+		tags: route.tags.map(description => tagDescriptionToKey[description]),
+		parameters: route.parameters, // probably a transform required?
 		responses: route.responses && Object
 			.keys(route.responses)
 			.reduce((map, key) => {
@@ -93,7 +77,9 @@ routes.forEach(({ path: routePath, export: route }) => {
 const html = readFileSync(swaggerHtmlPath, 'utf8')
 writeFileSync(
 	swaggerHtmlPath,
-	html.replace('https://petstore.swagger.io/v2/swagger.json', './swagger.json'),
+	html
+		.replace('https://petstore.swagger.io/v2/swagger.json', './swagger.json')
+		.replace('<title>Swagger UI</title>', `<title>Todo App API</title>`),
 	'utf8'
 )
 

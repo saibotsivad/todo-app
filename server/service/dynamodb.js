@@ -8,6 +8,10 @@ const config = {
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID
 }
 
+if (!config.region || !config.secretAccessKey || !config.accessKeyId) {
+	throw Error('AWS credentials not loaded.')
+}
+
 const sign = createAwsSigner({ config })
 
 const awsClient = got.extend({
@@ -22,7 +26,6 @@ const awsClient = got.extend({
 })
 
 export const db = async (type, params) => {
-	console.log('PARAMS', params)
 	const request = {
 		url: `https://dynamodb.${config.region}.amazonaws.com`,
 		method: 'POST',
@@ -31,7 +34,16 @@ export const db = async (type, params) => {
 			'X-Amz-Target': `DynamoDB_20120810.${type}`,
 			Host: `dynamodb.${config.region}.amazonaws.com`
 		},
+		retry: {
+			limit: 0
+		},
+		throwHttpErrors: false,
 		body: JSON.stringify(params)
 	}
-	return awsClient(request)
+	const response = await awsClient(request)
+	const data = JSON.parse(response.body)
+	return {
+		data,
+		status: response.statusCode
+	}
 }

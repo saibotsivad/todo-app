@@ -1,22 +1,24 @@
 import { name as cookie } from 'security/cookie.js'
+import { auth } from 'lib/tags.js'
 
 export const summary = `
-	Fetch \`user\` object for authenticated request.
+	Fetch the [user] object for an authenticated request.
 `
 
 export const description = `
-	Retrieve the \`user\` object for the authenticated
-	request, or throw an error if not authenticated.
+	If the request is authenticated, this endpoint will return
+	the [user] object associated with the authentication. If the
+	request is not authenticated, it will return an error.
 `
 
 export const tags = [
-	'user'
+	auth
 ]
 
 export const responses = {
 	200: {
 		description: `
-			The complete \`user\` object of the authenticated
+			The complete [user] object of the authenticated
 			request.
 		`
 	},
@@ -40,7 +42,7 @@ export const handler = async (req, res) => {
 	res.end(JSON.stringify({
 		data: {
 			id: '001',
-			type: 'user',
+			type: [user],
 			attributes: {
 				firstName: 'John',
 				lastName: 'Jingleheimerschmidt'

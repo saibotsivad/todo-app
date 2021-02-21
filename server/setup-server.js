@@ -1,16 +1,30 @@
+import errorFormatter from 'lib/error-formatter.js'
 import routes from './globbed-routes.js'
 import sirv from 'sirv'
 import compression from 'compression'
+import { json } from 'lib/polka-parser.js'
 
-const compress = compression()
+const errorHandler = handler => async (req, res) => {
+	try {
+		return await handler(req, res)
+	} catch (error) {
+		error = errorFormatter(error)
+		res.setHeader('Content-Type', 'application/json')
+		res.statusCode = parseInt(error.status, 10)
+		res.end(JSON.stringify({ errors: [ error ] }))
+	}
+}
 
 export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 	const { verbose, maxAge } = options
-	const staticPublicFiles = sirv('./public', { maxAge })
 
 	if (verbose) { console.log('Adding routes:') }
 
-	api.use(compress, staticPublicFiles)
+	api.use(
+		compression(),
+		sirv('./public', { maxAge }),
+		json()
+	)
 
 	routes.forEach(route => {
 		// from:
@@ -27,6 +41,6 @@ export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 		const method = path.pop()
 		path = '/' + path.join('/')
 		if (verbose) { console.log(' - ' + method.toUpperCase() + ' ' + path) }
-		api[method](path, route.export.handler)
+		api[method](path, errorHandler(route.export.handler))
 	})
 }
