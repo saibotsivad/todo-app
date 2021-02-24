@@ -18,6 +18,9 @@ provider:
     shouldStartNameWithService: true
   environment:
     TABLE_NAME: todo-app-${opt:stage}
+    # NOTE: When run locally, this environment variable is not set, but
+    # in production it should be set via this YAML file.
+    NODE_ENV: production
 
 functions:
   api:

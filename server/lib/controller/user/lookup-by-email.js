@@ -8,9 +8,9 @@ export default async ({ email }) => {
 				S: 'email'
 			},
 			sk: {
-				S: `email|${email}`
+				S: `email|${(email || '').toLowerCase()}`
 			}
 		}
 	})
-	return data
+	return data && data.Item || null
 }
