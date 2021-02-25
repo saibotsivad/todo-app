@@ -1,13 +1,13 @@
+import { UnauthorizedRequest } from 'lib/exceptions.js'
+import { parseCookie } from 'lib/cookie.js'
+
 export const name = 'cookie'
 
-export const handler = async () => {
-	//
-}
-
-function authorize(req, res, next) {
-	// mutate req; available later
-	req.token = req.headers['authorization']
-	req.token
-		? next()
-		: ((res.statusCode=401) && res.end('No token!'))
+export const authorize = async req => {
+	const { userId, sessionId, sessionSecret } = parseCookie(req.headers.cookie) || {}
+	if (!userId || !sessionId || !sessionSecret) {
+		throw new UnauthorizedRequest('Could not locate or parse cookie.')
+	}
+	const session = await lookupSession({ userId, sessionId, sessionSecret })
+	req.currentUserId = userId
 }

@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
 
-// TODO: switch to bcrypt
+// TODO: switch to bcrypt?
 
 const pbkdf2 = promisify(crypto.pbkdf2)
 const randomBytes = promisify(crypto.randomBytes)
@@ -32,4 +32,9 @@ export const validatePassword = async ({ hash, password }) => {
 		// an error during hashing is equivalent to an invalid password
 	}
 	return false
+}
+
+export const generatePassword = async () => {
+	const bytes = await randomBytes(KEY_LENGTH)
+	return bytes.toString('base64')
 }

@@ -1,6 +1,8 @@
-import { BadRequest } from 'lib/exceptions.js'
 import { auth } from 'lib/tags.js'
+import { BadRequest } from 'lib/exceptions.js'
+import { generateCookie } from 'lib/cookie.js'
 import { validatePassword } from 'lib/password.js'
+import createUserSession from 'lib/controller/user/create-user-session.js'
 import lookupByEmail from 'lib/controller/user/lookup-by-email.js'
 
 export const summary = `
@@ -65,14 +67,19 @@ export const handler = async (req, res) => {
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to authenticate.')
 	}
-	console.log('-----------------', { email, password })
 	const user = await lookupByEmail({ email })
-	if (!user) {
-		throw new BadRequest('Could not locate user by email.')
+	if (!user || !user.attributes.password) {
+		throw new BadRequest('Could not locate valid user by email.')
 	}
-	if (!(await validatePassword({ hash: user.pw && user.pw.S, password }))) {
+	if (!(await validatePassword({ hash: user.attributes.password, password }))) {
 		throw new BadRequest('Could not validate password.')
 	}
-	res.setHeader('Set-Cookie', 'foo-bar: bizz-baz')
+	const { sessionId, sessionSecret, expirationDate } = await createUserSession({ user })
+	res.setHeader('X-Set-Cookie', generateCookie({
+		userId: user.id,
+		sessionId,
+		sessionSecret,
+		expirationDate
+	}))
 	res.end()
 }

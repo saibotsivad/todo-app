@@ -1,24 +1,13 @@
-import { BadRequest } from 'lib/exceptions.js'
+import { BadRequest, ItemAlreadyExists } from 'lib/exceptions.js'
 import { db } from 'service/dynamodb.js'
 import { normalizeEmail } from 'lib/email.js'
 import { hashPassword } from 'lib/password.js'
+import { itemAlreadyExists } from 'lib/dynamodb-helpers.js'
 import KSUID from 'ksuid'
 
 const passwordIsPseudoReasonable = password => password.length > 10
 	&& /[a-z]/.test(password)
 	&& /[0-9]/.test(password)
-
-const userAlreadyExists = data => data
-	&& data.CancellationReasons
-	&& data.CancellationReasons.find(({ Code }) => Code === 'ConditionalCheckFailed')
-
-class UserAlreadyExists extends Error {
-	constructor(message) {
-		super(message)
-		this.status = 409
-		this.title = message
-	}
-}
 
 export default async ({ email, password }) => {
 	if (!passwordIsPseudoReasonable(password)) {
@@ -60,7 +49,7 @@ export default async ({ email, password }) => {
 					ReturnValuesOnConditionCheckFailure: 'NONE'
 				}
 			},
-			// user for profile/details lookup off sk
+			// user-by-id collection, for profile, details, session, etc
 			{
 				Put: {
 					TableName: process.env.TABLE_NAME,
@@ -69,7 +58,7 @@ export default async ({ email, password }) => {
 							S: `user|${userId}`
 						},
 						sk: {
-							S: `email|${email}`
+							S: 'user'
 						},
 						c,
 						u
@@ -82,10 +71,10 @@ export default async ({ email, password }) => {
 					TableName: process.env.TABLE_NAME,
 					Item: {
 						pk: {
-							S: 'email'
+							S: `email|${email}`
 						},
 						sk: {
-							S: `email|${email}`
+							S: 'email'
 						},
 						userId: {
 							S: userId
@@ -106,8 +95,8 @@ export default async ({ email, password }) => {
 		]
 	})
 
-	if (userAlreadyExists(data)) {
-		throw new UserAlreadyExists('User already exists for that email address.')
+	if (itemAlreadyExists(data)) {
+		throw new ItemAlreadyExists('User already exists for that email address.')
 	}
 
 	return {

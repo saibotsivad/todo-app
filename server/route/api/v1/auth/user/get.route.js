@@ -1,4 +1,4 @@
-import { name as cookie } from 'security/cookie.js'
+import { name as cookie, authorize } from 'security/cookie.js'
 import { auth } from 'lib/tags.js'
 
 export const summary = `
@@ -30,23 +30,16 @@ export const responses = {
 }
 
 export const security = [
-	{
-		type: cookie,
-		scopes: []
-	}
+	[
+		{
+			type: cookie,
+			authorize,
+			scopes: []
+		}
+	]
 ]
 
 export const handler = async (req, res) => {
-	// console.log('request user', req.currentUser)
-	// res.end(`the user was ${req.currentUser ? '' : 'not '} found`)
-	res.end(JSON.stringify({
-		data: {
-			id: '001',
-			type: [user],
-			attributes: {
-				firstName: 'John',
-				lastName: 'Jingleheimerschmidt'
-			}
-		}
-	}))
+	res.setHeader('Content-Type', 'application/json')
+	res.end(JSON.stringify(req.currentUser))
 }

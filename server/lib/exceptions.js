@@ -8,6 +8,16 @@ export class BadRequest extends Error {
 	}
 }
 
+export class ItemAlreadyExists extends Error {
+	constructor(message, meta) {
+		super(message)
+		this.status = 409
+		this.title = 'The item attempting to be created already exists or conflicts.'
+		this.detail = message
+		this.meta = meta
+	}
+}
+
 export class UnauthorizedRequest extends Error {
 	constructor(message, meta) {
 		super(message)

@@ -7,21 +7,31 @@ export default {
 		value: 'user',
 		required: true
 	},
-	created: {
-		type: 'date'
+	attributes: {
+		type: 'object',
+		properties: {
+			activated: {
+				type: 'boolean'
+			},
+			email: {
+				type: 'string',
+				required: true
+			},
+			password: {
+				type: 'string',
+				required: true
+			}
+		}
 	},
-	updated: {
-		type: 'date'
-	},
-	activated: {
-		type: 'boolean'
-	},
-	email: {
-		type: 'string',
-		required: true
-	},
-	password: {
-		type: 'string',
-		required: true
+	meta: {
+		type: 'object',
+		properties: {
+			created: {
+				type: 'date'
+			},
+			updated: {
+				type: 'date'
+			}
+		}
 	}
 }
