@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte'
 
+	export let loggingIn
 	export let parameters
 	let email
 	let password
@@ -20,7 +21,7 @@
 	</p>
 
 	<p>
-		<button type="submit">
+		<button type="submit" disabled={loggingIn}>
 			log in
 		</button>
 	</p>

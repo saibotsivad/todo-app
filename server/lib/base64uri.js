@@ -19,7 +19,7 @@ export const decode = string => Buffer
 	.from(
 		string
 			.replace(/-/g, '+')
-			.replce(/_/g, '\\'),
+			.replace(/_/g, '\\'),
 		'base64'
 	)
 	.toString('utf8')

@@ -1,14 +1,14 @@
 import { db } from 'service/dynamodb.js'
 
-export default async ({ userId, sessionId }) => {
+export default async ({ id }) => {
 	const { data, status } = await db('GetItem', {
 		TableName: process.env.TABLE_NAME,
 		Key: {
 			pk: {
-				S: `user|${userId}`
+				S: `user|${id}`
 			},
 			sk: {
-				S: `session|${sessionId}`
+				S: 'user'
 			}
 		}
 	})
@@ -18,15 +18,15 @@ export default async ({ userId, sessionId }) => {
 	}
 
 	return {
-		id: sessionId,
-		type: 'session',
+		id,
+		type: 'user',
 		attributes: {
-			password: data.Item.pw.S
+			// email: data.Item.pk.S.split('|')[1],
+			// password: data.Item.pw.S
 		},
 		meta: {
 			created: data.Item.c.S,
-			updated: data.Item.c.S,
-			expiration: data.Item.e.S
+			updated: data.Item.c.S
 		}
 	}
 }

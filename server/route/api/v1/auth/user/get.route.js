@@ -1,5 +1,6 @@
 import { name as cookie, authorize } from 'security/cookie.js'
 import { auth } from 'lib/tags.js'
+import lookupById from 'lib/controller/user/lookup-by-id.js'
 
 export const summary = `
 	Fetch the [user] object for an authenticated request.
@@ -41,5 +42,5 @@ export const security = [
 
 export const handler = async (req, res) => {
 	res.setHeader('Content-Type', 'application/json')
-	res.end(JSON.stringify(req.currentUser))
+	res.end(JSON.stringify(await lookupById({ id: req.currentUserId })))
 }

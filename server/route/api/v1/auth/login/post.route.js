@@ -75,11 +75,12 @@ export const handler = async (req, res) => {
 		throw new BadRequest('Could not validate password.')
 	}
 	const { sessionId, sessionSecret, expirationDate } = await createUserSession({ user })
-	res.setHeader('X-Set-Cookie', generateCookie({
+	res.setHeader('Set-Cookie', generateCookie({
 		userId: user.id,
 		sessionId,
 		sessionSecret,
 		expirationDate
 	}))
-	res.end()
+	res.setHeader('Content-Type', 'application/json')
+	res.end(JSON.stringify({ ok: true }))
 }

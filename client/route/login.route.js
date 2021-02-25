@@ -1,5 +1,5 @@
 import { router } from 'lib/state-router.js'
-import { getCurrentUser } from 'api/user.js'
+import { getCurrentUser, login } from 'api/user.js'
 import template from './Login.svelte'
 
 const getRedirect = parameters => {
@@ -30,7 +30,16 @@ export default {
 		),
 	activate: ({ domApi }) => {
 		domApi.$on('login', ({ detail: { email, password }}) => {
-			console.log({ email, password })
+			domApi.$set({ loggingIn: true })
+			login({ email, password })
+				.then(response => {
+					domApi.$set({ loggingIn: false })
+					console.log('done!', response)
+				})
+				.catch(error => {
+					domApi.$set({ loggingIn: false })
+					console.error('ohno!', error)
+				})
 		})
 	}
 }
