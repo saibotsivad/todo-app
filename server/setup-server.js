@@ -1,9 +1,9 @@
 import errorFormatter from 'lib/error-formatter.js'
 import routes from './globbed-routes.js'
-import sirv from 'sirv'
 import compression from 'compression'
 import secureRoute from 'lib/secure-route.js'
 import { json } from 'lib/polka-parser.js'
+import serveStatic from 'serve-static'
 
 export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 	const { verbose, maxAge } = options
@@ -11,9 +11,9 @@ export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 	if (verbose) { console.log('Adding routes:') }
 
 	api.use(
+		json(),
 		compression(),
-		sirv('./public', { maxAge }),
-		json()
+		serveStatic('./public'),
 	)
 
 	routes.forEach(route => {

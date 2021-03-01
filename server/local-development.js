@@ -1,3 +1,5 @@
+require('source-map-support').install()
+
 import { setupServer } from './setup-server.js'
 import polka from 'polka'
 

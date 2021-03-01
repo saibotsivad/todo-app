@@ -16,7 +16,6 @@ export const authorize = async req => {
 				hash: session.attributes.password,
 				password: sessionSecret
 			})
-			console.log('-------------- valid?', validSessionSecret)
 			if (validSessionSecret && new Date(session.meta.expiration).getTime() > Date.now()) {
 				valid = true
 			}

@@ -20,13 +20,12 @@ export default async ({ id }) => {
 	return {
 		id,
 		type: 'user',
-		attributes: {
-			// email: data.Item.pk.S.split('|')[1],
-			// password: data.Item.pw.S
-		},
 		meta: {
 			created: data.Item.c.S,
-			updated: data.Item.c.S
+			updated: data.Item.u.S
+		},
+		attributes: {
+			email: data.Item.email.S
 		}
 	}
 }

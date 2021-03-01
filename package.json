@@ -6,20 +6,20 @@
   },
   "type": "module",
   "scripts": {
-    "setup": "rimraf deploy/public && npm-run-all --parallel symlink:* && npm-run-all --parallel glob:*",
+    "setup": "rimraf public/build && rimraf public/docs && rimraf deploy/public && npm-run-all --parallel symlink:* && npm-run-all --parallel glob:*",
     "symlink:client": "rimraf client/node_modules && mkdirp client/node_modules && cd client/node_modules && symlink ../component/ component && symlink ../lib/ lib  && symlink ../api/ api",
     "symlink:dev": "symlink public server/public",
     "symlink:server": "rimraf server/node_modules && mkdirp server/node_modules && cd server/node_modules && symlink ../security security && symlink ../service service && symlink ../lib lib",
     "glob:client-routes": "glob-module-file --cwd='./client' --pattern='route/**/*.route.js' --format=es --exportWithPath --pathPrefix='./' --outputPath=client/globbed-routes.js",
     "glob:server-routes": "glob-module-file --cwd='./server' --pattern='route/**/*.route.js' --format=es --exportWithPath --importStar --pathPrefix='./' --outputPath=server/globbed-routes.js",
     "glob:server-models": "glob-module-file --cwd='./server' --pattern='model/**/*.model.js' --format=es --exportWithPath --importStar --pathPrefix='./' --outputPath=server/globbed-models.js",
-    "generate-openapi": "ncp node_modules/swagger-ui-dist public/docs && node generate-openapi.js",
-    "prebuild": "npm run setup && cd deploy && npm ci && cd ..",
+    "postsetup": "ncp node_modules/swagger-ui-dist public/docs && cd deploy && npm ci && cd ..",
+    "prebuild": "npm run setup",
     "build": "rollup -c",
     "postbuild": "node generate-openapi.js && ncp public deploy/public",
     "predeploy": "npm run build",
     "deploy": "cd deploy && serverless deploy --stage=$STAGE",
-    "dev": "npm run setup && npm-run-all --parallel watch:js watch:glob-client-routes watch:glob-server-routes watch:glob-server-models",
+    "dev": "npm-run-all --parallel watch:js watch:glob-client-routes watch:glob-server-routes watch:glob-server-models",
     "start": "node server/local-development.js",
     "watch:js": "rollup -c -w",
     "watch:glob-client-routes": "watch 'npm run glob:client-routes' client/route",
@@ -60,6 +60,7 @@
   "dependencies": {
     "abstract-state-router": "^6.1.0",
     "ksuid": "^2.0.0",
+    "serve-static": "^1.14.1",
     "svelte-state-renderer": "^3.0.1"
   }
 }

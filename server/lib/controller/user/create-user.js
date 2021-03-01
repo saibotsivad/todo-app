@@ -36,8 +36,8 @@ export default async ({ email, password }) => {
 						sk: {
 							S: `user|${userId}`
 						},
-						pw: {
-							S: hashedPassword
+						email: {
+							S: email
 						},
 						c,
 						u
@@ -60,6 +60,12 @@ export default async ({ email, password }) => {
 						sk: {
 							S: 'user'
 						},
+						password: {
+							S: hashedPassword
+						},
+						email: {
+							S: email
+						},
 						c,
 						u
 					}
@@ -79,7 +85,7 @@ export default async ({ email, password }) => {
 						userId: {
 							S: userId
 						},
-						pw: {
+						password: {
 							S: hashedPassword
 						},
 						c,
