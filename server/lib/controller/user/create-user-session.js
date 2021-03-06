@@ -37,6 +37,11 @@ export default async ({ user }) => {
 			e: {
 				S: expirationDate.toISOString()
 			},
+			status: {
+				// User sessions are created as active here, but if you
+				// build out 2FA you could create them as not-yet-active.
+				S: 'a'
+			},
 			c,
 			u
 		},

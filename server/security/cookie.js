@@ -24,6 +24,7 @@ export const authorize = async req => {
 
 	if (valid) {
 		req.currentUserId = userId
+		req.currentUserSessionId = sessionId
 	} else {
 		throw new UnauthorizedRequest('Could not locate or parse cookie.')
 	}

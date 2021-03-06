@@ -21,7 +21,8 @@ export default async ({ userId, sessionId }) => {
 		id: sessionId,
 		type: 'session',
 		attributes: {
-			password: data.Item.pw.S
+			password: data.Item.pw.S,
+			status: data.Item.status.S
 		},
 		meta: {
 			created: data.Item.c.S,

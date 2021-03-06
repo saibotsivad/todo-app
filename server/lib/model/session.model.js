@@ -13,6 +13,15 @@ export default {
 			password: {
 				type: 'string',
 				required: true
+			},
+			status: {
+				type: 'enum',
+				required: true,
+				values: [
+					'a', // active
+					'n', // not yet active
+					'e', // expired, aka was previously active but is no longer
+				]
 			}
 		}
 	},

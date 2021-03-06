@@ -25,7 +25,8 @@ export default async ({ id }) => {
 			updated: data.Item.u.S
 		},
 		attributes: {
-			email: data.Item.email.S
+			email: data.Item.email.S,
+			password: data.Item.password.S
 		}
 	}
 }

@@ -1,12 +1,26 @@
 <script>
+	import Container from 'component/Container.svelte'
+	import { createEventDispatcher } from 'svelte'
+
+	export let disabled
 	export let user
+
+	const dispatch = createEventDispatcher()
 </script>
 
 
-<h1><code>app</code></h1>
+<Container>
+	<h1>Hello!</h1>
 
-<p>Here is the loaded <code>user</code> object:</p>
+	<p>You are logged in as {user.attributes.email}</p>
 
-<pre>{JSON.stringify(user, undefined, 2)}</pre>
+	<p>
+		<button on:click={() => dispatch('logout')} {disabled}>
+			log out
+		</button>
+	</p>
 
-<uiView />
+	<hr>
+
+	<uiView />
+</Container>

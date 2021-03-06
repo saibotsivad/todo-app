@@ -15,6 +15,29 @@ import { encode, decode } from 'lib/base64uri.js'
 // easier debugging.
 const COOKIE_NAME = 'todoapp'
 
+const secureCookieParts = process.env.NODE_ENV === 'production'
+	? [
+		// The `path` key is not necessary right away, but it might be used to
+		// constrain cookies to `/api/*` for additional security constraints.
+		// For now we'll be explicit that it's available on all paths.
+		'Path=/',
+
+		// When developing locally, the API is run with this environment
+		// variable set, via the `package.json` run scripts. If that's not
+		// set then cookies must be set via HTTPS only.
+		'Secure',
+
+		// Setting the `HttpOnly` flag instructs the browser not to share
+		// the cookie with the browser's JavaScript, which could be used
+		// by third-party scripts to hijack things.
+		'HttpOnly',
+
+		// Setting this property declares your cookie should be restricted
+		// to a first-party or same-site context.
+		'SameSite'
+	]
+	: []
+
 // The cookies "value" is a base64uri encoded, JSON
 // stringified object containing the user id and the
 // session id.
@@ -51,34 +74,18 @@ export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDat
 		// mostly just makes life difficult for the developer.
 		// TODO: `domain=<domain_name>`,
 
-		// The `path` key is not necessary right away, but it might be used to
-		// constrain cookies to `/api/*` for additional security constraints.
-		// For now we'll be explicit that it's available on all paths.
-		`Path=/`,
-
-		// When developing locally, the API is run with this environment
-		// variable set, via the `package.json` run scripts. If that's not
-		// set then cookies must be set via HTTPS only.
-		process.env.NODE_ENV === 'production'
-			? `Secure`
-			: false,
-
-		// Setting the `HttpOnly` flag instructs the browser not to share
-		// the cookie with the browser's JavaScript, which could be used
-		// by third-party scripts to hijack things.
-		process.env.NODE_ENV === 'production'
-			? `HttpOnly`
-			: false,
-
-		// Setting this property declares your cookie should be restricted
-		// to a first-party or same-site context.
-		process.env.NODE_ENV === 'production'
-			? 'SameSite'
-			: false
+		...secureCookieParts
 
 	// Filter out the ones not set and compose.
 	].filter(Boolean).join('; ')
 }
+
+export const generateExpiredCookie = () => ([
+	`${COOKIE_NAME}=expired`,
+	`Expires=${new Date().toUTCString()}`,
+	'Max-Age=0',
+	...secureCookieParts
+].filter(Boolean).join('; '))
 
 export const parseCookie = string => {
 	try {

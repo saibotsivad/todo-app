@@ -5,7 +5,11 @@ export default {
 	template,
 	activate: ({ domApi }) => {
 		domApi.$on('signup', ({ detail: { email, password }}) => {
-			domApi.$set({ disabled: true })
+			domApi.$set({
+				disabled: true,
+				success: null,
+				errors: null
+			})
 			console.log('signing up', email, password)
 			createUser({ email, password })
 				.then(response => {

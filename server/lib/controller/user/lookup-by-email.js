@@ -22,7 +22,7 @@ export default async ({ email }) => {
 		type: 'user',
 		attributes: {
 			email: data.Item.pk.S.split('|')[1],
-			password: data.Item.pw.S
+			password: data.Item.password.S
 		},
 		meta: {
 			created: data.Item.c.S,

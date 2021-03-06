@@ -30,7 +30,11 @@ export default {
 		),
 	activate: ({ domApi }) => {
 		domApi.$on('login', ({ detail: { email, password }}) => {
-			domApi.$set({ disabled: true })
+			domApi.$set({
+				disabled: true,
+				success: null,
+				errors: null
+			})
 			login({ email, password })
 				.then(response => {
 					console.log('done', response)
