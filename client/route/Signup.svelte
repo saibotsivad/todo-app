@@ -14,7 +14,14 @@
 </script>
 
 <Container>
-	<h1>Sign Up</h1>
+	<h1>
+		Sign Up
+		<small>
+			<a href={asr.makePath('login')}>
+				or log in
+			</a>
+		</small>
+	</h1>
 
 	<p>Get yourself a free account today!</p>
 

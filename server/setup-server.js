@@ -54,7 +54,7 @@ export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 						res.statusCode = status
 					}
 				})
-				res.end(JSON.stringify({ errors }))
+				res.end(JSON.stringify({ errors: errors.map(errorFormatter) }))
 			}
 		})
 	})

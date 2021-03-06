@@ -19,7 +19,7 @@
     "postbuild": "node generate-openapi.js && ncp public deploy/public",
     "predeploy": "npm run build",
     "deploy": "cd deploy && serverless deploy --stage=$STAGE",
-    "dev": "npm-run-all --parallel watch:js watch:glob-client-routes watch:glob-server-routes watch:glob-server-models",
+    "dev": "export DEVELOPMENT=true && npm-run-all --parallel watch:js watch:glob-client-routes watch:glob-server-routes watch:glob-server-models",
     "start": "node server/local-development.js",
     "watch:js": "rollup -c -w",
     "watch:glob-client-routes": "watch 'npm run glob:client-routes' client/route",

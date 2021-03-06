@@ -3,6 +3,7 @@
 	import { createEventDispatcher } from 'svelte'
 
 	export let disabled
+	export let submitting
 	export let user
 
 	const dispatch = createEventDispatcher()
@@ -12,12 +13,16 @@
 <Container>
 	<h1>Hello!</h1>
 
-	<p>You are logged in as {user.attributes.email}</p>
+	<p>You are logged in as {user && user.attributes && user.attributes.email || 'N/A'}</p>
 
 	<p>
-		<button on:click={() => dispatch('logout')} {disabled}>
-			log out
-		</button>
+		{#if submitting}
+			logging out, one moment
+		{:else}
+			<button on:click={() => dispatch('logout')} {disabled}>
+				log out
+			</button>
+		{/if}
 	</p>
 
 	<hr>

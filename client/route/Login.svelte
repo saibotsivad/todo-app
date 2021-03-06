@@ -6,6 +6,8 @@
 	export let asr
 	export let disabled
 	export let errors
+	export let parameters
+	export let submitting
 	export let success
 	let email
 	let password
@@ -14,24 +16,31 @@
 </script>
 
 <Container>
-	<form {disabled} on:submit|preventDefault={() => dispatch('login', { email, password })}>
-		<p>
-			email
-			<input type="text" bind:value={email} placeholder="email@site.com">
-		</p>
+	{#if parameters && parameters.logout && !submitting && !success}
+		<p>success logging out!</p>
+	{/if}
+	{#if !submitting && !success}
+		<form disabled={disabled || success} on:submit|preventDefault={() => dispatch('login', { email, password })}>
+			<p>
+				email
+				<input type="text" bind:value={email} placeholder="email@site.com">
+			</p>
 
-		<p>
-			password
-			<input type="password" bind:value={password}>
-		</p>
+			<p>
+				password
+				<input type="password" bind:value={password}>
+			</p>
 
-		<p>
-			<button type="submit">
-				log in
-			</button>
-		</p>
-	</form>
-	{#if success}
+			<p>
+				<button type="submit">
+					log in
+				</button>
+			</p>
+		</form>
+	{/if}
+	{#if submitting}
+		<p>Just a moment, logging you in...</p>
+	{:else if success}
 		<p>Success logging in, one moment while we wrap things up and redirect you...</p>
 	{/if}
 	<p>

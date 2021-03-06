@@ -1,3 +1,4 @@
+import { router } from 'lib/state-router.js'
 import { getCurrentUser, logout } from 'api/user.js'
 import template from './App.svelte'
 
@@ -13,6 +14,7 @@ export default {
 		domApi.$on('logout', () => {
 			console.log('logging out')
 			domApi.$set({
+				submitting: true,
 				disabled: true,
 				success: null,
 				errors: null
@@ -20,13 +22,12 @@ export default {
 			logout()
 				.then(response => {
 					console.log('done', response)
-					domApi.$set({
-						success: true
-					})
+					router.go('login', { logout: true })
 				})
 				.catch(error => {
 					console.error('error', error)
 					domApi.$set({
+						submitting: false,
 						disabled: false,
 						errors: error.body.errors
 					})

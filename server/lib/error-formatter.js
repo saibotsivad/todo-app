@@ -1,6 +1,12 @@
 export default error => {
 	error = error || {}
-	console.error(error)
+
+	if (process.env.DEVELOPMENT) {
+		console.error(error)
+		error.meta = error.meta || {}
+		error.meta.stacktrace = error.stack
+	}
+
 	return {
 		status: error.status && error.status.toString() || '500',
 		code: (error.name !== 'Error' && error.name) || error.code || 'UnexpectedException',
