@@ -1,31 +1,33 @@
 import { createAwsSigner } from 'sign-aws-requests'
 import got from 'got'
 
-const config = {
-	service: 'dynamodb',
-	region: process.env.AWS_REGION,
-	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-	accessKeyId: process.env.AWS_ACCESS_KEY_ID
-}
-
-if (!config.region || !config.secretAccessKey || !config.accessKeyId) {
-	throw Error('AWS credentials not loaded.')
-}
-
-const sign = createAwsSigner({ config })
-
-const awsClient = got.extend({
-	hooks: {
-		beforeRequest: [
-			async options => {
-				const { authorization } = await sign(options)
-				options.headers.Authorization = authorization
-			}
-		]
-	}
-})
+let awsClient
 
 export const db = async (type, params) => {
+	// lazy instantiation
+	if (!awsClient) {
+		const config = {
+			service: 'dynamodb',
+			region: process.env.AWS_REGION,
+			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+			accessKeyId: process.env.AWS_ACCESS_KEY_ID
+		}
+		if (!config.region || !config.secretAccessKey || !config.accessKeyId) {
+			throw Error('AWS credentials not loaded.')
+		}
+		const sign = createAwsSigner({ config })
+		awsClient = got.extend({
+			hooks: {
+				beforeRequest: [
+					async options => {
+						const { authorization } = await sign(options)
+						options.headers.Authorization = authorization
+					}
+				]
+			}
+		})
+	}
+
 	const request = {
 		url: `https://dynamodb.${config.region}.amazonaws.com`,
 		method: 'POST',
