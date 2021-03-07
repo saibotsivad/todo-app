@@ -21,4 +21,5 @@ jobs:
     - run: npm ci
     - run: npm run build
     # https://stackoverflow.com/questions/2871181/replacing-some-characters-in-a-string-with-another-character
-    - run: STAGE="${GITHUB_HEAD_REF//[^a-zA-Z0-9]/-}" && npm run deploy
+    - run: export STAGE="${GITHUB_HEAD_REF//[^a-zA-Z0-9]/-}"
+    - run: npm run deploy
