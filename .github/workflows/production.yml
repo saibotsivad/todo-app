@@ -19,5 +19,5 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: export STAGE="dev" && npm run deploy
-    - run: echo "do integration tests"
-    - run: echo "deploy to prod if tests pass"
+    - run: echo "do integration tests of the api aka test every endpoint and auth flows"
+    - run: echo "deploy to prod if tests pass using blue green setup"
