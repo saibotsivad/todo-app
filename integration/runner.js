@@ -15,9 +15,7 @@ const mutableState = {
 
 for (const scenario of scenarios) {
 	const test = suite(scenario)
-	test(scenario, async () => {
-		const run = await import(`./${scenario}/${scenario}.js`)
-		await run.default(assert, mutableState)
-	})
+	const run = await import(`./${scenario}/${scenario}.js`)
+	await run.default(test, assert, mutableState)
 	await test.run()
 }

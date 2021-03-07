@@ -1,4 +1,5 @@
 import { createAwsSigner } from 'sign-aws-requests'
+import { DatabaseValidation } from 'lib/exceptions.js'
 import got from 'got'
 
 let awsClient
@@ -44,6 +45,13 @@ export const db = async (type, params) => {
 	}
 	const response = await awsClient(request)
 	const data = JSON.parse(response.body)
+
+	if (response.statusCode !== 200 && data.__type) {
+		if (data.__type.includes('#ValidationException')) {
+			throw new DatabaseValidation('Invalid parameters given to DynamoDB call.', { stacktrace: data.message })
+		}
+	}
+
 	return {
 		data,
 		status: response.statusCode

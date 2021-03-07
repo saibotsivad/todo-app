@@ -8,6 +8,16 @@ export class BadRequest extends Error {
 	}
 }
 
+export class DatabaseValidation extends Error {
+	constructor(message, meta) {
+		super(message)
+		this.status = 400
+		this.title = 'The data sent to the database was invalid. This is likely a developer error.'
+		this.detail = message
+		this.meta = meta
+	}
+}
+
 export class ItemAlreadyExists extends Error {
 	constructor(message, meta) {
 		super(message)
