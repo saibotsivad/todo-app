@@ -29,12 +29,12 @@ export const db = async (type, params) => {
 	}
 
 	const request = {
-		url: `https://dynamodb.${config.region}.amazonaws.com`,
+		url: `https://dynamodb.${process.env.AWS_REGION}.amazonaws.com`,
 		method: 'POST',
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
 			'X-Amz-Target': `DynamoDB_20120810.${type}`,
-			Host: `dynamodb.${config.region}.amazonaws.com`
+			Host: `dynamodb.${process.env.AWS_REGION}.amazonaws.com`
 		},
 		retry: {
 			limit: 0
