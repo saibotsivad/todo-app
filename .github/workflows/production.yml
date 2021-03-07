@@ -19,6 +19,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - run: export STAGE="dev" && npm run deploy
+    - env:
+        STAGE: dev
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: npm run deploy
     - run: echo "do integration tests of the api aka test every endpoint and auth flows"
     - run: echo "deploy to prod if tests pass using blue green setup"
