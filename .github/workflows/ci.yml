@@ -21,4 +21,4 @@ jobs:
     - run: npm ci
     - run: npm run build
     # https://stackoverflow.com/questions/2871181/replacing-some-characters-in-a-string-with-another-character
-    - run: CLEAN_BRANCH="${GITHUB_BASE_REF//[^a-zA-Z0-9]/-}" && echo "xxxxx $CLEAN_BRANCH xxxxx"
+    - run: CLEAN_BRANCH="${GITHUB_HEAD_REF//[^a-zA-Z0-9]/-}" && echo "xxxxx $CLEAN_BRANCH xxxxx"
