@@ -18,7 +18,7 @@
     "build": "rollup -c",
     "postbuild": "node generate-openapi.js && ncp public deploy/public",
     "predeploy": "npm run build",
-    "deploy": "cd deploy && serverless deploy --stage=$STAGE",
+    "deploy": "echo \"deploying stage $STAGE now\" && cd deploy && serverless deploy --stage=$STAGE",
     "dev": "export DEVELOPMENT=true && npm-run-all --parallel watch:js watch:glob-client-routes watch:glob-server-routes watch:glob-server-models",
     "start": "node server/local-development.js",
     "watch:js": "rollup -c -w",

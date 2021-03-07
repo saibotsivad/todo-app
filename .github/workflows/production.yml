@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -20,3 +18,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
+    - run: export STAGE="dev" && npm run deploy
+    - run: echo "do integration tests"
+    - run: echo "deploy to prod if tests pass"
