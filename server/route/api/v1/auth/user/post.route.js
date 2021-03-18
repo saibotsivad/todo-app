@@ -59,6 +59,7 @@ export const handler = async (req, res) => {
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to create an account.')
 	}
+	res.statusCode = 201
 	res.setHeader('Content-Type', 'application/json')
 	res.end(JSON.stringify({
 		data: await createUser({ email, password })

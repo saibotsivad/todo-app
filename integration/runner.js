@@ -4,13 +4,14 @@ import * as assert from 'uvu/assert'
 const scenarios = [
 	'user-create',
 	'user-login',
+	'user-get',
 	'user-logout'
 ]
 
 const mutableState = {
 	userEmail: 'me@site.com',
 	userPassword: 'batteryhorsestaple9001',
-	baseUrl: 'http://localhost:3000' // TODO based on other stuff
+	baseUrl: process.env.BASE_URL || `http://localhost:${process.env.PORT || '3000'}`
 }
 
 for (const scenario of scenarios) {
