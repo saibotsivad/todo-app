@@ -4,7 +4,6 @@ import * as assert from 'uvu/assert'
 const scenarios = [
 	'user-create',
 	'user-login',
-	'user-get',
 	'user-logout'
 ]
 

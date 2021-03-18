@@ -1,7 +1,9 @@
 import { db } from 'service/dynamodb.js'
 
 export default async ({ userId, sessionId }) => {
-	const { data, status } = await db('SetItem', {
+	const now = new Date().toISOString()
+
+	const { data, status } = await db('UpdateItem', {
 		TableName: process.env.TABLE_NAME,
 		Key: {
 			pk: {
@@ -10,6 +12,29 @@ export default async ({ userId, sessionId }) => {
 			sk: {
 				S: `session|${sessionId}`
 			}
-		}
+		},
+		ExpressionAttributeNames: {
+			'#PASSWORD': 'pw',
+			'#EXPIRATION': 'e',
+			'#STATUS': 'status',
+			'#UPDATED': 'u'
+		},
+		ExpressionAttributeValues: {
+			':password': {
+				BOOL: false
+			},
+			':expiration': {
+				S: now
+			},
+			':status': {
+				S: 'i' // i = inactive
+			},
+			':updated': {
+				S: now
+			}
+		},
+		UpdateExpression: 'SET #PASSWORD = :password, #EXPIRATION = :expiration, #STATUS = :status, #UPDATED = :updated'
 	})
+	console.log('----------------', status)
+	console.log('----------------', data)
 }
