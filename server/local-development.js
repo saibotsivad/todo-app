@@ -21,7 +21,11 @@ const api = polka()
 
 setupServer(api, { verbose: true, maxAge: 0 })
 
-api.listen(3000, err => {
-	if (err) throw err;
-	console.log(`> Running on localhost:3000`)
+const port = parseInt(process.env.PORT || '3000', 10)
+
+api.listen(port, error => {
+	if (error) {
+		throw error
+	}
+	console.log(`> Running on localhost:${port}`)
 })
