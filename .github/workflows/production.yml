@@ -18,7 +18,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build
     - env:
         STAGE: dev
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -27,6 +26,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: npm run deploy
     - env:
+        STAGE: dev
         BASE_URL: "https://v46ryodrp2.execute-api.us-east-1.amazonaws.com/dev/"
       run: npm run integration
     - run: echo "deploy to prod if tests pass using blue green setup"
