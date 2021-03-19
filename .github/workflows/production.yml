@@ -25,7 +25,8 @@ jobs:
         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        BASE_URL: "https://v46ryodrp2.execute-api.us-east-1.amazonaws.com/dev/"
       run: npm run deploy
-    - run: npm run integration
+    - env:
+        BASE_URL: "https://v46ryodrp2.execute-api.us-east-1.amazonaws.com/dev/"
+      run: npm run integration
     - run: echo "deploy to prod if tests pass using blue green setup"
