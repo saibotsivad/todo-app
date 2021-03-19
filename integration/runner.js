@@ -13,6 +13,8 @@ const mutableState = {
 	baseUrl: process.env.BASE_URL || `http://localhost:${process.env.PORT || '3000'}`
 }
 
+console.log('Running integration tests for:', mutableState.baseUrl)
+
 for (const scenario of scenarios) {
 	const test = suite(scenario)
 	const run = await import(`./${scenario}/${scenario}.js`)
