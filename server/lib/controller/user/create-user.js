@@ -23,7 +23,7 @@ export default async ({ email, password }) => {
 
 	// 1. write user to dynamodb
 
-	const { data, status } = await db('TransactWriteItems', {
+	const { data } = await db('TransactWriteItems', {
 		TransactItems: [
 			// user in user collection
 			{

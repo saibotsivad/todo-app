@@ -20,7 +20,7 @@ routes.forEach(route => {
 		.replace(/^route\//, '')
 		.replace(/\.route\.js$/, '')
 		.replace(/\//g, '.')
-		.replace(/[\[\]]/g, '')
+		.replace(/[[\]]/g, '')
 	route.export.route = '/' + route.path
 		.split('/')
 		.pop()

@@ -1,4 +1,4 @@
-function api (method, url, options = {}) {
+function api(method, url, options = {}) {
 	return fetch(
 		url,
 		Object.assign(
@@ -13,16 +13,16 @@ function api (method, url, options = {}) {
 				: {}
 		)
 	)
-	.then(async response => ({
-		status: response.status,
-		body: await response.json()
-	}))
-	.then(response => {
-		if (response.status >= 400) {
-			throw response
-		}
-		return response
-	})
+		.then(async response => ({
+			status: response.status,
+			body: await response.json()
+		}))
+		.then(response => {
+			if (response.status >= 400) {
+				throw response
+			}
+			return response
+		})
 }
 
 export const get = api.bind(null, 'GET')

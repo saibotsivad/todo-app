@@ -93,8 +93,7 @@ export const parseCookie = string => {
 			.split(';')
 			.map(s => s.trim())
 			.find(s => s.startsWith(`${COOKIE_NAME}=`))
-			.split('=')
-			[1]
+			.split('=')[1]
 		const { uid, sid, pw } = JSON.parse(decode(base64))
 		return {
 			userId: uid,

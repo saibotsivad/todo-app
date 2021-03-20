@@ -37,6 +37,6 @@ export default async (test, assert, state) => {
 		assert.is(response.statusCode, 200, 'gives correct status code')
 		assert.ok(response.body, 'there is a body response')
 		const user = JSON.parse(response.body).data
-		// assert.is(user.id, state.user.id, 'requested user matches test user')
+		assert.is(user.id, state.user.id, 'requested user matches test user')
 	})
 }

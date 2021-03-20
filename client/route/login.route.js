@@ -22,14 +22,14 @@ export default {
 			// resolved promise means the user is logged in, so
 			// redirect to the original location if one is set
 			// in query params, or to `app` otherwise
-			(user) => Promise.reject({
+			() => Promise.reject({
 				redirectTo: getRedirect(parameters)
 			}),
 			// user is not logged in, present normal login
 			() => ({ parameters })
 		),
 	activate: ({ domApi, parameters }) => {
-		domApi.$on('login', ({ detail: { email, password }}) => {
+		domApi.$on('login', ({ detail: { email, password } }) => {
 			domApi.$set({
 				submitting: true,
 				disabled: true,
@@ -37,7 +37,7 @@ export default {
 				errors: null
 			})
 			login({ email, password })
-				.then(response => {
+				.then(() => {
 					domApi.$set({
 						submitting: false,
 						success: true

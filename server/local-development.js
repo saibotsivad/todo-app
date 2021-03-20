@@ -7,7 +7,7 @@ const requiredEnvironmentVariables = [
 	'AWS_REGION',
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
-	'TABLE_NAME',
+	'TABLE_NAME'
 ]
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {

@@ -25,6 +25,7 @@
     "watch:glob-client-routes": "watch 'npm run glob:client-routes' client/route",
     "watch:glob-server-routes": "watch 'npm run glob:server-routes && node generate-openapi.js' server/route",
     "watch:glob-server-models": "watch 'npm run glob:server-models && node generate-openapi.js' server/lib/model",
+    "test:lint": "eslint '**/*.js'",
     "integration": "uvu integration"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "abstract-state-router": "^6.1.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
+    "eslint": "^7.22.0",
     "glob-module-file": "^3.0.2",
     "got": "^11.8.1",
     "ksuid": "^2.0.0",

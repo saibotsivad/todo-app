@@ -1,0 +1,20 @@
+/node_modules/* # ignored by default, but... 
+
+# local fidgety pieces
+/secrets.sh
+/fiddle.js
+
+# these are generated files/folders
+
+/deploy/.serverless
+/deploy/node_modules
+/deploy/public
+/deploy/build.js
+/deploy/build.js.map
+
+/public/build
+/public/docs
+
+/server/node_modules
+/server/public
+/server/globbed-*.js

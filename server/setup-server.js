@@ -6,15 +6,15 @@ import secureRoute from 'lib/secure-route.js'
 import { json } from 'lib/polka-parser.js'
 import serveStatic from 'serve-static'
 
-export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
-	const { verbose, maxAge } = options
+export const setupServer = (api, options = { verbose: false }) => {
+	const { verbose } = options
 
 	if (verbose) { console.log('Adding routes:') }
 
 	api.use(
 		json(),
 		compression(),
-		serveStatic('./public'),
+		serveStatic('./public')
 	)
 
 	routes.forEach(route => {

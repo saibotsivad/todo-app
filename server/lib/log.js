@@ -83,7 +83,7 @@ const levelToIndex = {
 	info: 3,
 	warn: 4,
 	error: 5,
-	fatal: 6,
+	fatal: 6
 }
 
 const log = level => (message, ...params) => {

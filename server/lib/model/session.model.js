@@ -20,7 +20,7 @@ export default {
 				values: [
 					'a', // active
 					'n', // not yet active
-					'e', // expired, aka was previously active but is no longer
+					'e'  // expired, aka was previously active but is no longer
 				]
 			}
 		}

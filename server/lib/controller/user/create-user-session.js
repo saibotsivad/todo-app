@@ -1,7 +1,6 @@
-import { BadRequest, ItemAlreadyExists } from 'lib/exceptions.js'
+import { ItemAlreadyExists } from 'lib/exceptions.js'
 import { db } from 'service/dynamodb.js'
 import { generatePassword } from 'lib/password.js'
-import { normalizeEmail } from 'lib/email.js'
 import { hashPassword } from 'lib/password.js'
 import { itemAlreadyExists } from 'lib/dynamodb-helpers.js'
 import KSUID from 'ksuid'
@@ -22,7 +21,7 @@ export default async ({ user }) => {
 	])
 	const hashedSecret = await hashPassword({ password: sessionSecret })
 
-	const { data, status } = await db('PutItem', {
+	const { data } = await db('PutItem', {
 		TableName: process.env.TABLE_NAME,
 		Item: {
 			pk: {

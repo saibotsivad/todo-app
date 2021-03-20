@@ -4,7 +4,7 @@ import template from './Signup.svelte'
 export default {
 	template,
 	activate: ({ domApi }) => {
-		domApi.$on('signup', ({ detail: { email, password }}) => {
+		domApi.$on('signup', ({ detail: { email, password } }) => {
 			domApi.$set({
 				disabled: true,
 				success: null,

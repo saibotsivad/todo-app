@@ -1,7 +1,7 @@
 import { db } from 'service/dynamodb.js'
 
 export default async ({ userId, sessionId }) => {
-	const { data, status } = await db('GetItem', {
+	const { data } = await db('GetItem', {
 		TableName: process.env.TABLE_NAME,
 		Key: {
 			pk: {
