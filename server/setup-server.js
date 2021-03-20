@@ -1,4 +1,5 @@
 import errorFormatter from 'lib/error-formatter.js'
+import log from 'lib/log.js'
 import routes from './globbed-routes.js'
 import compression from 'compression'
 import secureRoute from 'lib/secure-route.js'
@@ -31,7 +32,7 @@ export const setupServer = (api, options = { verbose: false, maxAge: 60 }) => {
 		const method = path.pop()
 		path = '/' + path.join('/')
 		if (verbose) {
-			console.log(' - ' + method.toUpperCase() + ' ' + path)
+			log.info(method.toUpperCase() + ' ' + path)
 		}
 		api[method](path, async (req, res) => {
 			let errors

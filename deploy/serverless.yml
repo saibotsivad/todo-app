@@ -19,9 +19,10 @@ provider:
   environment:
     STAGE: ${opt:stage}
     TABLE_NAME: todo-app-${opt:stage}
-    # NOTE: When run locally, this environment variable is not set, but
-    # in production it should be set via this YAML file.
+    # NOTE: When run locally, these environment variables should not set, but
+    # in production they are always set via this YAML file.
     NODE_ENV: production
+    IS_DEPLOYED: "true"
 
 functions:
   api:
