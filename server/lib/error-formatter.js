@@ -2,7 +2,6 @@ export default error => {
 	error = error || {}
 
 	if (process.env.DEVELOPMENT) {
-		console.error(error)
 		error.meta = error.meta || {}
 		error.meta.stacktrace = error.meta && error.meta.stacktrace || error.stack
 	}

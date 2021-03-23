@@ -41,8 +41,11 @@ export const security = [
 ]
 
 export const handler = async (req, res) => {
-	res.setHeader('Content-Type', 'application/json')
-	res.end(JSON.stringify({
-		data: await lookupById({ id: req.currentUserId })
-	}))
+	return {
+		json: true,
+		status: 200,
+		body: {
+			data: await lookupById({ id: req.currentUserId })
+		}
+	}
 }

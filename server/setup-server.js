@@ -6,10 +6,10 @@ import secureRoute from 'lib/secure-route.js'
 import { json } from 'lib/polka-parser.js'
 import serveStatic from 'serve-static'
 
-export const setupServer = (api, options = { verbose: false }) => {
-	const { verbose } = options
+const setJson = res => res.setHeader('Content-Type', 'application/json')
 
-	if (verbose) { console.log('Adding routes:') }
+export const setupServer = (api, { verbose = false, development = false } = {}) => {
+	log.info('Adding routes:')
 
 	api.use(
 		json(),
@@ -31,9 +31,9 @@ export const setupServer = (api, options = { verbose: false }) => {
 		).split('/')
 		const method = path.pop()
 		path = '/' + path.join('/')
-		if (verbose) {
-			log.info(method.toUpperCase() + ' ' + path)
-		}
+
+		log.info(method.toUpperCase() + ' ' + path)
+
 		api[method](path, async (req, res) => {
 			let errors
 			try {
@@ -41,13 +41,24 @@ export const setupServer = (api, options = { verbose: false }) => {
 					errors = await secureRoute(route.export.security, req)
 				}
 				if (!errors) {
-					return await route.export.handler(req, res)
+					const response = await route.export.handler(req, res)
+					log.info(`${method.toUpperCase()} ${path} - ${response.status}`)
+					if (!response.status) {
+						throw new Error('This is a developer error, all routes must specify a `statusCode` value.')
+					}
+					res.statusCode = response.status
+					if (response.json) {
+						setJson(res)
+						res.end(JSON.stringify(response.body || {}))
+					} else if (response.body) {
+						res.end(response.body)
+					}
 				}
 			} catch (error) {
 				errors = [ errorFormatter(error) ]
 			}
 			if (errors) {
-				res.setHeader('Content-Type', 'application/json')
+				setJson(res)
 				// error code is highest error code thrown
 				errors.forEach(error => {
 					const status = parseInt(error.status, 10)
@@ -55,7 +66,19 @@ export const setupServer = (api, options = { verbose: false }) => {
 						res.statusCode = status
 					}
 				})
-				res.end(JSON.stringify({ errors: errors.map(errorFormatter) }))
+				log.info(`${method.toUpperCase()} ${path} - ${res.statusCode}`)
+				res.end(JSON.stringify({
+					errors: errors
+						.map(errorFormatter)
+						.map(error => {
+							if (!development && error.meta && error.meta.stacktrace) {
+								let { meta: { stacktrace, ...meta }, ...data } = error
+								meta = Object.keys(meta).length ? meta : undefined
+								return Object.assign({}, data, { meta })
+							}
+							return error
+						})
+				}))
 			}
 		})
 	})
