@@ -12,5 +12,5 @@
 /deploy/build.js
 /deploy/build.js.map
 /deploy/public
-/secrets.sh
+/configuration.sh
 /fiddle.js

@@ -44,6 +44,12 @@
 		<p>Success logging in, one moment while we wrap things up and redirect you...</p>
 	{/if}
 	<p>
+		Forgot your password?
+		<a href={asr.makePath('forgot')}>
+			Send yourself a password reset link.
+		</a>
+	</p>
+	<p>
 		Don't have an account?
 		<a href={asr.makePath('signup')}>
 			Create an account today!

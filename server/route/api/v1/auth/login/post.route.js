@@ -85,7 +85,7 @@ export const handler = async (req, res) => {
 			})
 		},
 		json: true,
-		status: 200,
+		status: 201,
 		body: { ok: true }
 	}
 }

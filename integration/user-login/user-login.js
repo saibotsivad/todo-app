@@ -18,7 +18,7 @@ export default async (test, assert, state) => {
 				}
 			}
 		)
-		assert.is(response.statusCode, 200, 'gives correct status code')
+		assert.is(response.statusCode, 201, 'gives correct status code')
 		assert.ok(response.body, 'there is a body response')
 		const data = JSON.parse(response.body)
 		assert.is(data.ok, true, 'just a simple ok response')
