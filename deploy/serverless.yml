@@ -1,4 +1,4 @@
-service: todo-app
+service: todo-journal
 
 provider:
   name: aws
@@ -10,7 +10,7 @@ provider:
   logRetentionInDays: 7
   deploymentBucket:
     blockPublicAccess: true
-    name: todo-app-1498571
+    name: todo-journal-1498571
     maxPreviousDeploymentArtifacts: 1
   versionFunctions: false
   endpointType: edge
@@ -18,8 +18,8 @@ provider:
     shouldStartNameWithService: true
   environment:
     STAGE: ${opt:stage}
-    TABLE_NAME: todo-app-${opt:stage}
-    ADMIN_EMAIL_ADDRESS: admin+${opt:stage}@todo-app.com
+    TABLE_NAME: todo-journal-${opt:stage}
+    ADMIN_EMAIL_ADDRESS: admin+${opt:stage}@todojournal.com
     # NOTE: When run locally, these environment variables won't be set, but
     # in production they will be set via this YAML file, so we use that to
     # detect what environment we're in when running local.
@@ -42,7 +42,7 @@ resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: todo-app-${opt:stage}
+        TableName: todo-journal-${opt:stage}
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S

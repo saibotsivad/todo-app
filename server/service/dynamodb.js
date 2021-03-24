@@ -5,7 +5,10 @@ import got from 'got'
 let awsClient
 
 export const db = async (type, params) => {
-	// lazy instantiation
+	// This is lazy instantiation, but it still imports even if
+	// you never use DynamoDB. So far all the Lambda functions
+	// use DynamoDB so this is fine, but if there's ever a Lambda
+	// function that doesn't, this will need to be revisited.
 	if (!awsClient) {
 		const config = {
 			service: 'dynamodb',

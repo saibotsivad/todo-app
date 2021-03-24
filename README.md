@@ -1,8 +1,9 @@
-# todo-app
+# todo-journal
 
-my personal ideal todo app
+my personal ideal todo app, which is a sort of mashup of a
+bullet journal and a sort of todo list
 
-a work in progress
+definitely a work in progress
 
 ## local dev
 

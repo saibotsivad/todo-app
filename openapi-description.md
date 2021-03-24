@@ -1,6 +1,6 @@
-# Todo App
+# Todo Journal
 
-This is the base API for the todo-app project, which is an opinionated
+This is the base API for the todo-journal project, which is an opinionated
 test bed wherein [the author](https://davistobias.com) smashes together
 random lessons learned into the todo app of his dreams.
 
