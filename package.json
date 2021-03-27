@@ -25,6 +25,7 @@
     "watch:glob-client-routes": "watch 'npm run glob:client-routes' client/route",
     "watch:glob-server-routes": "watch 'npm run glob:server-routes && node generate-openapi.js' server/route",
     "watch:glob-server-models": "watch 'npm run glob:server-models && node generate-openapi.js' server/lib/model",
+	"test": "npm run test:lint",
     "test:lint": "eslint '**/*.js'",
     "integration": "uvu integration",
     "remove": "cd deploy && serverless remove --stage=$STAGE"
