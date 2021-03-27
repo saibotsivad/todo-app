@@ -1,5 +1,5 @@
 import errorFormatter from 'lib/error-formatter.js'
-import log from 'lib/log.js'
+import log from 'service/log.js'
 import routes from './globbed-routes.js'
 import compression from 'compression'
 import secureRoute from 'lib/secure-route.js'
@@ -8,7 +8,7 @@ import serveStatic from 'serve-static'
 
 const setJson = res => res.setHeader('Content-Type', 'application/json')
 
-export const setupServer = (api, { verbose = false, development = false } = {}) => {
+export const setupServer = (api) => {
 	log.info('Adding routes:')
 
 	api.use(
@@ -49,6 +49,9 @@ export const setupServer = (api, { verbose = false, development = false } = {}) 
 					res.statusCode = response.status
 					if (response.json) {
 						setJson(res)
+						if (response.body && response.body.errors) {
+							response.body.errors = response.body.errors.map(errorFormatter)
+						}
 						res.end(JSON.stringify(response.body || {}))
 					} else if (response.body) {
 						res.end(response.body)
@@ -68,16 +71,7 @@ export const setupServer = (api, { verbose = false, development = false } = {}) 
 				})
 				log.info(`${method.toUpperCase()} ${path} - ${res.statusCode}`)
 				res.end(JSON.stringify({
-					errors: errors
-						.map(errorFormatter)
-						.map(error => {
-							if (!development && error.meta && error.meta.stacktrace) {
-								let { meta: { stacktrace, ...meta }, ...data } = error
-								meta = Object.keys(meta).length ? meta : undefined
-								return Object.assign({}, data, { meta })
-							}
-							return error
-						})
+					errors: errors.map(errorFormatter)
 				}))
 			}
 		})

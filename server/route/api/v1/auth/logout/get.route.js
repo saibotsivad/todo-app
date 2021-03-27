@@ -42,7 +42,7 @@ export const security = [
 	]
 ]
 
-export const handler = async (req, res) => {
+export const handler = async (req) => {
 	await expireSession({ userId: req.currentUserId, sessionId: req.currentUserSessionId })
 	return {
 		headers: {

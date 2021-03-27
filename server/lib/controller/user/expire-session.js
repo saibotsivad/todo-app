@@ -4,7 +4,7 @@ export default async ({ userId, sessionId }) => {
 	const now = new Date().toISOString()
 
 	const { data, status } = await db('UpdateItem', {
-		TableName: process.env.TABLE_NAME,
+		TableName: process.env.TJ_TABLE_NAME,
 		Key: {
 			pk: {
 				S: `user|${userId}`

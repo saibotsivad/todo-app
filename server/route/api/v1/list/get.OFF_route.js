@@ -40,7 +40,7 @@ export const handler = async (req, res) => {
 
 	res.setHeader('Content-Type', 'application/json')
 	res.end(dynamodbListToJsonApiList(await db('Query', {
-		TableName: process.env.TABLE_NAME,
+		TableName: process.env.TJ_TABLE_NAME,
 		ExpressionAttributeValues: {
 			':pk': {
 				S: `list|${userId}`

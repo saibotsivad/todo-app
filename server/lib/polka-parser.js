@@ -18,6 +18,7 @@ export function parse(opts = {}) {
 		const ctype = head['content-type']
 		const clength = parseInt(head['content-length'], 10)
 
+		// eslint-disable-next-line eqeqeq
 		if (isNaN(clength) && head['transfer-encoding'] == null) return next() // no body
 		if (ctype && !ctype.includes(type)) return next() // not valid type
 		if (clength === 0) return next() // is empty

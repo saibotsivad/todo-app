@@ -40,7 +40,7 @@ export const security = [
 	]
 ]
 
-export const handler = async (req, res) => {
+export const handler = async (req) => {
 	return {
 		json: true,
 		status: 200,

@@ -4,7 +4,7 @@
 		"es6": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 2018,
+		"ecmaVersion": 2021,
 		"sourceType": "module"
 	},
 	"extends": "eslint:recommended",
@@ -12,11 +12,11 @@
 		"array-bracket-spacing": [
 			"error",
 			"always",
-			{ objectsInArrays: false, arraysInArrays: false }
+			{ "objectsInArrays": false, "arraysInArrays": false }
 		],
 		"no-irregular-whitespace": [
 			"error",
-			{ skipStrings: false }
+			{ "skipStrings": false }
 		],
 		"comma-dangle": [ "error", "never" ],
 		"eqeqeq": [ "error", "always" ],
@@ -35,14 +35,14 @@
 			"error",
 			"never"
 		],
-		"keyword-spacing": [ "error", { before: true }],
+		"keyword-spacing": [ "error", { "before": true }],
 		"space-before-blocks": [ "error", "always" ],
 		"space-before-function-paren": [
 			"error",
 			{
-				anonymous: "always",
-				named: "never",
-				asyncArrow: "always"
+				"anonymous": "always",
+				"named": "never",
+				"asyncArrow": "always"
 			}
 		],
 		"space-in-parens": [ "error", "never" ],
@@ -66,8 +66,7 @@
 		],
 		"valid-jsdoc": [
 			"error",
-			{ requireReturn: false }
-		],
-		"consistent-return": "error"
+			{ "requireReturn": false }
+		]
 	}
 }

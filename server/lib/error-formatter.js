@@ -1,9 +1,11 @@
 export default error => {
 	error = error || {}
 
-	if (process.env.DEVELOPMENT) {
+	if (process.env.NODE_ENV !== 'local') {
 		error.meta = error.meta || {}
 		error.meta.stacktrace = error.meta && error.meta.stacktrace || error.stack
+	} else if (error.meta && error.meta.stacktrace) {
+		delete error.meta.stacktrace
 	}
 
 	return {

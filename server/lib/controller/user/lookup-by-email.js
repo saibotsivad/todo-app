@@ -2,7 +2,7 @@ import { db } from 'service/dynamodb.js'
 
 export default async ({ email }) => {
 	const { data } = await db('GetItem', {
-		TableName: process.env.TABLE_NAME,
+		TableName: process.env.TJ_TABLE_NAME,
 		Key: {
 			pk: {
 				S: `email|${(email || '').toLowerCase()}`

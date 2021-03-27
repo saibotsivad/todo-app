@@ -28,7 +28,7 @@ export default async ({ email, password }) => {
 			// user in user collection
 			{
 				Put: {
-					TableName: process.env.TABLE_NAME,
+					TableName: process.env.TJ_TABLE_NAME,
 					Item: {
 						pk: {
 							S: 'user'
@@ -52,7 +52,7 @@ export default async ({ email, password }) => {
 			// user-by-id collection, for profile, details, session, etc
 			{
 				Put: {
-					TableName: process.env.TABLE_NAME,
+					TableName: process.env.TJ_TABLE_NAME,
 					Item: {
 						pk: {
 							S: `user|${userId}`
@@ -74,7 +74,7 @@ export default async ({ email, password }) => {
 			// email maps to one user id, for lookup during login
 			{
 				Put: {
-					TableName: process.env.TABLE_NAME,
+					TableName: process.env.TJ_TABLE_NAME,
 					Item: {
 						pk: {
 							S: `email|${email}`

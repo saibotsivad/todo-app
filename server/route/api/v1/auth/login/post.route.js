@@ -62,7 +62,7 @@ export const responses = {
 	}
 }
 
-export const handler = async (req, res) => {
+export const handler = async (req) => {
 	const { email, password } = req.body || {}
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to authenticate.')

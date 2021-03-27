@@ -1,9 +1,9 @@
 import { auth } from 'lib/tags.js'
 import { BadRequest } from 'lib/exceptions.js'
-import { generateCookie } from 'lib/cookie.js'
-import { validatePassword } from 'lib/password.js'
-import createUserSession from 'lib/controller/user/create-user-session.js'
+import generatePasswordResetToken from 'lib/controller/user/generate-password-reset-token.js'
 import lookupByEmail from 'lib/controller/user/lookup-by-email.js'
+import renderMarkdownTemplate from 'lib/render-markdown-template.js'
+import { sendEmail } from 'lib/service/email.js'
 
 export const summary = `
 	Send password reset email.
@@ -57,17 +57,23 @@ export const responses = {
 	}
 }
 
-export const handler = async (req, res) => {
+export const handler = async (req) => {
 	const { email } = req.body || {}
 	if (!email) {
 		throw new BadRequest('Email must be supplied to send password reset link.')
 	}
 	const user = await lookupByEmail({ email })
+	const passwordResetToken = user && await generatePasswordResetToken({ user })
 	const emailSent = user && await sendEmail({
-		fromAddress: process.env.ADMIN_EMAIL_ADDRESS,
+		fromAddress: process.env.TJ_ADMIN_EMAIL_ADDRESS,
 		toAddress: email,
-		subject,
-		body
+		subject: 'Password reset requested?',
+		body: renderMarkdownTemplate({
+			parameters: {
+				url: `https://${process.env.TJ_API_DOMAIN}/app#/forgotPassword/finalize?token=${passwordResetToken}`
+			},
+			template: 'TODO server/lib/email-templates/forgot-password.md'
+		})
 	})
 	if (!emailSent) {
 		throw new BadRequest('Could not send password reset link to provided email.')

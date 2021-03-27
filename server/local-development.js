@@ -7,7 +7,8 @@ const requiredEnvironmentVariables = [
 	'AWS_REGION',
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
-	'TABLE_NAME'
+	'TJ_TABLE_NAME',
+	'TJ_API_DOMAIN'
 ]
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {
@@ -19,7 +20,7 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 
 const api = polka()
 
-setupServer(api, { verbose: true, maxAge: 0 })
+setupServer(api)
 
 const port = parseInt(process.env.PORT || '3000', 10)
 

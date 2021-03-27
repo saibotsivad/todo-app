@@ -18,8 +18,9 @@ provider:
     shouldStartNameWithService: true
   environment:
     STAGE: ${opt:stage}
-    TABLE_NAME: todo-journal-${opt:stage}
-    ADMIN_EMAIL_ADDRESS: admin+${opt:stage}@todojournal.com
+    TJ_TABLE_NAME: todo-journal-${opt:stage}
+    TJ_ADMIN_EMAIL_ADDRESS: admin+${opt:stage}@todojournal.com
+    TJ_API_DOMAIN: todojournal.com # TODO based on stage
     # NOTE: When run locally, these environment variables won't be set, but
     # in production they will be set via this YAML file, so we use that to
     # detect what environment we're in when running local.

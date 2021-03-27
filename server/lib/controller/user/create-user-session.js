@@ -22,7 +22,7 @@ export default async ({ user }) => {
 	const hashedSecret = await hashPassword({ password: sessionSecret })
 
 	const { data } = await db('PutItem', {
-		TableName: process.env.TABLE_NAME,
+		TableName: process.env.TJ_TABLE_NAME,
 		Item: {
 			pk: {
 				S: `user|${user.id}`
