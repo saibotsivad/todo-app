@@ -3,7 +3,7 @@ import { BadRequest } from 'lib/exceptions.js'
 import generatePasswordResetToken from 'lib/controller/user/generate-password-reset-token.js'
 import lookupByEmail from 'lib/controller/user/lookup-by-email.js'
 import renderMarkdownTemplate from 'lib/render-markdown-template.js'
-import { sendEmail } from 'lib/service/email.js'
+import { sendEmail } from 'service/email.js'
 
 export const summary = `
 	Send password reset email.

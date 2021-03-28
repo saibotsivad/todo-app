@@ -35,6 +35,11 @@ export const setupServer = (api) => {
 		log.info(method.toUpperCase() + ' ' + path)
 
 		api[method](path, async (req, res) => {
+			log.debug(method.toUpperCase() + ' ' + path, {
+				request: 'start',
+				userId: req.currentUserId,
+				sessionId: req.currentUserSessionId
+			})
 			let errors
 			try {
 				if (route.export.security) {
@@ -47,6 +52,11 @@ export const setupServer = (api) => {
 						throw new Error('This is a developer error, all routes must specify a `statusCode` value.')
 					}
 					res.statusCode = response.status
+					if (response.headers) {
+						for (const [ key, value ] of Object.entries(response.headers)) {
+							res.setHeader(key, value)
+						}
+					}
 					if (response.json) {
 						setJson(res)
 						if (response.body && response.body.errors) {
@@ -59,6 +69,7 @@ export const setupServer = (api) => {
 				}
 			} catch (error) {
 				errors = [ errorFormatter(error) ]
+				log.info(`${method.toUpperCase()} ${path} - ${res.statusCode}`, errors)
 			}
 			if (errors) {
 				setJson(res)
@@ -69,7 +80,6 @@ export const setupServer = (api) => {
 						res.statusCode = status
 					}
 				})
-				log.info(`${method.toUpperCase()} ${path} - ${res.statusCode}`)
 				res.end(JSON.stringify({
 					errors: errors.map(errorFormatter)
 				}))

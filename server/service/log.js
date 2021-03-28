@@ -86,7 +86,7 @@ const levelToIndex = {
 	fatal: 6
 }
 
-const log = level => (message, ...params) => {
+const log = level => (message, params) => {
 	const specifiedLevelIndex = levelToIndex[process.env.LOG_LEVEL] || levelToIndex.info
 	if (level >= specifiedLevelIndex) {
 		if (process.env.IS_DEPLOYED === 'true') {

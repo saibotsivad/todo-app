@@ -35,3 +35,8 @@ export TJ_ADMIN_EMAIL_ADDRESS="admin+$STAGE@todojournal.com"
 # a sub-domain during testing, e.g. `testing.todojournal.com`
 # or locally `localhost:3000`
 export TJ_API_DOMAIN="todojournal.com"
+
+# To run the integration tests, you either need to set the base
+# url, or (if running locally) the port.
+export BASE_URL="http://localhost:3000"
+export PORT="3000"

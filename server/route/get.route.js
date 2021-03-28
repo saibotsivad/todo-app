@@ -35,7 +35,10 @@ export const html = `<!DOCTYPE html>
 </html>
 `
 
-export const handler = async (req, res) => {
-	res.setHeader('content-type', 'text/html')
-	res.end(html)
-}
+export const handler = async () => ({
+	body: html,
+	status: 200,
+	headers: {
+		'content-type': 'text/html'
+	}
+})
