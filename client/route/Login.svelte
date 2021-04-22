@@ -22,12 +22,12 @@
 	{#if !submitting && !success}
 		<form disabled={disabled || success} on:submit|preventDefault={() => dispatch('login', { email, password })}>
 			<p>
-				email
+				Email
 				<input type="text" bind:value={email} placeholder="email@site.com">
 			</p>
 
 			<p>
-				password
+				Password
 				<input type="password" bind:value={password}>
 			</p>
 
