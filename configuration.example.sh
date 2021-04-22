@@ -16,7 +16,7 @@ export AWS_SECRET_ACCESS_KEY="abc123abc123abc123abc123"
 # level more in detail.
 export LOG_LEVEL="debug"
 
-# TODO: ideally when run locally this would be like "branch-name-123"
+# Ideally when run locally this would be like "branch-name-123"
 # but for now it's just the develop stage
 export STAGE="dev"
 

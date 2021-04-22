@@ -1,5 +1,5 @@
-import { router } from 'lib/state-router.js'
-import { getCurrentUser, login } from 'api/user.js'
+import { router } from 'client/lib/state-router.js'
+import { getCurrentUser, login } from 'client/api/user.js'
 import template from './Login.svelte'
 
 const getRedirect = parameters => {

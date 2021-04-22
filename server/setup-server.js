@@ -19,10 +19,10 @@ export const setupServer = (api) => {
 
 	routes.forEach(route => {
 		// from:
-		// route.path = 'route/api/v1/list/[listId]/todo/[todoId]/get.route.js'
+		// route.path = 'route/api/v1/list/get.[listId].route.js'
 		// to:
 		// - method: GET
-		// - path: api/v1/list/:listId/todo/:todoId
+		// - path: api/v1/list/:listId
 		let path = (
 			route.path
 				.replace(/^route\//, '')

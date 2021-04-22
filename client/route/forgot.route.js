@@ -1,4 +1,4 @@
-import { forgotPassword } from 'api/user.js'
+import { forgotPassword } from 'client/api/user.js'
 import template from './Forgot.svelte'
 
 export default {

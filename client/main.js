@@ -9,13 +9,6 @@ const shouldScrollToTop = (currentState, previousState) => {
 const stateChangeHistory = []
 
 routes.forEach(route => {
-	// TODO: this feels like it should be part of the glob generation script
-	// from:
-	// route.path = 'route/app/list/[listId]/todo/[todoId].route.js'
-	// to:
-	// route.export.name = 'app.list.listId.todo.todoId'
-	// route.export.route '/:todoId'
-	// 
 	route.export.name = route.path
 		.replace(/^route\//, '')
 		.replace(/\.route\.js$/, '')
