@@ -1,9 +1,8 @@
-import makeCache from 'lib/cache-get-request.js'
+import { makeRequestCache } from 'lib/make-request-cache.js'
 import { get, post } from 'lib/json-fetch.js'
 
-const cache = makeCache()
-
-export const getCurrentUser = cache(
+// TODO need to make sure this caching stuff is right and add tests
+export const getCurrentUser = async () => makeRequestCache(
 	() => get('/api/v1/auth/user').then(response => response.body.data)
 )
 

@@ -2,7 +2,7 @@
 parameters:
   url:
     type: string
-	required: true
+    required: true
     description: The link to the password reset page.
 ---
 

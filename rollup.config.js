@@ -7,6 +7,7 @@ import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
+import { string } from 'rollup-plugin-string'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -83,7 +84,7 @@ export default [
 			exports: production
 				? 'default'
 				: undefined,
-			file: 'deploy/build.js'
+			dir: 'deploy/build'
 		},
 		plugins: [
 			// If you have external dependencies installed from
@@ -94,6 +95,9 @@ export default [
 			resolve({
 				browser: false,
 				preferBuiltins: true
+			}),
+			string({
+				include: '**/*.md'
 			}),
 			commonjs(),
 

@@ -7,7 +7,7 @@ import * as tags from './server/lib/tags.js'
 const pathToRepo = dirname(fileURLToPath(import.meta.url))
 const swaggerHtmlPath = join(pathToRepo, 'public/docs/index.html')
 const swaggerJsonPath = join(pathToRepo, 'public/docs/swagger.json')
-const { name: title, version } = JSON.parse(readFileSync(join(pathToRepo, 'package.json')))
+const { name: title, version } = JSON.parse(readFileSync(join(pathToRepo, 'package.json'), 'utf8'))
 
 const clean = string => string && string
 	.replace(/\t/g, '')

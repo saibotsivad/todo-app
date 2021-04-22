@@ -1,4 +1,4 @@
-import { createUser } from 'client/api/user.js'
+import { createUser } from 'api/user.js'
 import template from './Signup.svelte'
 
 export default {

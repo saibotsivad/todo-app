@@ -1,9 +1,9 @@
 import { auth } from 'lib/tags.js'
 import { BadRequest } from 'lib/exceptions.js'
+import { sendEmail } from 'service/email.js'
 import generatePasswordResetToken from 'lib/controller/user/generate-password-reset-token.js'
 import lookupByEmail from 'lib/controller/user/lookup-by-email.js'
-import renderMarkdownTemplate from 'lib/render-markdown-template.js'
-import { sendEmail } from 'service/email.js'
+import renderEmailTemplate from 'lib/render-email-template.js'
 
 export const summary = `
 	Send password reset email.
@@ -68,11 +68,11 @@ export const handler = async (req) => {
 		fromAddress: process.env.TJ_ADMIN_EMAIL_ADDRESS,
 		toAddress: email,
 		subject: 'Password reset requested?',
-		body: renderMarkdownTemplate({
+		body: renderEmailTemplate({
 			parameters: {
 				url: `https://${process.env.TJ_API_DOMAIN}/app#/forgotPassword/finalize?token=${passwordResetToken}`
 			},
-			template: 'TODO server/lib/email-templates/forgot-password.md'
+			template: (await import('lib/email-templates/forgot-password.md')).default
 		})
 	})
 	if (!emailSent) {

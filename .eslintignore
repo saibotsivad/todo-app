@@ -11,6 +11,7 @@
 /deploy/public
 /deploy/build.js
 /deploy/build.js.map
+/deploy/build
 
 /public/build
 /public/docs
