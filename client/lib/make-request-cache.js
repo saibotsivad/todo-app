@@ -8,10 +8,18 @@ For each endpoint request, you will need to create a new cache:
 import { makeRequestCache } from 'lib/make-request-cache.js'
 import { router } from 'lib/state-router.js'
 
-export const exampleRequest = async () => makeRequestCache(
+export const exampleRequest = makeRequestCache(
 	router,
-	() => get('/api/v1/example')
+	async () => get('/api/v1/example')
 )
+```
+
+Then, using that is as simple as:
+
+```js
+import { exampleRequest } from 'path/to/thing.js'
+
+exampleRequest(params).then(handler)
 ```
 
  */
