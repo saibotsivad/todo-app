@@ -9,8 +9,7 @@
 /server/public
 /deploy/node_modules
 /deploy/.serverless
-/deploy/build.js
-/deploy/build.js.map
+/deploy/build
 /deploy/public
 /configuration.sh
 /fiddle.js
