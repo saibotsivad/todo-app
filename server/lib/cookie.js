@@ -13,7 +13,7 @@ import { encode, decode } from 'lib/base64uri.js'
 // The name of the cookie doesn`t matter a whole lot, but it
 // makes sense to have it be related to your application, for
 // easier debugging.
-const COOKIE_NAME = 'todoapp'
+const COOKIE_NAME = 'todo-journal'
 
 const secureCookieParts = process.env.NODE_ENV === 'production'
 	? [
@@ -49,7 +49,7 @@ const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(
 	})
 )
 
-export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDate }) => {
+export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDate, currentNow = Date.now() }) => {
 	return [
 		`${COOKIE_NAME}=${generateCookieValue({ userId, sessionId, sessionSecret })}`,
 
@@ -67,7 +67,7 @@ export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDat
 
 		// Similarly, the `Max-Age` property specifies the number of seconds
 		// until the cookie should expire.
-		`Max-Age=${Math.round((expirationDate.getTime() - Date.now()) / 1000)}`,
+		`Max-Age=${Math.round((expirationDate.getTime() - currentNow) / 1000)}`,
 
 		// When this is deployed to production, or a development branch, the
 		// domain name should be pinned. But when running locally, pinning it
