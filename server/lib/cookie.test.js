@@ -20,6 +20,4 @@ test('generating and then parsing a cookie', () => {
 	assert.is(params.sessionSecret, 'c')
 })
 
-
-
 test.run()

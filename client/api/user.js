@@ -1,8 +1,9 @@
 import { makeRequestCache } from 'lib/make-request-cache.js'
+import { router } from 'lib/state-router.js'
 import { get, post } from 'lib/json-fetch.js'
 
-// TODO need to make sure this caching stuff is right and add tests
 export const getCurrentUser = async () => makeRequestCache(
+	router,
 	() => get('/api/v1/auth/user').then(response => response.body.data)
 )
 
