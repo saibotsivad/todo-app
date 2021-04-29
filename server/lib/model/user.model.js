@@ -1,36 +1,45 @@
 export default {
-	id: {
-		type: 'string'
-	},
-	type: {
-		type: 'string',
-		value: 'user',
-		required: true
-	},
-	attributes: {
-		type: 'object',
-		properties: {
-			activated: {
-				type: 'boolean'
-			},
-			email: {
-				type: 'string',
-				required: true
-			},
-			password: {
-				type: 'string',
-				required: true
+	type: 'object',
+	required: [
+		'type'
+	],
+	properties: {
+		id: {
+			type: 'string'
+		},
+		type: {
+			type: 'string',
+			value: 'user'
+		},
+		attributes: {
+			type: 'object',
+			required: [
+				'email',
+				'password'
+			],
+			properties: {
+				activated: {
+					type: 'boolean'
+				},
+				email: {
+					type: 'string'
+				},
+				password: {
+					type: 'string'
+				}
 			}
-		}
-	},
-	meta: {
-		type: 'object',
-		properties: {
-			created: {
-				type: 'date'
-			},
-			updated: {
-				type: 'date'
+		},
+		meta: {
+			type: 'object',
+			properties: {
+				created: {
+					type: 'string',
+					format: 'date-time'
+				},
+				updated: {
+					type: 'string',
+					format: 'date-time'
+				}
 			}
 		}
 	}
