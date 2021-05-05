@@ -1,0 +1,38 @@
+# These are the services, in this approach I am envisioning basically only
+# a handful of services, namely a DynamoDB table called directly from the
+# Cloudflare Worker. However, to implement autocomplete text search, you
+# would probably launch an ElasticSearch instance or something, and ideally
+# that would be managed here as well.
+
+# TODO also if you want to do streaming from DynamoDB
+
+service: todo-journal
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage}
+  region: us-east-1
+  logRetentionInDays: 7
+  deploymentBucket:
+    blockPublicAccess: true
+    name: todo-journal-1498571
+    maxPreviousDeploymentArtifacts: 1
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: todo-journal-${opt:stage}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST

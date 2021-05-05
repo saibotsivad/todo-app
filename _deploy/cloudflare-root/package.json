@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "name": "cloudflare-root",
+  "version": "0.0.0",
+  "main": "build.js"
+}

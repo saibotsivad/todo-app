@@ -2,5 +2,13 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_app/api-v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_app/cf-api-v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_app/cloudflare-api" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_app/cloudflare-api-v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_app/my-worker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_deploy/cloudflare-api" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/my-worker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/my-worker" vcs="Git" />
   </component>
 </project>

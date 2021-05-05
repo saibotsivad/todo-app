@@ -13,3 +13,11 @@
 /deploy/public
 /configuration.sh
 /fiddle.js
+
+
+# for the new organization
+# TODO remove _ prefix
+
+/_deploy/*/build.js
+/_deploy/*/build.js.map
+/_app/*/node_modules
