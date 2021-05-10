@@ -5,12 +5,22 @@ import lookupSession from '@/lib/controller/user/lookup-session.js'
 
 export const name = 'cookie'
 
-export const authorize = async req => {
+/**
+ * Fetch a session from the database using the session information
+ * unpacked from the cookie.
+ *
+ * @param {object} services - The services object.
+ * @param {object} services.db - The database service object.
+ * @param {object} services.config - The configuration service object.
+ * @param {object} req - The request object.
+ * @returns {Promise<void>} - The request is mutated or an error is thrown.
+ */
+export const authorize = async ({ db, config }, req) => {
 	let valid = false
 
 	const { userId, sessionId, sessionSecret } = parseCookie(req.headers.cookie) || {}
 	if (userId && sessionId && sessionSecret) {
-		const session = await lookupSession({ userId, sessionId })
+		const session = await lookupSession({ db, config }, { userId, sessionId })
 		if (session) {
 			const validSessionSecret = await validatePassword({
 				hash: session.attributes.password,

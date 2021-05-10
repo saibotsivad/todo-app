@@ -9,14 +9,24 @@ links I have found on the subject are:
 */
 
 import { encode, decode } from '@/lib/base64uri.js'
-import { get } from '@/service/variables.js'
 
 // The name of the cookie doesn`t matter a whole lot, but it
 // makes sense to have it be related to your application, for
 // easier debugging.
 const COOKIE_NAME = 'todo-journal'
 
-const secureCookieParts = get('NODE_ENV') === 'production'
+// The cookies "value" is a base64uri encoded, JSON
+// stringified object containing the user id and the
+// session id.
+const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(
+	JSON.stringify({
+		uid: userId,
+		sid: sessionId,
+		pw: sessionSecret
+	})
+)
+
+const secureCookieParts = ({ config }) => config.get('NODE_ENV') === 'production'
 	? [
 		// The `path` key is not necessary right away, but it might be used to
 		// constrain cookies to `/api/*` for additional security constraints.
@@ -39,18 +49,8 @@ const secureCookieParts = get('NODE_ENV') === 'production'
 	]
 	: []
 
-// The cookies "value" is a base64uri encoded, JSON
-// stringified object containing the user id and the
-// session id.
-const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(
-	JSON.stringify({
-		uid: userId,
-		sid: sessionId,
-		pw: sessionSecret
-	})
-)
+export const generateCookie = (services, { userId, sessionId, sessionSecret, expirationDate, currentNow = Date.now() }) => {
 
-export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDate, currentNow = Date.now() }) => {
 	return [
 		`${COOKIE_NAME}=${generateCookieValue({ userId, sessionId, sessionSecret })}`,
 
@@ -75,17 +75,17 @@ export const generateCookie = ({ userId, sessionId, sessionSecret, expirationDat
 		// mostly just makes life difficult for the developer.
 		// TODO: `domain=<domain_name>`,
 
-		...secureCookieParts
+		...secureCookieParts(services)
 
-	// Filter out the ones not set and compose.
+		// Filter out the ones not set and compose.
 	].filter(Boolean).join('; ')
 }
 
-export const generateExpiredCookie = () => ([
+export const generateExpiredCookie = (services) => ([
 	`${COOKIE_NAME}=expired`,
 	`Expires=${new Date().toUTCString()}`,
 	'Max-Age=0',
-	...secureCookieParts
+	...secureCookieParts(services)
 ].filter(Boolean).join('; '))
 
 export const parseCookie = string => {

@@ -1,11 +1,9 @@
 import { auth } from '@/lib/tags.js'
 import { BadRequest } from '@/lib/exceptions.js'
 import { sendEmail } from '@/service/email.js'
-import { get } from '@/service/variables.js'
 import generatePasswordResetToken from '@/lib/controller/user/generate-password-reset-token.js'
 import lookupByEmail from '@/lib/controller/user/lookup-by-email.js'
 import renderEmailTemplate from '@/lib/render-email-template.js'
-import template from '@/lib/email-templates/forgot-password.md'
 
 export const summary = `
 	Send password reset email.
@@ -59,22 +57,22 @@ export const responses = {
 	}
 }
 
-export const handler = async (req) => {
+export const handler = async (services, req) => {
 	const { email } = req.body || {}
 	if (!email) {
 		throw new BadRequest('Email must be supplied to send password reset link.')
 	}
-	const user = await lookupByEmail({ email })
-	const passwordResetToken = user && await generatePasswordResetToken({ user })
-	const emailSent = user && await sendEmail({
-		fromAddress: get('TJ_ADMIN_EMAIL_ADDRESS'),
+	const user = await lookupByEmail(services, { email })
+	const passwordResetToken = user && await generatePasswordResetToken(services, { user })
+	const emailSent = user && await sendEmail(services, {
+		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Password reset requested?',
 		body: renderEmailTemplate({
 			parameters: {
-				url: `https://${get('TJ_API_DOMAIN')}/app#/forgotPassword/finalize?token=${passwordResetToken}`
+				url: `https://${services.config.get('TJ_API_DOMAIN')}/app#/forgotPassword/finalize?token=${passwordResetToken}`
 			},
-			template
+			template: (await import('@/lib/email-templates/forgot-password.md')).default
 		})
 	})
 	if (!emailSent) {

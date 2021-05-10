@@ -1,11 +1,8 @@
-import { db } from '@/service/dynamodb.js'
-import { get } from '@/service/variables.js'
-
-export default async ({ userId, sessionId }) => {
+export default async ({ db, config }, { userId, sessionId }) => {
 	const now = new Date().toISOString()
 
 	const { data, status } = await db('UpdateItem', {
-		TableName: get('TJ_TABLE_NAME'),
+		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
 				S: `user|${userId}`

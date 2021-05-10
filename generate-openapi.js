@@ -45,7 +45,7 @@ routes.forEach(({ path: routePath, export: route }) => {
 		routePath
 			.replace(/^route\//, '')
 			.replace(/\.route\.js$/, '')
-			.replace(/\[([^\]]+)\]/g, ':$1')
+			.replace(/\[([^\]]+)]/g, ':$1')
 	).split('/')
 	const method = path.pop().toLowerCase()
 	path = '/' + path.join('/')

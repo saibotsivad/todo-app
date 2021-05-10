@@ -54,7 +54,7 @@ export const responses = {
 	}
 }
 
-export const handler = async (req) => {
+export const handler = async (services, req) => {
 	const { email, password } = req.body || {}
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to create an account.')
@@ -63,7 +63,7 @@ export const handler = async (req) => {
 		json: true,
 		status: 201,
 		body: {
-			data: await createUser({ email, password })
+			data: await createUser(services, { email, password })
 		}
 	}
 }

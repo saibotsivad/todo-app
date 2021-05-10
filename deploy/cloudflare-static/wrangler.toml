@@ -4,7 +4,7 @@ zone_id = "72fdb6a1e6c368d54f90b78bff6f58da"
 workers_dev = true
 
 [env.local]
-name = "todo-journal-local"
+name = "todojournal-static-local"
 vars = { ENVIRONMENT = "local" }
 routes = [ "*" ]
 kv_namespaces = [
@@ -12,7 +12,7 @@ kv_namespaces = [
 ]
 
 [env.develop]
-name = "todo-journal-develop"
+name = "todojournal-static-develop"
 vars = { ENVIRONMENT = "develop" }
 routes = [
 	"develop.todojournal.com",
@@ -25,7 +25,7 @@ kv_namespaces = [
 ]
 
 [env.production]
-name = "todo-journal"
+name = "todojournal-static"
 vars = { ENVIRONMENT = "production" }
 routes = [
 	"todojournal.com",

@@ -40,12 +40,12 @@ export const security = [
 	]
 ]
 
-export const handler = async (req) => {
+export const handler = async (services, req) => {
 	return {
 		json: true,
 		status: 200,
 		body: {
-			data: await lookupById({ id: req.currentUserId })
+			data: await lookupById(services, { id: req.currentUserId })
 		}
 	}
 }

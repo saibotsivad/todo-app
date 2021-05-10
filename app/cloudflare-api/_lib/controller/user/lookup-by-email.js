@@ -1,9 +1,6 @@
-import { db } from '@/service/dynamodb.js'
-import { get } from '@/service/variables.js'
-
-export default async ({ email }) => {
+export default async ({ db, config }, { email }) => {
 	const { data } = await db('GetItem', {
-		TableName: get('TJ_TABLE_NAME'),
+		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
 				S: `email|${(email || '').toLowerCase()}`

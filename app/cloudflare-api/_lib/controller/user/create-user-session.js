@@ -1,29 +1,26 @@
 import { ItemAlreadyExists } from '@/lib/exceptions.js'
-import { db } from '@/service/dynamodb.js'
-import { generatePassword } from '@/lib/password.js'
-import { hashPassword } from '@/lib/password.js'
+import { generatePassword, hashPassword } from '@/lib/password.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
-import { get } from '@/service/variables.js'
 import { ksuid } from '@/lib/ksuid.js'
 
 // You will need to decide on your expiration policy, but for
 // this app a 90 day expiration seems okay?
 const SESSION_SECONDS = 7776000 // 90 days = 90 * 24 * 60 * 60
 
-export default async ({ user }) => {
+export default async ({ db, config }, { user }) => {
 
 	const now = new Date()
 	const c = { S: now.toISOString() } // created
 	const u = { S: now.toISOString() } // updated
 	const expirationDate = new Date(now.getTime() + (SESSION_SECONDS * 1000))
 	const [ sessionId, sessionSecret ] = await Promise.all([
-		ksuid().then(s => s.string),
+		ksuid(),
 		generatePassword()
 	])
 	const hashedSecret = await hashPassword({ password: sessionSecret })
 
 	const { data } = await db('PutItem', {
-		TableName: get('TJ_TABLE_NAME'),
+		TableName: config.get('TJ_TABLE_NAME'),
 		Item: {
 			pk: {
 				S: `user|${user.id}`

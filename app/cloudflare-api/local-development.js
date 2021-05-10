@@ -1,7 +1,9 @@
 import 'source-map-support/register.js'
 import { setupServer } from './setup-server.js'
-import { set } from '@/service/variables.js'
 import polka from 'polka'
+import { generateIndex } from '../cloudflare-static/generate-index.js'
+import { db } from '@/service/db.js'
+import log from '@/service/log.js'
 
 const requiredEnvironmentVariables = [
 	'AWS_ACCOUNT_ID',
@@ -19,15 +21,29 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 	process.exit(1)
 }
 
-requiredEnvironmentVariables
+const configValues = requiredEnvironmentVariables
 	.concat([
 		'NODE_ENV'
 	])
-	.forEach(key => { set(key, process.env[key]) })
+	.reduce((map, key) => {
+		map[key] = process.env[key]
+		return map
+	}, {})
+
+configValues.BUILD_PREFIX = 'localhost:3000/fizz/'
+
+const config = {
+	get: async key => configValues[key]
+}
 
 const api = polka()
 
-setupServer(api)
+setupServer({ db, config, log }, api)
+
+api.get('/', (req, res) => {
+	res.setHeader('Content-Type', 'text/html')
+	res.end(generateIndex('localhost:3000/___static/'))
+})
 
 const port = parseInt(process.env.PORT || '3000', 10)
 

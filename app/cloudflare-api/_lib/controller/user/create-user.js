@@ -1,6 +1,4 @@
 import { BadRequest, ItemAlreadyExists } from '@/lib/exceptions.js'
-import { db } from '@/service/dynamodb.js'
-import { get } from '@/service/variables.js'
 import { normalizeEmail } from '@/lib/email.js'
 import { hashPassword } from '@/lib/password.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
@@ -10,7 +8,7 @@ const passwordIsPseudoReasonable = password => password.length > 10
 	&& /[a-z]/.test(password)
 	&& /[0-9]/.test(password)
 
-export default async ({ email, password }) => {
+export default async ({ db, config }, { email, password }) => {
 	if (!passwordIsPseudoReasonable(password)) {
 		throw new BadRequest('Passwords must contain at least 8 characters, at least 1 letter, and at least 1 number.')
 	}
@@ -18,7 +16,7 @@ export default async ({ email, password }) => {
 	const now = new Date().toISOString()
 	const c = { S: now } // created
 	const u = { S: now } // updated
-	const userId = (await ksuid()).string
+	const userId = await ksuid()
 	const hashedPassword = await hashPassword({ password })
 	email = normalizeEmail(email)
 
@@ -29,7 +27,7 @@ export default async ({ email, password }) => {
 			// user in user collection
 			{
 				Put: {
-					TableName: get('TJ_TABLE_NAME'),
+					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: 'user'
@@ -53,7 +51,7 @@ export default async ({ email, password }) => {
 			// user-by-id collection, for profile, details, session, etc
 			{
 				Put: {
-					TableName: get('TJ_TABLE_NAME'),
+					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: `user|${userId}`
@@ -75,7 +73,7 @@ export default async ({ email, password }) => {
 			// email maps to one user id, for lookup during login
 			{
 				Put: {
-					TableName: get('TJ_TABLE_NAME'),
+					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: `email|${email}`

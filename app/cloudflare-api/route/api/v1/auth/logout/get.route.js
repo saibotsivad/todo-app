@@ -42,11 +42,11 @@ export const security = [
 	]
 ]
 
-export const handler = async (req) => {
-	await expireSession({ userId: req.currentUserId, sessionId: req.currentUserSessionId })
+export const handler = async (services, req) => {
+	await expireSession(services, { userId: req.currentUserId, sessionId: req.currentUserSessionId })
 	return {
 		headers: {
-			'Set-Cookie': generateExpiredCookie()
+			'Set-Cookie': generateExpiredCookie(services)
 		},
 		json: true,
 		body: { ok: true }

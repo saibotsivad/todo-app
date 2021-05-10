@@ -1,13 +1,12 @@
 // import { createAwsSigner } from 'sign-aws-requests'
 import { DatabaseValidation } from '@/lib/exceptions.js'
-import { get } from '@/service/variables.js'
 // import got from 'got'
 
 const got = { extend: () => {} }
 
 let awsClient
 
-export const db = async (type, params) => {
+export const db = config => async (type, params) => {
 	// This is lazy instantiation, but it still imports even if
 	// you never use DynamoDB. So far all the Lambda functions
 	// use DynamoDB so this is fine, but if there's ever a Lambda
@@ -15,9 +14,9 @@ export const db = async (type, params) => {
 	if (!awsClient) {
 		const config = {
 			service: 'dynamodb',
-			region: get('AWS_REGION'),
-			secretAccessKey: get('AWS_SECRET_ACCESS_KEY'),
-			accessKeyId: get('AWS_ACCESS_KEY_ID')
+			region: config.get('AWS_REGION'),
+			secretAccessKey: config.get('AWS_SECRET_ACCESS_KEY'),
+			accessKeyId: config.get('AWS_ACCESS_KEY_ID')
 		}
 		if (!config.region || !config.secretAccessKey || !config.accessKeyId) {
 			throw Error('AWS credentials not loaded.')
@@ -37,12 +36,12 @@ export const db = async (type, params) => {
 	}
 
 	const request = {
-		url: `https://dynamodb.${get('AWS_REGION')}.amazonaws.com`,
+		url: `https://dynamodb.${config.get('AWS_REGION')}.amazonaws.com`,
 		method: 'POST',
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
 			'X-Amz-Target': `DynamoDB_20120810.${type}`,
-			Host: `dynamodb.${get('AWS_REGION')}.amazonaws.com`
+			Host: `dynamodb.${config.get('AWS_REGION')}.amazonaws.com`
 		},
 		retry: {
 			limit: 0

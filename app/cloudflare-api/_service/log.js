@@ -1,4 +1,4 @@
-import { get } from '@/service/variables.js'
+import { get } from '@/service/process-env.node.js'
 
 /*
 

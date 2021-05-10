@@ -1,6 +1,4 @@
-import log from '@/service/log.js'
-
-export default ({ parameters, template }) => {
+export default ({ parameters, template, log }) => {
 	log.debug('rendering markdown template', { parameters, template })
 	// TODO render the markdown
 	// if the template has frontmatter with `parameters`

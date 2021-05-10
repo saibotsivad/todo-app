@@ -163,8 +163,8 @@ const cloudflareStatic = {
 }
 
 export default [
-	// client,
+	client,
 	// lambda,
-	cloudflareApi
-	// cloudflareStatic
+	cloudflareApi,
+	cloudflareStatic
 ]

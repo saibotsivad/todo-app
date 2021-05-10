@@ -62,22 +62,22 @@ export const responses = {
 	}
 }
 
-export const handler = async (req) => {
+export const handler = async (services, req) => {
 	const { email, password } = req.body || {}
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to authenticate.')
 	}
-	const user = await lookupByEmail({ email })
+	const user = await lookupByEmail(services, { email })
 	if (!user || !user.attributes.password) {
 		throw new BadRequest('Could not locate valid user by email.')
 	}
 	if (!(await validatePassword({ hash: user.attributes.password, password }))) {
 		throw new BadRequest('Could not validate password.')
 	}
-	const { sessionId, sessionSecret, expirationDate } = await createUserSession({ user })
+	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { user })
 	return {
 		headers: {
-			'Set-Cookie': generateCookie({
+			'Set-Cookie': generateCookie(services, {
 				userId: user.id,
 				sessionId,
 				sessionSecret,

@@ -33,12 +33,11 @@
     "release:cloudflare-api": "cd deploy/cloudflare-api && wrangler publish --env=production",
     "release:cloudflare-static": "cd deploy/cloudflare-static && wrangler publish --env=production",
     "release:aws-services": "cd deploy/aws-services && serverless deploy --stage=production",
-    "---code-testing": "---------------------------------",
+    "---test-functional": "---------------------------------",
     "test": "npm-run-all --parallel test:lint test:unit:client test:unit:server",
     "test:lint": "eslint \"**/*.js\"",
-    "test:unit:client": "uvu client '\\.test\\.js$'",
-    "test:unit:server": "uvu server '\\.test\\.js$'",
-    "---integration-testing": "---------------------------------",
+    "test:unit": "uvu app '\\.test\\.js$'",
+    "---test-integration": "---------------------------------",
     "integration": "uvu integration",
     "---local": "---------------------------------",
     "dev": "export DEVELOPMENT=true && run-p watch:* wrangle:*",
@@ -48,7 +47,7 @@
     "watch:glob-client-routes": "chokidar \"client/route/**/*.js\" -c \"npm run glob:client-routes\"",
     "watch:glob-server-routes": "chokidar \"server/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
     "watch:glob-server-models": "chokidar \"server/lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
-    "start": "node app/cloudflare-api/local-development.js"
+    "start": "export LOG_LEVEL=debug && node app/cloudflare-api/local-development.js"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.1.1",

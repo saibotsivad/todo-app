@@ -1,5 +1,4 @@
 import errorFormatter from '@/lib/error-formatter.js'
-import log from '@/service/log.js'
 import routes from './globbed-routes.js'
 // import compression from 'compression'
 import secureRoute from '@/lib/secure-route.js'
@@ -8,7 +7,16 @@ import { json } from '@/lib/polka-parser.js'
 
 const setJson = res => res.setHeader('Content-Type', 'application/json')
 
-export const setupServer = (api) => {
+/**
+ * Given some lazily instantiated services, set up each route for the API.
+ *
+ * @param {object} services - The map containing all services.
+ * @param {object} services.db - The database service object.
+ * @param {object} services.config - The configuration service object.
+ * @param {object} api - The polka-like server to add routes to.
+ */
+export const setupServer = (services, api) => {
+	const { log } = services
 	log.info('Adding routes:')
 
 	api.use(
@@ -27,7 +35,7 @@ export const setupServer = (api) => {
 			route.path
 				.replace(/^route\//, '')
 				.replace(/\.route\.js$/, '')
-				.replace(/\[([^\]]+)\]/g, ':$1')
+				.replace(/\[([^\]]+)]/g, ':$1')
 		).split('/')
 		const method = path.pop()
 		path = '/' + path.join('/')
@@ -43,13 +51,13 @@ export const setupServer = (api) => {
 			let errors
 			try {
 				if (route.export.security) {
-					errors = await secureRoute(route.export.security, req)
+					errors = await secureRoute(services, route.export.security, req)
 				}
 				if (!errors) {
-					const response = await route.export.handler(req, res)
+					const response = await route.export.handler(services, req, res)
 					log.info(`${method.toUpperCase()} ${path} - ${response.status}`)
 					if (!response.status) {
-						throw new Error('This is a developer error, all routes must specify a `statusCode` value.')
+						throw new Error('This is a developer error, all routes must specify a `status` value.')
 					}
 					res.statusCode = response.status
 					if (response.headers) {

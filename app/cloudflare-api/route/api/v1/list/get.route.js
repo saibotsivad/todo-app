@@ -1,6 +1,4 @@
-import { name as cookie } from '@/lib/security/cookie.js'
-import { db } from '@/service/dynamodb.js'
-import { get } from '@/service/variables.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.js'
 import dynamodbListToJsonApiList from '@/lib/dynamodb-list-to-json-api-list.js'
 
 export const summary = `
@@ -32,19 +30,18 @@ export const responses = {
 export const security = [
 	{
 		type: cookie,
+		authorize,
 		scopes: []
 	}
 ]
 
-export const handler = async (req, res) => {
-	const userId = '001' // TODO from security stuff
-
+export const handler = async ({ db, config }, req, res) => {
 	res.setHeader('Content-Type', 'application/json')
 	res.end(dynamodbListToJsonApiList(await db('Query', {
-		TableName: get('TJ_TABLE_NAME'),
+		TableName: config.get('TJ_TABLE_NAME'),
 		ExpressionAttributeValues: {
 			':pk': {
-				S: `list|${userId}`
+				S: `list|${req.currentUserId}`
 			}
 		},
 		KeyConditionExpression: 'pk = :pk'

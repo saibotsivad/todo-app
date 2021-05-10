@@ -1,4 +1,4 @@
-import { get } from '@/service/variables.js'
+import { get } from '@/service/process-env.node.js'
 
 export default error => {
 	error = error || {}
@@ -7,7 +7,7 @@ export default error => {
 		if (error.meta) {
 			delete error.meta.stacktrace
 		}
-	} else if (error.meta && error.meta.stacktrace) {
+	} else {
 		error.meta = error.meta || {}
 		error.meta.stacktrace = error.meta && error.meta.stacktrace || error.stack
 	}
