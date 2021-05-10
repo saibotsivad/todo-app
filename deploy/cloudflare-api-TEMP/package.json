@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "name": "cloudflare-api",
-  "version": "0.0.0",
-  "main": "build/build.js"
-}
