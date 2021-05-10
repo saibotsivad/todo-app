@@ -8,6 +8,7 @@ import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
 import { string } from 'rollup-plugin-string'
+import alias from '@rollup/plugin-alias'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -33,11 +34,11 @@ const production = !process.env.ROLLUP_WATCH
 // }
 
 const client = {
-	input: 'client/main.js',
+	input: 'app/website/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
-		dir: 'public/build'
+		dir: 'deploy/cloudflare-static/public/build'
 	},
 	plugins: [
 		svelte({
@@ -74,17 +75,18 @@ const client = {
 	}
 }
 
+
 const lambda = {
 	input: production
-		? 'server/lambda.js'
-		: 'server/local-development.js',
+		? 'app/cloudflare-api/legacy-lambda.js'
+		: 'app/cloudflare-api/local-development.js',
 	output: {
 		sourcemap: true,
 		format: 'cjs',
 		exports: production
 			? 'default'
 			: undefined,
-		dir: 'deploy/build'
+		dir: 'deploy/lambda-api/build'
 	},
 	plugins: [
 		// If you have external dependencies installed from
@@ -114,11 +116,40 @@ const lambda = {
 }
 
 const cloudflareApi = {
-	input: '_app/cloudflare-api/worker-wrapped.js',
+	input: 'app/cloudflare-api/worker-wrapped.js',
 	output: {
 		sourcemap: true,
 		format: 'es',
-		file: '_deploy/cloudflare-api/build.js'
+		file: 'deploy/cloudflare-api/build/build.js',
+		inlineDynamicImports: true
+	},
+	plugins: [
+		alias({
+			entries: [
+				{ find: /^(.*)\.node\.js$/, replacement: '$1.worker.js' }
+			]
+		}),
+		resolve({
+			browser: true,
+			preferBuiltins: false
+		}),
+		string({
+			include: '**/*.md'
+		}),
+		commonjs(),
+		json()
+	],
+	watch: {
+		clearScreen: false
+	}
+}
+
+const cloudflareStatic = {
+	input: 'app/cloudflare-static/main.js',
+	output: {
+		format: 'es',
+		file: 'deploy/cloudflare-static/worker/build/build.js',
+		inlineDynamicImports: true
 	},
 	plugins: [
 		resolve({
@@ -135,4 +166,5 @@ export default [
 	// client,
 	// lambda,
 	cloudflareApi
+	// cloudflareStatic
 ]

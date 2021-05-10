@@ -39,12 +39,13 @@ you can't do deep subdomains with workers https://community.cloudflare.com/t/com
 
 with that in mind...
 
-site.com - serves the main page
+these are all static pages
 
+site.com - serves the main page
 site.com/build/* - serves built assets
+site.com/page/* - serves static pages
+site.com/docs/* - serves the swagger docs
+
+routes = ["site.com","site.com/build/*","site.com/page/*","site.com/docs/*"]
 
 site.com/api/* - serves the api stuff
-
-site.com/page/* - serves static pages
-
-site.com/docs/* - serves the swagger docs

@@ -1,21 +1,19 @@
-/node_modules/* # ignored by default, but... 
+# the usual suspects
+/node_modules/*
 
-# local fidgety pieces
-/secrets.sh
+# personal local files
 /fiddle.js
 
-# these are generated files/folders
+# symlinks (don't follow)
+/app/*/node_modules
 
-/deploy/.serverless
-/deploy/node_modules
-/deploy/public
-/deploy/build.js
-/deploy/build.js.map
-/deploy/build
+# globbed things
+/**/globbed-*.js
 
-/public/build
-/public/docs
-
-/server/node_modules
-/server/public
-/server/globbed-*.js
+# built parts
+/deploy/*/.serverless
+/deploy/*/build
+/deploy/cloudflare-static/dist
+/deploy/cloudflare-static/public/build
+/deploy/cloudflare-static/public/docs
+/deploy/cloudflare-static/worker/build

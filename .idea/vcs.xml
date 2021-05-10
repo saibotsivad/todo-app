@@ -9,6 +9,7 @@
     <mapping directory="$PROJECT_DIR$/_app/my-worker" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/_deploy/cloudflare-api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/app/my-worker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/deploy/cloudflare-api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/my-worker" vcs="Git" />
   </component>
 </project>

@@ -1,12 +1,12 @@
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { readFileSync, writeFileSync } from 'fs'
-import routes from './server/globbed-routes.js'
-import * as tags from './server/lib/tags.js'
+import routes from './app/cloudflare-api/globbed-routes.js'
+import * as tags from './app/cloudflare-api/_lib/tags.js'
 
 const pathToRepo = dirname(fileURLToPath(import.meta.url))
-const swaggerHtmlPath = join(pathToRepo, 'public/docs/index.html')
-const swaggerJsonPath = join(pathToRepo, 'public/docs/swagger.json')
+const swaggerHtmlPath = join(pathToRepo, 'deploy/cloudflare-static/public/docs/index.html')
+const swaggerJsonPath = join(pathToRepo, 'deploy/cloudflare-static/public/docs/swagger.json')
 const { name: title, version } = JSON.parse(readFileSync(join(pathToRepo, 'package.json'), 'utf8'))
 
 const clean = string => string && string
