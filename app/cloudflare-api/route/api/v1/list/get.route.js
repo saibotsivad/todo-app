@@ -1,4 +1,5 @@
 import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { list } from '@/lib/tags.js'
 import dynamodbListToJsonApiList from '@/lib/dynamodb-list-to-json-api-list.js'
 
 export const summary = `
@@ -10,7 +11,7 @@ export const description = `
 `
 
 export const tags = [
-	'list'
+	list
 ]
 
 export const responses = {

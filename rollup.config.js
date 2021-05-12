@@ -2,36 +2,26 @@
 import svelte from 'rollup-plugin-svelte'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import run from '@rollup/plugin-run'
 import json from '@rollup/plugin-json'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
 import { string } from 'rollup-plugin-string'
 import alias from '@rollup/plugin-alias'
+import npmRun from 'rollup-plugin-npm-run'
 
 const production = !process.env.ROLLUP_WATCH
 
-// function serve() {
-// 	let server
-
-// 	function toExit() {
-// 		if (server) server.kill(0)
-// 	}
-
-// 	return {
-// 		writeBundle() {
-// 			if (server) return
-// 			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-// 				stdio: ['ignore', 'inherit', 'inherit'],
-// 				shell: true
-// 			})
-
-// 			process.on('SIGTERM', toExit)
-// 			process.on('exit', toExit)
-// 		}
-// 	}
-// }
+function generateOpenApi() {
+	return {
+		writeBundle() {
+			require('child_process').spawn('node', [ 'generate-openapi.js' ], {
+				stdio: [ 'ignore', 'inherit', 'inherit' ],
+				shell: true
+			})
+		}
+	}
+}
 
 const client = {
 	input: 'app/website/main.js',
@@ -75,45 +65,44 @@ const client = {
 	}
 }
 
-
-const lambda = {
-	input: production
-		? 'app/cloudflare-api/legacy-lambda.js'
-		: 'app/cloudflare-api/local-development.js',
-	output: {
-		sourcemap: true,
-		format: 'cjs',
-		exports: production
-			? 'default'
-			: undefined,
-		dir: 'deploy/lambda-api/build'
-	},
-	plugins: [
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
-		resolve({
-			browser: false,
-			preferBuiltins: true
-		}),
-		string({
-			include: '**/*.md'
-		}),
-		commonjs(),
-
-		json(),
-
-		// In dev mode, call `npm run start` once
-		// the API bundle has been generated
-		!production && run(),
-
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
-		production && terser()
-	]
-}
+// const lambda = {
+// 	input: production
+// 		? 'app/cloudflare-api/legacy-lambda.js'
+// 		: 'app/cloudflare-api/local-development.js',
+// 	output: {
+// 		sourcemap: true,
+// 		format: 'cjs',
+// 		exports: production
+// 			? 'default'
+// 			: undefined,
+// 		dir: 'deploy/lambda-api/build'
+// 	},
+// 	plugins: [
+// 		// If you have external dependencies installed from
+// 		// npm, you'll most likely need these plugins. In
+// 		// some cases you'll need additional configuration -
+// 		// consult the documentation for details:
+// 		// https://github.com/rollup/plugins/tree/master/packages/commonjs
+// 		resolve({
+// 			browser: false,
+// 			preferBuiltins: true
+// 		}),
+// 		string({
+// 			include: '**/*.md'
+// 		}),
+// 		commonjs(),
+//
+// 		json(),
+//
+// 		// In dev mode, call `npm run start` once
+// 		// the API bundle has been generated
+// 		!production && run(),
+//
+// 		// If we're building for production (npm run build
+// 		// instead of npm run dev), minify
+// 		production && terser()
+// 	]
+// }
 
 const cloudflareApi = {
 	input: 'app/cloudflare-api/worker-wrapped.js',
@@ -137,7 +126,11 @@ const cloudflareApi = {
 			include: '**/*.md'
 		}),
 		commonjs(),
-		json()
+		json(),
+		generateOpenApi(),
+		// In dev mode, call `npm run start` once
+		// the bundle has been generated
+		!production && npmRun('start')
 	],
 	watch: {
 		clearScreen: false

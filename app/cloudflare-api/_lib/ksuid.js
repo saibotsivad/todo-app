@@ -8,15 +8,26 @@ import getRandomValues from '@/shared/cf-shim/crypto/get-random-values.node.js'
 // This number (14e11) was picked to be easy to remember.
 const EPOCH_IN_MS = 14e11
 
-const TIMESTAMP_BYTE_LENGTH = 4 // Timestamp is a uint32
 const PAYLOAD_BYTE_LENGTH = 16
-const BYTE_LENGTH = TIMESTAMP_BYTE_LENGTH + PAYLOAD_BYTE_LENGTH // KSUIDs are 20 bytes when binary encoded
+
+function numberToByteArray(number) {
+	let int = BigInt(number)
+	const result = []
+	while (int > 0n) {
+		result.push(Number(int % 0x100n))
+		int /= 0x100n
+	}
+	return Uint8Array.from(result.reverse())
+}
 
 export const ksuid = () => {
 	const timestamp = Math.floor((Date.now() - EPOCH_IN_MS) / 1e3)
-	const timestampBuffer = Buffer.allocUnsafe(TIMESTAMP_BYTE_LENGTH)
-	timestampBuffer.writeUInt32BE(timestamp, 0)
+	const timestampArray = numberToByteArray(timestamp)
 	const dataArray = new Uint8Array(PAYLOAD_BYTE_LENGTH)
 	getRandomValues(dataArray)
-	return Buffer.concat([ timestampBuffer, dataArray ], BYTE_LENGTH).toString('base64')
+	const allBytes = [ ...timestampArray, ...dataArray ]
+	return btoa(String.fromCharCode.apply(null, allBytes))
+		.replace(/\+/g, '-')
+		.replace(/\//g, '_')
+		.replace(/=/g, '')
 }

@@ -1,5 +1,5 @@
 import 'source-map-support/register.js'
-import { setupServer } from './setup-server.js'
+import { setupRouter } from './setup-router.js'
 import { generateIndex } from '../cloudflare-static/generate-index.js'
 import { db } from '@/service/db.js'
 import { routeRequest } from '@/lib/route-request.js'
@@ -9,6 +9,7 @@ import { join } from 'path'
 import log from '@/service/log.js'
 import Trouter from 'trouter'
 import http from 'http'
+import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
 
 const requiredEnvironmentVariables = [
 	'AWS_ACCOUNT_ID',
@@ -43,8 +44,6 @@ const config = {
 
 const router = new Trouter()
 
-setupServer({ db, config, log }, router)
-
 router.add('GET', '/', async () => ({
 	headers: {
 		'Content-Type': 'text/html'
@@ -53,9 +52,17 @@ router.add('GET', '/', async () => ({
 	status: 200
 }))
 
-router.add('GET', /__build__(?<path>\/.+)$/, async request => serveFile({
+const serveDocs = async request => serveFile({
+	filepath: join('deploy/cloudflare-static/public/docs', request.params.path || '/')
+})
+router.add('GET', '/docs/', serveDocs)
+router.add('GET', /docs\/(?<path>.+)$/, serveDocs)
+
+router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path)
 }))
+
+setupRouter({ db, config, log }, router)
 
 const server = http.createServer((req, res) => {
 	// trusting the `host` of the header is not good in production, but for
@@ -73,16 +80,7 @@ const server = http.createServer((req, res) => {
 	}
 
 	if (request.search) {
-		request.query = {}
-		for (const [ key, value ] of url.searchParams) {
-			if (Array.isArray(request.query[key])) {
-				request.query[key].push(value)
-			} else if (request.query[key] !== undefined) {
-				request.query[key] = [ request.query[key], value ]
-			} else {
-				request.query[key] = value
-			}
-		}
+		request.query = remapPairsToMap(url.searchParams)
 	}
 
 	const start = Date.now()
@@ -97,7 +95,7 @@ const server = http.createServer((req, res) => {
 			body
 		}) => {
 			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
-			if (json) {
+			if (json || typeof body === 'object') {
 				headers = headers || {}
 				headers['Content-Type'] = 'application/json'
 			}
@@ -107,7 +105,7 @@ const server = http.createServer((req, res) => {
 				})
 			}
 			res.writeHead(status)
-			if (json) {
+			if (json || typeof body === 'object') {
 				res.end(JSON.stringify(body))
 			} else {
 				res.end(body)

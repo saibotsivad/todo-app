@@ -1,7 +1,10 @@
-import polka from '@/lib/polka/polka.js'
-import { setupServer } from './setup-server.js'
+import { setupRouter } from './setup-router.js'
 import { db } from '@/service/db.js'
+import { routeRequest } from '@/lib/route-request.js'
+import { ksuid } from '@/lib/ksuid.js'
 import log from '@/service/log.js'
+import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
+import Trouter from 'trouter'
 
 // set('AWS_ACCOUNT_ID', AWS_ACCOUNT_ID)
 // set('AWS_REGION', AWS_REGION)
@@ -12,21 +15,55 @@ import log from '@/service/log.js'
 // set('NODE_ENV', 'production')
 // set('IS_DEPLOYED', 'true')
 
+// eslint-disable-next-line no-undef
 addEventListener('fetch', event => {
 	event.respondWith(handleRequest(event.request))
 })
 
-const config = {
-	get: async key => CONFIGURATION.get(key)
-}
+let router
 
-let api
-
-async function handleRequest(request) {
-	if (!api) {
-		api = polka()
-		setupServer({ db, config, log }, api)
+async function handleRequest(req) {
+	if (!router) {
+		// The configuration settings are loaded once per instantiation, so if you
+		// change them midway you'll have to wait until the instances go away.
+		// eslint-disable-next-line no-undef
+		const config = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
+		router = new Trouter()
+		setupRouter({ db, log, config: key => config[key] }, router)
 	}
-	const { body, headers } = await api(request)
-	return new Response(body, { headers })
+
+	const url = new URL(req.url)
+	const request = {
+		method: req.method.toUpperCase(),
+		headers: remapPairsToMap(req.headers),
+		pathname: url.pathname,
+		search: url.search,
+		body: req.body // TODO
+	}
+	if (request.search) {
+		request.query = remapPairsToMap(url.searchParams)
+	}
+
+	const start = Date.now()
+	const requestId = ksuid()
+	log.info(`[${requestId}] [START] ${request.method} ${request.pathname}${request.search || ''}`)
+
+	return routeRequest(router, request)
+		.then(({
+			status,
+			headers,
+			json,
+			body
+		}) => {
+			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
+			if (json || typeof body === 'object') {
+				headers = headers || {}
+				headers['Content-Type'] = 'application/json'
+				body = JSON.stringify(body)
+			}
+			return new Response(body, {
+				status,
+				headers: new Headers(headers)
+			})
+		})
 }

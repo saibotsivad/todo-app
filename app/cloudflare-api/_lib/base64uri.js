@@ -8,18 +8,14 @@ For simple base64 that is URI safe, we do the following translations:
 
 */
 
-export const encode = string => Buffer
-	.from(string, 'utf8')
-	.toString('base64')
+export const encode = string => btoa(string)
 	.replace(/\+/g, '-')
 	.replace(/\//g, '_')
 	.replace(/=/g, '')
 
-export const decode = string => Buffer
-	.from(
-		string
-			.replace(/-/g, '+')
-			.replace(/_/g, '\\'),
-		'base64'
-	)
+export const decode = string => atob(
+	string
+		.replace(/-/g, '+')
+		.replace(/_/g, '\\')
+)
 	.toString('utf8')

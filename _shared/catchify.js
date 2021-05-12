@@ -7,8 +7,8 @@
  * const [ error, result ] = await catchify(myCoolPromise)
  * ```
  *
- * @param {Promise<T>} p - The non-awaited promise.
- * @returns {Promise<[null, T] | [any]>} - The error-first array result.
+ * @param {Promise} p - The non-awaited promise.
+ * @returns {Promise<[null, any] | [any]>} - The error-first array result.
  */
 export const catchify = async p => Promise
 	.resolve(p)

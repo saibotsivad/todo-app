@@ -18,6 +18,16 @@ export class DatabaseValidation extends Error {
 	}
 }
 
+export class NotFound extends Error {
+	constructor(message, meta) {
+		super(message)
+		this.status = 404
+		this.title = 'The requested resource could not be found.'
+		this.detail = message
+		this.meta = meta
+	}
+}
+
 export class ItemAlreadyExists extends Error {
 	constructor(message, meta) {
 		super(message)

@@ -7,28 +7,26 @@ workers_dev = true
 name = "todojournal-static-local"
 vars = { ENVIRONMENT = "local" }
 routes = [ "*" ]
-kv_namespaces = [
-	{ binding = "STATIC_ASSET", id = "70476d6349854e14a309295c1229c8b5", preview_id = "70476d6349854e14a309295c1229c8b5" }
-]
 
 [env.develop]
 name = "todojournal-static-develop"
 vars = { ENVIRONMENT = "develop" }
 routes = [
 	"develop.todojournal.com",
+	"develop.todojournal.com/",
+	"develop.todojournal.com/asset/*",
 	"develop.todojournal.com/build/*",
 	"develop.todojournal.com/page/*",
 	"develop.todojournal.com/docs/*"
 ]
-kv_namespaces = [
-	{ binding = "STATIC_ASSET", id = "70476d6349854e14a309295c1229c8b5", preview_id = "70476d6349854e14a309295c1229c8b5" }
-]
 
 [env.production]
-name = "todojournal-static"
+name = "todojournal-static-production"
 vars = { ENVIRONMENT = "production" }
 routes = [
 	"todojournal.com",
+	"todojournal.com/",
+	"todojournal.com/asset/*",
 	"todojournal.com/build/*",
 	"todojournal.com/page/*",
 	"todojournal.com/docs/*"

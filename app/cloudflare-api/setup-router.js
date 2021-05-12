@@ -10,7 +10,7 @@ import secureRoute from '@/lib/secure-route.js'
  * @param {object} services.config - The configuration service object.
  * @param {object} router - The router object to add routes to.
  */
-export const setupServer = (services, router) => {
+export const setupRouter = (services, router) => {
 	const { log } = services
 	log.info('Adding routes:')
 

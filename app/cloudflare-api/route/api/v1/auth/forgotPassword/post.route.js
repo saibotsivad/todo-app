@@ -60,7 +60,7 @@ export const responses = {
 export const handler = async (services, req) => {
 	const { email } = req.body || {}
 	if (!email) {
-		throw new BadRequest('Email must be supplied to send password reset link.')
+		throw new BadRequest('Email must be supplied to send password reset  link.')
 	}
 	const user = await lookupByEmail(services, { email })
 	const passwordResetToken = user && await generatePasswordResetToken(services, { user })
