@@ -12,13 +12,13 @@ export const name = 'cookie'
  * @param {object} services - The services object.
  * @param {object} services.db - The database service object.
  * @param {object} services.config - The configuration service object.
- * @param {object} req - The request object.
+ * @param {object} request - The request object.
  * @returns {Promise<void>} - The request is mutated or an error is thrown.
  */
-export const authorize = async ({ db, config }, req) => {
+export const authorize = async ({ db, config }, request) => {
 	let valid = false
 
-	const { userId, sessionId, sessionSecret } = parseCookie(req.headers.cookie) || {}
+	const { userId, sessionId, sessionSecret } = parseCookie(request.headers.cookie) || {}
 	if (userId && sessionId && sessionSecret) {
 		const session = await lookupSession({ db, config }, { userId, sessionId })
 		if (session) {
@@ -34,8 +34,8 @@ export const authorize = async ({ db, config }, req) => {
 	}
 
 	if (valid) {
-		req.currentUserId = userId
-		req.currentUserSessionId = sessionId
+		request.currentUserId = userId
+		request.currentUserSessionId = sessionId
 	} else {
 		throw new UnauthorizedRequest('Could not locate or parse cookie.')
 	}

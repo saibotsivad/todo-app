@@ -35,15 +35,18 @@ export const security = [
 	}
 ]
 
-export const handler = async ({ db, config }, req, res) => {
-	res.setHeader('Content-Type', 'application/json')
-	res.end(dynamodbListToJsonApiList(await db('Query', {
-		TableName: config.get('TJ_TABLE_NAME'),
-		ExpressionAttributeValues: {
-			':pk': {
-				S: `list|${req.currentUserId}`
-			}
-		},
-		KeyConditionExpression: 'pk = :pk'
-	})))
+export const handler = async ({ db, config }, request) => {
+	return {
+		json: true,
+		status: 200,
+		body: dynamodbListToJsonApiList(await db('Query', {
+			TableName: config.get('TJ_TABLE_NAME'),
+			ExpressionAttributeValues: {
+				':pk': {
+					S: `list|${request.currentUserId}`
+				}
+			},
+			KeyConditionExpression: 'pk = :pk'
+		}))
+	}
 }

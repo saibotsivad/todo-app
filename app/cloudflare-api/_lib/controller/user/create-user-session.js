@@ -13,10 +13,8 @@ export default async ({ db, config }, { user }) => {
 	const c = { S: now.toISOString() } // created
 	const u = { S: now.toISOString() } // updated
 	const expirationDate = new Date(now.getTime() + (SESSION_SECONDS * 1000))
-	const [ sessionId, sessionSecret ] = await Promise.all([
-		ksuid(),
-		generatePassword()
-	])
+	const sessionId = ksuid()
+	const sessionSecret = await generatePassword()
 	const hashedSecret = await hashPassword({ password: sessionSecret })
 
 	const { data } = await db('PutItem', {

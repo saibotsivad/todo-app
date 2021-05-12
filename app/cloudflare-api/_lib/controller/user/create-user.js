@@ -16,7 +16,7 @@ export default async ({ db, config }, { email, password }) => {
 	const now = new Date().toISOString()
 	const c = { S: now } // created
 	const u = { S: now } // updated
-	const userId = await ksuid()
+	const userId = ksuid()
 	const hashedPassword = await hashPassword({ password })
 	email = normalizeEmail(email)
 

@@ -64,7 +64,7 @@
     "compression": "^1.7.4",
     "glob-module-file": "^3.0.2",
     "got": "^11.8.1",
-    "ksuid": "^2.0.0",
+    "mime": "^2.5.2",
     "mkdirp": "^1.0.4",
     "ncp": "^2.0.0",
     "npm-run-all": "^4.1.5",
@@ -89,6 +89,7 @@
     "svelte-state-renderer": "^3.0.1",
     "swagger-ui-dist": "^3.42.0",
     "symlink-cli": "^1.0.0",
+    "trouter": "^3.2.0",
     "uvu": "^0.5.1",
     "worktop": "^0.6.1"
   },

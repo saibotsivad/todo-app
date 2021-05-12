@@ -44,13 +44,13 @@ the request object.
 
 */
 
-export default async (services, security, req) => {
+export default async (services, security, request) => {
 	const errors = []
 	for (const block of security) {
 		let successfulSectionCount = 0
 		for (const section of block) {
 			try {
-				await section.authorize(services, req)
+				await section.authorize(services, request)
 				successfulSectionCount++
 			} catch (error) {
 				// the security routes have the potential to pollute

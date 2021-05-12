@@ -12,14 +12,11 @@ const TIMESTAMP_BYTE_LENGTH = 4 // Timestamp is a uint32
 const PAYLOAD_BYTE_LENGTH = 16
 const BYTE_LENGTH = TIMESTAMP_BYTE_LENGTH + PAYLOAD_BYTE_LENGTH // KSUIDs are 20 bytes when binary encoded
 
-const generate = async () => {
-	let array = new Uint8Array(PAYLOAD_BYTE_LENGTH)
-	return getRandomValues(array)
-}
-
-export const ksuid = async () => {
+export const ksuid = () => {
 	const timestamp = Math.floor((Date.now() - EPOCH_IN_MS) / 1e3)
 	const timestampBuffer = Buffer.allocUnsafe(TIMESTAMP_BYTE_LENGTH)
 	timestampBuffer.writeUInt32BE(timestamp, 0)
-	return Buffer.concat([ timestampBuffer, await generate() ], BYTE_LENGTH).toString('base64')
+	const dataArray = new Uint8Array(PAYLOAD_BYTE_LENGTH)
+	getRandomValues(dataArray)
+	return Buffer.concat([ timestampBuffer, dataArray ], BYTE_LENGTH).toString('base64')
 }

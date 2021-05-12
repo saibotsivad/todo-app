@@ -1,9 +1,14 @@
 import 'source-map-support/register.js'
 import { setupServer } from './setup-server.js'
-import polka from 'polka'
 import { generateIndex } from '../cloudflare-static/generate-index.js'
 import { db } from '@/service/db.js'
+import { routeRequest } from '@/lib/route-request.js'
+import { ksuid } from '@/lib/ksuid.js'
+import { serveFile } from '@/lib/serve-file.js'
+import { join } from 'path'
 import log from '@/service/log.js'
+import Trouter from 'trouter'
+import http from 'http'
 
 const requiredEnvironmentVariables = [
 	'AWS_ACCOUNT_ID',
@@ -13,6 +18,8 @@ const requiredEnvironmentVariables = [
 	'TJ_TABLE_NAME',
 	'TJ_API_DOMAIN'
 ]
+
+const port = parseInt(process.env.PORT || '3000', 10)
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 	console.log('Some environment variables are not set.')
@@ -30,26 +37,84 @@ const configValues = requiredEnvironmentVariables
 		return map
 	}, {})
 
-configValues.BUILD_PREFIX = 'localhost:3000/fizz/'
-
 const config = {
 	get: async key => configValues[key]
 }
 
-const api = polka()
+const router = new Trouter()
 
-setupServer({ db, config, log }, api)
+setupServer({ db, config, log }, router)
 
-api.get('/', (req, res) => {
-	res.setHeader('Content-Type', 'text/html')
-	res.end(generateIndex('localhost:3000/___static/'))
-})
+router.add('GET', '/', async () => ({
+	headers: {
+		'Content-Type': 'text/html'
+	},
+	body: generateIndex(`http://localhost:${port}/__build__/`),
+	status: 200
+}))
 
-const port = parseInt(process.env.PORT || '3000', 10)
+router.add('GET', /__build__(?<path>\/.+)$/, async request => serveFile({
+	filepath: join('deploy/cloudflare-static/public', request.params.path)
+}))
 
-api.listen(port, error => {
-	if (error) {
-		throw error
+const server = http.createServer((req, res) => {
+	// trusting the `host` of the header is not good in production, but for
+	// local development it should be fine enough
+	const url = new URL(`http://${req.headers.host}${req.url}`)
+	const request = {
+		method: req.method.toUpperCase(),
+		pathname: url.pathname,
+		search: url.search,
+		headers: Object.keys(req.headers).reduce((map, key) => {
+			map[key] = req.headers[key]
+			return map
+		}, {}),
+		body: req.body // TODO
 	}
-	console.log(`> Running on localhost:${port}`)
+
+	if (request.search) {
+		request.query = {}
+		for (const [ key, value ] of url.searchParams) {
+			if (Array.isArray(request.query[key])) {
+				request.query[key].push(value)
+			} else if (request.query[key] !== undefined) {
+				request.query[key] = [ request.query[key], value ]
+			} else {
+				request.query[key] = value
+			}
+		}
+	}
+
+	const start = Date.now()
+	const requestId = ksuid()
+	log.info(`[${requestId}] [START] ${request.method} ${request.pathname}${request.search || ''}`)
+
+	routeRequest(router, request)
+		.then(({
+			status,
+			headers,
+			json,
+			body
+		}) => {
+			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
+			if (json) {
+				headers = headers || {}
+				headers['Content-Type'] = 'application/json'
+			}
+			if (headers) {
+				Object.keys(headers).forEach(key => {
+					res.setHeader(key, headers[key])
+				})
+			}
+			res.writeHead(status)
+			res.end(
+				json
+					? JSON.stringify(body)
+					: body
+			)
+		})
 })
+
+console.log(`> Running on localhost:${port}`)
+
+server.listen(port)

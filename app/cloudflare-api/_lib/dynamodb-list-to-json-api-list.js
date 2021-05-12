@@ -1,6 +1,6 @@
 export default (dynamodbResponse) => {
 	const response = JSON.parse(dynamodbResponse.body)
-	return JSON.stringify({
+	return {
 		data: response.Items.map(({ id, type, ...remaining }) => ({
 			id: id.S,
 			type: type.S,
@@ -12,5 +12,5 @@ export default (dynamodbResponse) => {
 					return map
 				}, {})
 		}))
-	})
+	}
 }

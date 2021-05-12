@@ -2,7 +2,7 @@
 // https://github.com/lukeed/polka/blob/next/packages/parse/index.js
 // whenever Luke publishes @next with the parse package, I can snag that
 
-import { decode } from 'querystring'
+// import { decode } from 'querystring'
 
 const noop = x => x
 
@@ -59,19 +59,19 @@ export function json(opts={}) {
 	return parse({ type, parser, limit })
 }
 
-export function urlencoded(opts={}) {
-	const { parser=decode, limit } = opts
-	const type = opts.type || 'application/x-www-form-urlencoded'
-	return parse({ type, parser, limit })
-}
+// export function urlencoded(opts={}) {
+// 	const { parser=decode, limit } = opts
+// 	const type = opts.type || 'application/x-www-form-urlencoded'
+// 	return parse({ type, parser, limit })
+// }
 
-export function raw(opts={}) {
-	const { limit, encoding=null } = opts
-	const type = opts.type || 'application/octet-stream'
-	return parse({ limit, type, encoding })
-}
+// export function raw(opts={}) {
+// 	const { limit, encoding=null } = opts
+// 	const type = opts.type || 'application/octet-stream'
+// 	return parse({ limit, type, encoding })
+// }
 
-export function text(opts={}) {
-	const { limit, type='text/plain' } = opts
-	return parse({ limit, type })
-}
+// export function text(opts={}) {
+// 	const { limit, type='text/plain' } = opts
+// 	return parse({ limit, type })
+// }
