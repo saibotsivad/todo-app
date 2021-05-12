@@ -107,11 +107,11 @@ const server = http.createServer((req, res) => {
 				})
 			}
 			res.writeHead(status)
-			res.end(
-				json
-					? JSON.stringify(body)
-					: body
-			)
+			if (json) {
+				res.end(JSON.stringify(body))
+			} else {
+				res.end(body)
+			}
 		})
 })
 

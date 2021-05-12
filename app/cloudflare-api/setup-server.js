@@ -72,9 +72,7 @@ export const setupServer = (services, router) => {
 				})
 				return {
 					status: statusCode,
-					headers: {
-						'Content-Type': 'application/json'
-					},
+					json: true,
 					body: { errors: errors.map(errorFormatter) }
 				}
 			}
