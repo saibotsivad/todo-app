@@ -1,5 +1,6 @@
 {
   "name": "todo-journal",
+  "private": true,
   "version": "0.0.0",
   "engines": {
     "node": "16.0.0"
@@ -34,7 +35,7 @@
     "release:cloudflare-static": "cd deploy/cloudflare-static && wrangler publish --env=production",
     "release:aws-services": "cd deploy/aws-services && serverless deploy --stage=production",
     "---test-functional": "---------------------------------",
-    "test": "npm-run-all --parallel test:lint test:unit:client test:unit:server",
+    "test": "npm-run-all --parallel test:lint test:unit",
     "test:lint": "eslint \"**/*.js\"",
     "test:unit": "uvu app '\\.test\\.js$'",
     "---test-integration": "---------------------------------",

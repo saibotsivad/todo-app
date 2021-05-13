@@ -6,7 +6,7 @@ addEventListener('fetch', event => {
 })
 
 async function handleEvent(event) {
-	// let pathname = new URL(event.request.url).pathname
+	let pathname = new URL(event.request.url).pathname
 	//
 	// if (pathname === '/') {
 	// 	return new Response(generateIndex('/test/'), {

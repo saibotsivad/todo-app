@@ -17,3 +17,4 @@
 /deploy/cloudflare-static/public/build
 /deploy/cloudflare-static/public/docs
 /deploy/cloudflare-static/worker/build
+/deploy/cloudflare-static/worker/worker
