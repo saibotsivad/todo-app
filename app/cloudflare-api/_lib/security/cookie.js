@@ -1,6 +1,6 @@
 import { UnauthorizedRequest } from '@/lib/exceptions.js'
 import { parseCookie } from '@/lib/cookie.js'
-import { validatePassword } from '@/lib/password.js'
+import { validatePassword } from '@/shared/worker-passwords/main.node.js'
 import lookupSession from '@/lib/controller/user/lookup-session.js'
 
 export const name = 'cookie'

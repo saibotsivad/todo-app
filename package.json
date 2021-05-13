@@ -39,7 +39,7 @@
     "test:lint": "eslint \"**/*.js\"",
     "test:unit": "uvu app '\\.test\\.js$'",
     "---test-integration": "---------------------------------",
-    "integration": "uvu integration",
+    "integration": "uvu integration 'runner.js'",
     "---local": "---------------------------------",
     "dev": "export DEVELOPMENT=true && run-p watch:*",
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
@@ -94,7 +94,7 @@
     "tree-kill": "^1.2.2",
     "trouter": "^3.2.0",
     "uvu": "^0.5.1",
-    "worktop": "^0.6.1"
+    "worktop": "^0.6.3"
   },
   "devDependencies": {
     "eslint": "^7.24.0",

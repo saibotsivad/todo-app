@@ -1,10 +1,10 @@
-import { suite } from 'uvu'
+/* global globalThis */
 import * as assert from 'uvu/assert'
 
 const scenarios = [
-	'user-create',
-	'user-login',
-	'user-logout'
+	'user-create'
+	// 'user-login',
+	// 'user-logout'
 ]
 
 const mutableState = {
@@ -16,12 +16,20 @@ const mutableState = {
 console.log('Running integration tests for:', mutableState.baseUrl)
 
 const run = async () => {
+	// Note the reference to `globalThis.UVU_*` is to manage suite
+	// flow, since `uvu` doesn't fully support that yet.
+	// More info: https://github.com/lukeed/uvu/issues/113
+	globalThis.UVU_DEFER = 1
+	const uvu = await import('uvu')
 	for (const scenario of scenarios) {
-		const test = suite(scenario)
+		const count = globalThis.UVU_QUEUE.push([ scenario ])
+		globalThis.UVU_INDEX = count - 1
+		const test = uvu.suite(scenario)
 		const run = await import(`./${scenario}/${scenario}.js`)
-		await run.default(test, assert, mutableState)
-		await test.run()
+		run.default(test, assert, mutableState)
+		test.run()
 	}
+	return uvu.exec()
 }
 
 const start = Date.now()

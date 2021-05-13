@@ -64,11 +64,27 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 
 setupRouter({ db: dynamodb(config), config, log }, router)
 
-const server = http.createServer((req, res) => {
+const getBody = req => new Promise(resolve => {
+	let data = ''
+	req.on('data', chunk => {
+		console.log('Data chunk available', chunk)
+		data += chunk
+	})
+	req.on('end', () => {
+		resolve(
+			(req.headers['content-type'] || '').toLowerCase().includes('application/json')
+				? JSON.parse(data)
+				: data
+		)
+	})
+})
+
+const handleHttpRequest = async (requestId, req, res) => {
 	// trusting the `host` of the header is not good in production, but for
 	// local development it should be fine enough
-	const url = new URL(`http://${req.headers.host}${req.url}`)
+	const url = new URL(`https://${req.headers.host}${req.url}`)
 	const request = {
+		id: requestId,
 		method: req.method.toUpperCase(),
 		pathname: url.pathname,
 		search: url.search,
@@ -76,40 +92,39 @@ const server = http.createServer((req, res) => {
 			map[key] = req.headers[key]
 			return map
 		}, {}),
-		body: req.body // TODO
+		body: await getBody(req)
 	}
 
 	if (request.search) {
 		request.query = remapPairsToMap(url.searchParams)
 	}
 
+	let { status, headers, json, body } = await routeRequest(router, request)
+	if (json || typeof body === 'object') {
+		headers = headers || {}
+		headers['Content-Type'] = 'application/json'
+	}
+	if (headers) {
+		Object.keys(headers).forEach(key => {
+			res.setHeader(key, headers[key])
+		})
+	}
+	res.writeHead(status || 500)
+	if (json || typeof body === 'object') {
+		res.end(JSON.stringify(body))
+	} else {
+		res.end(body)
+	}
+	return { request, status }
+}
+
+const server = http.createServer((req, res) => {
 	const start = Date.now()
 	const requestId = ksuid()
-	log.info(`[${requestId}] [START] ${request.method} ${request.pathname}${request.search || ''}`)
-
-	routeRequest(router, request)
-		.then(({
-			status,
-			headers,
-			json,
-			body
-		}) => {
+	log.info(`[${requestId}] [START] ${req.method.toUpperCase()} ${req.url}`)
+	handleHttpRequest(requestId, req, res)
+		.then(({ request, status }) => {
 			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
-			if (json || typeof body === 'object') {
-				headers = headers || {}
-				headers['Content-Type'] = 'application/json'
-			}
-			if (headers) {
-				Object.keys(headers).forEach(key => {
-					res.setHeader(key, headers[key])
-				})
-			}
-			res.writeHead(status || 500)
-			if (json || typeof body === 'object') {
-				res.end(JSON.stringify(body))
-			} else {
-				res.end(body)
-			}
 		})
 })
 
