@@ -1,5 +1,5 @@
 import { PBKDF2 } from 'worktop/crypto'
-import getRandomValues from '../cf-shim/crypto/get-random-values.node.js'
+import getRandomValues from '../cf-shim/crypto/get-random-values.worker.js'
 import { arrayToBase64Uri } from '../util/string.js'
 
 // Round count, key and salt lengths, and digest algorithm follow

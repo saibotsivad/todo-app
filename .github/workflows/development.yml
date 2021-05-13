@@ -22,11 +22,18 @@ jobs:
     - run: npm run test
     - run: npm run build
     - env:
-        STAGE: dev
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+        STAGE: develop
+        AWS_ACCOUNT_ID: 985731193180
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIA6LARILFOPZWEKBEX
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        CF_ACCOUNT_ID: bd5d47aef41fb2139f547a3349f5716f
+        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        LOG_LEVEL: debug
+        TJ_TABLE_NAME: todojournal-develop
+        TJ_ADMIN_EMAIL_ADDRESS: admin+develop@todojournal.com
+        TJ_API_DOMAIN: develop.todojournal.com
+        BASE_URL: "https://develop.todojournal.com"
       run: npm run deploy
     - env:
         STAGE: dev
