@@ -1,5 +1,5 @@
 import { setupRouter } from './setup-router.js'
-import { db } from '@/service/db.js'
+import { dynamodb } from '@/service/db.js'
 import { routeRequest } from '@/lib/route-request.js'
 import { ksuid } from '@/lib/ksuid.js'
 import log from '@/service/log.js'
@@ -27,9 +27,10 @@ async function handleRequest(req) {
 		// The configuration settings are loaded once per instantiation, so if you
 		// change them midway you'll have to wait until the instances go away.
 		// eslint-disable-next-line no-undef
-		const config = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
+		const options = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
+		const config = { get: key => options[key] }
 		router = new Trouter()
-		setupRouter({ db, log, config: key => config[key] }, router)
+		setupRouter({ db: dynamodb(config), log, config }, router)
 	}
 
 	const url = new URL(req.url)

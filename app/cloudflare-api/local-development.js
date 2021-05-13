@@ -1,7 +1,7 @@
 import 'source-map-support/register.js'
 import { setupRouter } from './setup-router.js'
 import { generateIndex } from '../cloudflare-static/generate-index.js'
-import { db } from '@/service/db.js'
+import { dynamodb } from '@/service/db.js'
 import { routeRequest } from '@/lib/route-request.js'
 import { ksuid } from '@/lib/ksuid.js'
 import { serveFile } from '@/lib/serve-file.js'
@@ -39,7 +39,7 @@ const configValues = requiredEnvironmentVariables
 	}, {})
 
 const config = {
-	get: async key => configValues[key]
+	get: key => configValues[key]
 }
 
 const router = new Trouter()
@@ -62,7 +62,7 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path)
 }))
 
-setupRouter({ db, config, log }, router)
+setupRouter({ db: dynamodb(config), config, log }, router)
 
 const server = http.createServer((req, res) => {
 	// trusting the `host` of the header is not good in production, but for
@@ -104,7 +104,7 @@ const server = http.createServer((req, res) => {
 					res.setHeader(key, headers[key])
 				})
 			}
-			res.writeHead(status)
+			res.writeHead(status || 500)
 			if (json || typeof body === 'object') {
 				res.end(JSON.stringify(body))
 			} else {

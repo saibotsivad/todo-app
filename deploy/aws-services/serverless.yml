@@ -6,7 +6,7 @@
 
 # TODO also if you want to do streaming from DynamoDB
 
-service: todo-journal
+service: todojournal
 
 provider:
   name: aws
@@ -16,7 +16,7 @@ provider:
   logRetentionInDays: 7
   deploymentBucket:
     blockPublicAccess: true
-    name: todo-journal-1498571
+    name: todojournal-20210512
     maxPreviousDeploymentArtifacts: 1
 
 resources:
@@ -24,7 +24,7 @@ resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: todo-journal-${opt:stage}
+        TableName: todojournal-${opt:stage}
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S
