@@ -1,7 +1,7 @@
 import { auth } from '@/lib/tags.js'
 import { BadRequest } from '@/lib/exceptions.js'
 import { generateCookie } from '@/lib/cookie.js'
-import { validatePassword } from '@/lib/password.js'
+import { validatePassword } from '@/shared/worker-passwords/main.node.js'
 import createUserSession from '@/lib/controller/user/create-user-session.js'
 import lookupByEmail from '@/lib/controller/user/lookup-by-email.js'
 

@@ -113,7 +113,7 @@ const cloudflareApi = {
 		inlineDynamicImports: true
 	},
 	plugins: [
-		alias({
+		!production && alias({
 			entries: [
 				{ find: /^(.*)\.node\.js$/, replacement: '$1.worker.js' }
 			]

@@ -1,6 +1,6 @@
 import { BadRequest, ItemAlreadyExists } from '@/lib/exceptions.js'
 import { normalizeEmail } from '@/lib/email.js'
-import { hashPassword } from '@/lib/password.js'
+import { hashPassword } from '@/shared/worker-passwords/main.node.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
 import { ksuid } from '@/lib/ksuid.js'
 

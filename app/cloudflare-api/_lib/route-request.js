@@ -16,6 +16,7 @@ const fourOhFour = () => ({
 
 /**
  * @typedef {object} ClientRequest
+ * @property {string} requestId - The system-assigned request identifier.
  * @property {string} method - The request method, in uppercase.
  * @property {URL} url - The full, parsed URL of the request.
  * @property {string} hostname - The host, e.g. the domain.

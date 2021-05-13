@@ -1,12 +1,8 @@
-// import crypto from 'crypto'
-// import { promisify } from 'util'
+import crypto from 'crypto'
+import { promisify } from 'util'
 
-// TODO: switch to bcrypt?
-
-// const pbkdf2 = promisify(crypto.pbkdf2)
-// const randomBytes = promisify(crypto.randomBytes)
-const pbkdf2 = async () => {}
-const randomBytes = async () => {}
+const pbkdf2 = promisify(crypto.pbkdf2)
+const randomBytes = promisify(crypto.randomBytes)
 
 // Round count, key and salt lengths, and digest algorithm follow
 // the recommendations of OWASP as of January 2018:

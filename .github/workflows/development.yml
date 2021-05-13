@@ -21,15 +21,15 @@ jobs:
     - run: npm run setup
     - run: npm run test
     - run: npm run build
-#    - env:
-#        STAGE: dev
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-#        AWS_REGION: ${{ secrets.AWS_REGION }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      run: npm run deploy
-#    - env:
-#        STAGE: dev
-#        BASE_URL: "https://develop.todojournal.com/"
-#      run: npm run integration
-#    - run: echo "deploy to prod if tests pass using blue green setup"
+    - env:
+        STAGE: dev
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: npm run deploy
+    - env:
+        STAGE: dev
+        BASE_URL: "https://develop.todojournal.com/"
+      run: npm run integration
+    - run: echo "TODO deploy to prod if tests pass"

@@ -1,5 +1,5 @@
 import { ItemAlreadyExists } from '@/lib/exceptions.js'
-import { generatePassword, hashPassword } from '@/lib/password.js'
+import { generatePassword, hashPassword } from '@/shared/worker-passwords/main.node.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
 import { ksuid } from '@/lib/ksuid.js'
 
