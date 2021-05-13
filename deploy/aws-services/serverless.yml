@@ -1,10 +1,10 @@
 # These are the services, in this approach I am envisioning basically only
 # a handful of services, namely a DynamoDB table called directly from the
-# Cloudflare Worker. However, to implement autocomplete text search, you
-# would probably launch an ElasticSearch instance or something, and ideally
-# that would be managed here as well.
-
-# TODO also if you want to do streaming from DynamoDB
+# Cloudflare Worker.
+#
+# However, to implement autocomplete text search, you would probably launch an ElasticSearch
+# instance or something, and use DynamoDB Streams to pipe data to it, and ideally the Streams
+# and ES instance would all be managed here. Or multiple serverless folders, whatever makes sense.
 
 service: todojournal
 
