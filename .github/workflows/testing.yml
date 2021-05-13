@@ -2,7 +2,7 @@ name: testing-deploy
 
 on:
   push:
-    branches: [ '!main', '!develop' ]
+    branches: [ 'feature/*' ]
 
 jobs:
   build:
