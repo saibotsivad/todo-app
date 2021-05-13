@@ -1,0 +1,19 @@
+type = "javascript"
+account_id = "bd5d47aef41fb2139f547a3349f5716f"
+zone_id = "72fdb6a1e6c368d54f90b78bff6f58da"
+workers_dev = true
+
+[env.local]
+name = "todojournal-api-local"
+vars = { ENVIRONMENT = "local" }
+route = "*"
+
+[env.develop]
+name = "todojournal-api-develop"
+vars = { ENVIRONMENT = "develop" }
+route = "develop.todojournal.com/api/*"
+
+[env.production]
+name = "todojournal-api"
+vars = { ENVIRONMENT = "production" }
+route = "todojournal.com/api/*"

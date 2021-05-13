@@ -1,0 +1,37 @@
+type = "webpack"
+account_id = "bd5d47aef41fb2139f547a3349f5716f"
+zone_id = "72fdb6a1e6c368d54f90b78bff6f58da"
+workers_dev = true
+
+[env.local]
+name = "todojournal-static-local"
+vars = { ENVIRONMENT = "local" }
+routes = [ "*" ]
+
+[env.develop]
+name = "todojournal-static-develop"
+vars = { ENVIRONMENT = "develop" }
+routes = [
+	"develop.todojournal.com",
+	"develop.todojournal.com/",
+	"develop.todojournal.com/asset/*",
+	"develop.todojournal.com/build/*",
+	"develop.todojournal.com/page/*",
+	"develop.todojournal.com/docs/*"
+]
+
+[env.production]
+name = "todojournal-static-production"
+vars = { ENVIRONMENT = "production" }
+routes = [
+	"todojournal.com",
+	"todojournal.com/",
+	"todojournal.com/asset/*",
+	"todojournal.com/build/*",
+	"todojournal.com/page/*",
+	"todojournal.com/docs/*"
+]
+
+[site]
+bucket = "./public"
+entry-point = "./worker"

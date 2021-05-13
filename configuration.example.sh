@@ -4,11 +4,15 @@
 # the project locally. When deployed using the `serverless` cli
 # commands, all variables are configured auto-magically.
 
-# Normal AWS credentials.
+# AWS credentials
 export AWS_ACCOUNT_ID="123456789012"
 export AWS_REGION="us-east-1"
 export AWS_ACCESS_KEY_ID="AKIAEXAMPLEKEY"
 export AWS_SECRET_ACCESS_KEY="abc123abc123abc123abc123"
+
+# Cloudflare credentials
+export CF_ACCOUNT_ID="12345"
+export CF_API_TOKEN="veryLongAPIToken"
 
 # Log level. See discussion in the `server/service/log.js` for the
 # different levels of logging. By default only `info` level and higher

@@ -5,13 +5,15 @@
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/server/node_modules" />
-      <excludeFolder url="file://$MODULE_DIR$/client/node_modules" />
-      <excludeFolder url="file://$MODULE_DIR$/public/build" />
-      <excludeFolder url="file://$MODULE_DIR$/public/docs" />
-      <excludeFolder url="file://$MODULE_DIR$/deploy/public" />
-      <excludeFolder url="file://$MODULE_DIR$/server/public" />
-      <excludeFolder url="file://$MODULE_DIR$/deploy/build" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/aws-services/.serverless" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/worker/build" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-api/build" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/public/docs" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/worker/worker" />
+      <excludeFolder url="file://$MODULE_DIR$/app/website/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/app/cloudflare-api/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/public/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
