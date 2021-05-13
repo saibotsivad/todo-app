@@ -1,15 +1,22 @@
+# the usual culprits
 .DS_Store
 /node_modules
-/public/build
-/public/docs
-/client/globbed-*
-/client/node_modules
-/server/globbed-*
-/server/node_modules
-/server/public
-/deploy/node_modules
-/deploy/.serverless
-/deploy/build
-/deploy/public
+
+# personal local files
 /configuration.sh
 /fiddle.js
+
+# symlinks
+/app/*/node_modules
+
+# globbed things
+/**/globbed-*.js
+
+# built parts
+/deploy/*/.serverless
+/deploy/*/build
+/deploy/cloudflare-static/dist
+/deploy/cloudflare-static/public/build
+/deploy/cloudflare-static/public/docs
+/deploy/cloudflare-static/worker/build
+/deploy/cloudflare-static/worker/worker
