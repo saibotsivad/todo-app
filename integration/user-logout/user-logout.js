@@ -2,6 +2,7 @@ import got from 'got'
 
 export default async (test, assert, state) => {
 	test('user-logout: logging out sets expired cookie', async () => {
+		console.log('------------', state.cookie)
 		const response = await got.get(`${state.baseUrl}/api/v1/auth/logout`, {
 			headers: {
 				cookie: state.cookie,
@@ -12,7 +13,7 @@ export default async (test, assert, state) => {
 		const data = JSON.parse(response.body)
 		assert.is(data.ok, true, 'just a simple ok response')
 		assert.ok(response.headers['set-cookie'], 'the cookie exists')
-		const matcher = /todoapp=([^;]+);/.exec(response.headers['set-cookie'])
+		const matcher = /todojournal=([^;]+);/.exec(response.headers['set-cookie'])
 		assert.ok(matcher, 'did find a regex match for cookie')
 		assert.is(matcher[1], 'expired', 'the cookie does not contain session info')
 	})
