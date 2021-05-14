@@ -48,6 +48,7 @@ export const handler = async (services, req) => {
 		headers: {
 			'Set-Cookie': generateExpiredCookie(services),
 		},
+		status: 200,
 		json: true,
 		body: { ok: true },
 	}
