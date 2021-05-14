@@ -4,8 +4,8 @@ export default async (test, assert, state) => {
 	test('user-logout: logging out sets expired cookie', async () => {
 		const response = await got.get(`${state.baseUrl}/api/v1/auth/logout`, {
 			headers: {
-				cookie: state.cookie
-			}
+				cookie: state.cookie,
+			},
 		})
 		assert.is(response.statusCode, 200, 'gives correct status code')
 		assert.ok(response.body, 'there is a body response')
@@ -20,9 +20,9 @@ export default async (test, assert, state) => {
 	test('user-logout: logged out user cannot fetch self', async () => {
 		const response = await got.get(`${state.baseUrl}/api/v1/auth/user`, {
 			headers: {
-				cookie: state.cookie
+				cookie: state.cookie,
 			},
-			throwHttpErrors: false
+			throwHttpErrors: false,
 		})
 		assert.is(response.statusCode, 401, 'gives unauthenticated status code')
 	})

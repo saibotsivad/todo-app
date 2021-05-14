@@ -13,7 +13,7 @@ export const description = `
 `
 
 export const tags = [
-	auth
+	auth,
 ]
 
 export const responses = {
@@ -21,13 +21,13 @@ export const responses = {
 		description: `
 			The complete [user] object of the authenticated
 			request.
-		`
+		`,
 	},
 	401: {
 		description: `
 			The request could not be authenticated.
-		`
-	}
+		`,
+	},
 }
 
 export const security = [
@@ -35,9 +35,9 @@ export const security = [
 		{
 			type: cookie,
 			authorize,
-			scopes: []
-		}
-	]
+			scopes: [],
+		},
+	],
 ]
 
 export const handler = async (services, req) => {
@@ -45,7 +45,7 @@ export const handler = async (services, req) => {
 		json: true,
 		status: 200,
 		body: {
-			data: await lookupById(services, { id: req.currentUserId })
-		}
+			data: await lookupById(services, { id: req.currentUserId }),
+		},
 	}
 }

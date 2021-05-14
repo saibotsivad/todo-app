@@ -1,8 +1,5 @@
 # whats next
 
-- get integration tests working
-- get deploy pipeline working
-	- run unit tests
-	- deploy to develop
-	- run integration tests
-	- if those pass deploy to prod
+- integration tests fail but the github workflow passes???
+- verify develop pipeline working and deploys all parts correctly
+- verify prod pipeline working and deploys all parts correctly

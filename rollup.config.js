@@ -17,9 +17,9 @@ function generateOpenApi() {
 		writeBundle() {
 			require('child_process').spawn('node', [ 'generate-openapi.js' ], {
 				stdio: [ 'ignore', 'inherit', 'inherit' ],
-				shell: true
+				shell: true,
 			})
-		}
+		},
 	}
 }
 
@@ -28,14 +28,14 @@ const client = {
 	output: {
 		sourcemap: true,
 		format: 'iife',
-		dir: 'deploy/cloudflare-static/public/build'
+		dir: 'deploy/cloudflare-static/public/build',
 	},
 	plugins: [
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
-				dev: !production
-			}
+				dev: !production,
+			},
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
@@ -48,7 +48,7 @@ const client = {
 		// https://github.com/rollup/plugins/tree/master/packages/commonjs
 		resolve({
 			browser: true,
-			dedupe: [ 'svelte' ]
+			dedupe: [ 'svelte' ],
 		}),
 		commonjs(),
 
@@ -58,11 +58,11 @@ const client = {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
 	],
 	watch: {
-		clearScreen: false
-	}
+		clearScreen: false,
+	},
 }
 
 // const lambda = {
@@ -110,31 +110,31 @@ const cloudflareApi = {
 		sourcemap: true,
 		format: 'es',
 		file: 'deploy/cloudflare-api/build/build.js',
-		inlineDynamicImports: true
+		inlineDynamicImports: true,
 	},
 	plugins: [
 		production && alias({
 			entries: [
-				{ find: /^(.*)\.node\.js$/, replacement: '$1.worker.js' }
-			]
+				{ find: /^(.*)\.node\.js$/, replacement: '$1.worker.js' },
+			],
 		}),
 		resolve({
 			browser: true,
-			preferBuiltins: false
+			preferBuiltins: false,
 		}),
 		string({
-			include: '**/*.md'
+			include: '**/*.md',
 		}),
 		commonjs(),
 		json(),
 		generateOpenApi(),
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
-		!production && npmRun('start')
+		!production && npmRun('start'),
 	],
 	watch: {
-		clearScreen: false
-	}
+		clearScreen: false,
+	},
 }
 
 const cloudflareStatic = {
@@ -142,22 +142,22 @@ const cloudflareStatic = {
 	output: {
 		format: 'es',
 		file: 'deploy/cloudflare-static/worker/build/build.js',
-		inlineDynamicImports: true
+		inlineDynamicImports: true,
 	},
 	plugins: [
 		resolve({
-			browser: true
+			browser: true,
 		}),
-		commonjs()
+		commonjs(),
 	],
 	watch: {
-		clearScreen: false
-	}
+		clearScreen: false,
+	},
 }
 
 export default [
 	client,
 	// lambda,
 	cloudflareApi,
-	cloudflareStatic
+	cloudflareStatic,
 ]

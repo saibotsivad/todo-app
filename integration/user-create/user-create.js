@@ -7,9 +7,9 @@ export default async (test, assert, state) => {
 			{
 				json: {
 					email: state.userEmail,
-					password: state.userPassword
-				}
-			}
+					password: state.userPassword,
+				},
+			},
 		)
 		assert.is(response.statusCode, 201, 'gives correct status code')
 		assert.ok(response.body, 'there is a body response')

@@ -8,7 +8,7 @@ export default {
 			domApi.$set({
 				disabled: true,
 				success: null,
-				errors: null
+				errors: null,
 			})
 			console.log('signing up', email, password)
 			createUser({ email, password })
@@ -16,16 +16,16 @@ export default {
 					console.log('done', response)
 					domApi.$set({
 						disabled: false,
-						success: true
+						success: true,
 					})
 				})
 				.catch(error => {
 					console.error('error', error)
 					domApi.$set({
 						disabled: false,
-						errors: error.body.errors
+						errors: error.body.errors,
 					})
 				})
 		})
-	}
+	},
 }

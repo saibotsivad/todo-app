@@ -30,23 +30,23 @@ export default async ({ db, config }, { email, password }) => {
 					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
-							S: 'user'
+							S: 'user',
 						},
 						sk: {
-							S: `user|${userId}`
+							S: `user|${userId}`,
 						},
 						email: {
-							S: email
+							S: email,
 						},
 						c,
-						u
+						u,
 					},
 					ConditionExpression: 'attribute_not_exists(#PK)',
 					ExpressionAttributeNames: {
-						'#PK': 'pk'
+						'#PK': 'pk',
 					},
-					ReturnValuesOnConditionCheckFailure: 'NONE'
-				}
+					ReturnValuesOnConditionCheckFailure: 'NONE',
+				},
 			},
 			// user-by-id collection, for profile, details, session, etc
 			{
@@ -54,21 +54,21 @@ export default async ({ db, config }, { email, password }) => {
 					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
-							S: `user|${userId}`
+							S: `user|${userId}`,
 						},
 						sk: {
-							S: 'user'
+							S: 'user',
 						},
 						password: {
-							S: hashedPassword
+							S: hashedPassword,
 						},
 						email: {
-							S: email
+							S: email,
 						},
 						c,
-						u
-					}
-				}
+						u,
+					},
+				},
 			},
 			// email maps to one user id, for lookup during login
 			{
@@ -76,28 +76,28 @@ export default async ({ db, config }, { email, password }) => {
 					TableName: config.get('TJ_TABLE_NAME'),
 					Item: {
 						pk: {
-							S: `email|${email}`
+							S: `email|${email}`,
 						},
 						sk: {
-							S: 'email'
+							S: 'email',
 						},
 						userId: {
-							S: userId
+							S: userId,
 						},
 						password: {
-							S: hashedPassword
+							S: hashedPassword,
 						},
 						c,
-						u
+						u,
 					},
 					ConditionExpression: 'attribute_not_exists(#PK)',
 					ExpressionAttributeNames: {
-						'#PK': 'pk'
+						'#PK': 'pk',
 					},
-					ReturnValuesOnConditionCheckFailure: 'NONE'
-				}
-			}
-		]
+					ReturnValuesOnConditionCheckFailure: 'NONE',
+				},
+			},
+		],
 	})
 
 	if (itemAlreadyExists(data)) {
@@ -109,10 +109,10 @@ export default async ({ db, config }, { email, password }) => {
 		type: 'user',
 		meta: {
 			created: now,
-			updated: now
+			updated: now,
 		},
 		attributes: {
-			email
-		}
+			email,
+		},
 	}
 }

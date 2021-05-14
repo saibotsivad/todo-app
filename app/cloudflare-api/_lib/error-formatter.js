@@ -17,6 +17,6 @@ export default error => {
 		code: (error.constructor.name !== 'Error' && error.constructor.name) || error.code || 'UnexpectedException',
 		title: error.title || 'Unexpected server exception',
 		detail: error.message || error.detail || 'Unexpected server exception, please report to API maintainers.',
-		meta: error.meta
+		meta: error.meta,
 	}
 }

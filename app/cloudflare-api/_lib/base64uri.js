@@ -16,6 +16,6 @@ export const encode = string => btoa(string)
 export const decode = string => atob(
 	string
 		.replace(/-/g, '+')
-		.replace(/_/g, '\\')
+		.replace(/_/g, '\\'),
 )
 	.toString('utf8')

@@ -10,7 +10,7 @@ export default (dynamodbResponse) => {
 				.reduce((map, [ key, value ]) => {
 					map[key] = value[Object.keys(value)[0]]
 					return map
-				}, {})
-		}))
+				}, {}),
+		})),
 	}
 }
