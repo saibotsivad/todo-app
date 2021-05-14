@@ -7,7 +7,7 @@ export default {
 	defaultChild: 'list',
 	resolve: async () => {
 		return {
-			user: await getCurrentUser()
+			user: await getCurrentUser(),
 		}
 	},
 	activate: ({ domApi }) => {
@@ -17,7 +17,7 @@ export default {
 				submitting: true,
 				disabled: true,
 				success: null,
-				errors: null
+				errors: null,
 			})
 			logout()
 				.then(response => {
@@ -29,9 +29,9 @@ export default {
 					domApi.$set({
 						submitting: false,
 						disabled: false,
-						errors: error.body.errors
+						errors: error.body.errors,
 					})
 				})
 		})
-	}
+	},
 }

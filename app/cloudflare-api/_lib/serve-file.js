@@ -18,16 +18,16 @@ export const serveFile = async ({ filepath }) => {
 			status: 404,
 			json: true,
 			body: {
-				errors: [ errorFormatter(new NotFound('Could not locate file', { filepath })) ]
-			}
+				errors: [ errorFormatter(new NotFound('Could not locate file', { filepath })) ],
+			},
 		}
 	} else if (error) {
 		return {
 			status: 500,
 			json: true,
 			body: {
-				errors: [ errorFormatter(error) ]
-			}
+				errors: [ errorFormatter(error) ],
+			},
 		}
 	}
 
@@ -36,7 +36,7 @@ export const serveFile = async ({ filepath }) => {
 		body: file,
 		headers: {
 			'content-type': mime.getType(extname(filepath).replace(/^\./, '')),
-			'content-length': Buffer.byteLength(file)
-		}
+			'content-length': Buffer.byteLength(file),
+		},
 	}
 }

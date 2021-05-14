@@ -14,5 +14,5 @@ export const catchify = async p => Promise
 	.resolve(p)
 	.then(
 		result => ([ null, result ]),
-		error => ([ error ])
+		error => ([ error ]),
 	)

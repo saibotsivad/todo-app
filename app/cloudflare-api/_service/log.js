@@ -76,7 +76,7 @@ const levelsList = [
 	'info',
 	'warn',
 	'error',
-	'fatal'
+	'fatal',
 ]
 
 const levelToIndex = {
@@ -85,7 +85,7 @@ const levelToIndex = {
 	info: 3,
 	warn: 4,
 	error: 5,
-	fatal: 6
+	fatal: 6,
 }
 
 const log = level => (message, params) => {
@@ -108,7 +108,7 @@ const log = level => (message, params) => {
 			console.log(JSON.stringify({
 				level: levelsList[level],
 				message,
-				params
+				params,
 			}))
 		} else {
 			// If it's not deployed, it means we are running locally, in which
@@ -130,5 +130,5 @@ export default {
 	info: log(3),
 	warn: log(4),
 	error: log(5),
-	fatal: log(6)
+	fatal: log(6),
 }

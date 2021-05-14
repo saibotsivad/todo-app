@@ -5,17 +5,17 @@ function api(method, url, options = {}) {
 			{
 				method,
 				headers: {
-					'Content-Type': 'application/json'
-				}
+					'Content-Type': 'application/json',
+				},
 			},
 			options.body
 				? { body: JSON.stringify(options.body) }
-				: {}
-		)
+				: {},
+		),
 	)
 		.then(async response => ({
 			status: response.status,
-			body: await response.json()
+			body: await response.json(),
 		}))
 		.then(response => {
 			if (response.status >= 400) {

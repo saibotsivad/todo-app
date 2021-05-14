@@ -13,7 +13,7 @@ export const description = `
 `
 
 export const tags = [
-	auth
+	auth,
 ]
 
 export const responses = {
@@ -23,13 +23,13 @@ export const responses = {
 			and a cookie header has been set which expires the session in
 			the users browser. Note that if no valid session is found, a 401
 			will be returned.
-		`
+		`,
 	},
 	401: {
 		description: `
 			Could not find a valid cookie session to expire or invalidate.
-		`
-	}
+		`,
+	},
 }
 
 export const security = [
@@ -37,18 +37,18 @@ export const security = [
 		{
 			type: cookie,
 			authorize,
-			scopes: []
-		}
-	]
+			scopes: [],
+		},
+	],
 ]
 
 export const handler = async (services, req) => {
 	await expireSession(services, { userId: req.currentUserId, sessionId: req.currentUserSessionId })
 	return {
 		headers: {
-			'Set-Cookie': generateExpiredCookie(services)
+			'Set-Cookie': generateExpiredCookie(services),
 		},
 		json: true,
-		body: { ok: true }
+		body: { ok: true },
 	}
 }

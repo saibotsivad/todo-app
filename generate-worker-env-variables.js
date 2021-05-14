@@ -4,7 +4,7 @@ const requiredEnvironmentVariables = [
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
 	'TJ_TABLE_NAME',
-	'TJ_API_DOMAIN'
+	'TJ_API_DOMAIN',
 ]
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {
@@ -16,7 +16,7 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 
 const configValues = requiredEnvironmentVariables
 	.concat([
-		'NODE_ENV'
+		'NODE_ENV',
 	])
 	.reduce((map, key) => {
 		map[key] = process.env[key]

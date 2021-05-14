@@ -14,7 +14,7 @@ export const dynamodb = options => async (type, params) => {
 			service: 'dynamodb',
 			region: options.get('AWS_REGION'),
 			secretAccessKey: options.get('AWS_SECRET_ACCESS_KEY'),
-			accessKeyId: options.get('AWS_ACCESS_KEY_ID')
+			accessKeyId: options.get('AWS_ACCESS_KEY_ID'),
 		}
 		if (!config.region || !config.secretAccessKey || !config.accessKeyId) {
 			throw Error('AWS credentials not loaded.')
@@ -38,13 +38,13 @@ export const dynamodb = options => async (type, params) => {
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
 			'X-Amz-Target': `DynamoDB_20120810.${type}`,
-			Host: `dynamodb.${options.get('AWS_REGION')}.amazonaws.com`
+			Host: `dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		},
 		retry: {
-			limit: 0
+			limit: 0,
 		},
 		throwHttpErrors: false,
-		body: JSON.stringify(params)
+		body: JSON.stringify(params),
 	}
 	const { authorization } = await sign(request)
 	request.headers.Authorization = authorization
@@ -60,6 +60,6 @@ export const dynamodb = options => async (type, params) => {
 
 	return {
 		data,
-		status: response.statusCode
+		status: response.statusCode,
 	}
 }

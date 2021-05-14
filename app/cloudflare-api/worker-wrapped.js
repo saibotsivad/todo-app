@@ -39,7 +39,7 @@ async function handleRequest(req) {
 		headers: remapPairsToMap(req.headers),
 		pathname: url.pathname,
 		search: url.search,
-		body: req.body // TODO
+		body: req.body, // TODO
 	}
 	if (request.search) {
 		request.query = remapPairsToMap(url.searchParams)
@@ -54,7 +54,7 @@ async function handleRequest(req) {
 			status,
 			headers,
 			json,
-			body
+			body,
 		}) => {
 			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
 			if (json || typeof body === 'object') {
@@ -64,7 +64,7 @@ async function handleRequest(req) {
 			}
 			return new Response(body, {
 				status,
-				headers: new Headers(headers)
+				headers: new Headers(headers),
 			})
 		})
 }

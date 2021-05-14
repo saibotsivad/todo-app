@@ -22,8 +22,8 @@ const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(
 	JSON.stringify({
 		uid: userId,
 		sid: sessionId,
-		pw: sessionSecret
-	})
+		pw: sessionSecret,
+	}),
 )
 
 const secureCookieParts = ({ config }) => config.get('NODE_ENV') === 'production'
@@ -45,7 +45,7 @@ const secureCookieParts = ({ config }) => config.get('NODE_ENV') === 'production
 
 		// Setting this property declares your cookie should be restricted
 		// to a first-party or same-site context.
-		'SameSite'
+		'SameSite',
 	]
 	: []
 
@@ -75,7 +75,7 @@ export const generateCookie = (services, { userId, sessionId, sessionSecret, exp
 		// mostly just makes life difficult for the developer.
 		// TODO: `domain=<domain_name>`,
 
-		...secureCookieParts(services)
+		...secureCookieParts(services),
 
 		// Filter out the ones not set and compose.
 	].filter(Boolean).join('; ')
@@ -85,7 +85,7 @@ export const generateExpiredCookie = (services) => ([
 	`${COOKIE_NAME}=expired`,
 	`Expires=${new Date().toUTCString()}`,
 	'Max-Age=0',
-	...secureCookieParts(services)
+	...secureCookieParts(services),
 ].filter(Boolean).join('; '))
 
 export const parseCookie = string => {
@@ -99,7 +99,7 @@ export const parseCookie = string => {
 		return {
 			userId: uid,
 			sessionId: sid,
-			sessionSecret: pw
+			sessionSecret: pw,
 		}
 	} catch (ignore) {
 		return null

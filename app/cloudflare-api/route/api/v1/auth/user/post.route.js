@@ -16,7 +16,7 @@ export const description = `
 `
 
 export const tags = [
-	auth
+	auth,
 ]
 
 export const parameters = [
@@ -30,28 +30,28 @@ export const parameters = [
 			properties: {
 				email: {
 					type: 'string',
-					required: true
+					required: true,
 				},
 				password: {
 					type: 'string',
-					required: true
-				}
-			}
-		}
-	}
+					required: true,
+				},
+			},
+		},
+	},
 ]
 
 export const responses = {
 	200: {
 		description: `
 			The request succeeded and an email will be sent.
-		`
+		`,
 	},
 	400: {
 		description: `
 			The email provided was considered invalid or already exists.
-		`
-	}
+		`,
+	},
 }
 
 export const handler = async (services, req) => {
@@ -63,7 +63,7 @@ export const handler = async (services, req) => {
 		json: true,
 		status: 201,
 		body: {
-			data: await createUser(services, { email, password })
-		}
+			data: await createUser(services, { email, password }),
+		},
 	}
 }

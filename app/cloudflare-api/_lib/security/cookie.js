@@ -24,7 +24,7 @@ export const authorize = async ({ db, config }, request) => {
 		if (session) {
 			const validSessionSecret = await validatePassword({
 				hash: session.attributes.password,
-				password: sessionSecret
+				password: sessionSecret,
 			})
 			const activeSession = session.attributes.status === 'a'
 			if (validSessionSecret && activeSession && new Date(session.meta.expiration).getTime() > Date.now()) {

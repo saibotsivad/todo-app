@@ -15,7 +15,7 @@ export const description = `
 `
 
 export const tags = [
-	auth
+	auth,
 ]
 
 export const parameters = [
@@ -29,15 +29,15 @@ export const parameters = [
 			properties: {
 				email: {
 					type: 'string',
-					required: true
+					required: true,
 				},
 				password: {
 					type: 'string',
-					required: true
-				}
-			}
-		}
-	}
+					required: true,
+				},
+			},
+		},
+	},
 ]
 
 export const responses = {
@@ -46,20 +46,20 @@ export const responses = {
 			The authentication request was a success. A new session has
 			been added for the user, and a cookie header is set. No other
 			information will be returned.
-		`
+		`,
 	},
 	400: {
 		description: `
 			The email or password were not supplied.
-		`
+		`,
 	},
 	401: {
 		description: `
 			The login request could not be authenticated. Either the email
 			could not be associated with an existing account, or the given
 			password was invalid.
-		`
-	}
+		`,
+	},
 }
 
 export const handler = async (services, req) => {
@@ -81,11 +81,11 @@ export const handler = async (services, req) => {
 				userId: user.id,
 				sessionId,
 				sessionSecret,
-				expirationDate
-			})
+				expirationDate,
+			}),
 		},
 		json: true,
 		status: 201,
-		body: { ok: true }
+		body: { ok: true },
 	}
 }

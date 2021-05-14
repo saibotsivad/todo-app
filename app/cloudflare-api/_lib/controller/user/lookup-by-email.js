@@ -3,12 +3,12 @@ export default async ({ db, config }, { email }) => {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
-				S: `email|${(email || '').toLowerCase()}`
+				S: `email|${(email || '').toLowerCase()}`,
 			},
 			sk: {
-				S: 'email'
-			}
-		}
+				S: 'email',
+			},
+		},
 	})
 
 	if (!data || !data.Item) {
@@ -20,11 +20,11 @@ export default async ({ db, config }, { email }) => {
 		type: 'user',
 		attributes: {
 			email: data.Item.pk.S.split('|')[1],
-			password: data.Item.password.S
+			password: data.Item.password.S,
 		},
 		meta: {
 			created: data.Item.c.S,
-			updated: data.Item.c.S
-		}
+			updated: data.Item.c.S,
+		},
 	}
 }
