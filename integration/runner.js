@@ -36,9 +36,13 @@ const start = Date.now()
 const time = () => `${Math.round((Date.now() - start) / 10) / 100}s`
 run()
 	.then(() => {
-		console.log(`Completed successfully after ${time()}`)
-		process.exit(0)
+		// `uvu` doesn't return the test suite statuses with `exec` but it
+		// does set `process.exitCode` so we can use that here
+		// More info: https://github.com/lukeed/uvu/issues/113
+		console.log(`Completed ${process.exitCode ? 'with failing tests' : 'successfully'} after ${time()}`)
+		process.exit(process.exitCode)
 	})
 	.catch(error => {
 		console.error(`Error thrown after ${time()} running tests`, error)
+		process.exit(1)
 	})

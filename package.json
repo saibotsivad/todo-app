@@ -36,7 +36,7 @@
     "release:aws-services": "cd deploy/aws-services && serverless deploy --stage=production",
     "---test-functional": "---------------------------------",
     "test": "npm-run-all --parallel test:lint test:unit",
-    "test:lint": "eslint \"**/*.js\" --fix",
+    "test:lint": "eslint \"**/*.js\"",
     "test:unit": "uvu app '\\.test\\.js$'",
     "---test-integration": "---------------------------------",
     "integration": "uvu integration 'runner.js'",
