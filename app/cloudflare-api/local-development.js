@@ -70,11 +70,16 @@ const getBody = req => new Promise(resolve => {
 		data += chunk
 	})
 	req.on('end', () => {
-		resolve(
-			(req.headers['content-type'] || '').toLowerCase().includes('application/json')
+		let output
+		try {
+			output = data && (req.headers['content-type'] || '').toLowerCase().includes('application/json')
 				? JSON.parse(data)
-				: data,
-		)
+				: data
+			resolve(output)
+		} catch (error) {
+			console.error('could not parse data as json', output)
+			resolve(data)
+		}
 	})
 })
 

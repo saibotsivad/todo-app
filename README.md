@@ -7,11 +7,30 @@ definitely a work in progress
 
 ## local dev
 
-first do `npm run setup`
+first time you need to do `npm run setup`
+
+***TODO:*** you need to install docker and setup the dynamodb local docker stuff first if you want to be able to run local
+
+then you start the dynamodb-local instance `npm run dynamodb`
 
 then whenever you want to dev do `npm run dev`
 
-***TODO:*** you need to install docker and setup the dynamodb local docker stuff first if you want to be able to run fully local
+## overall project setup
+
+create a `configuration-develop.sh` and `configuration-production.sh` file
+
+create an IAM user for develop and production, give admin access (need to figure out minimal access later), copy IAM key id and secret into respective `.sh` files
+
+create a single S3 bucket with a random suffix like `$PROJECT-1134587` to store all cloudformation deploy assets
+
+after the first deploy/release of a Worker, you will need to do
+
+```bash
+source configuration-$STAGE.sh
+node generate-worker-env-variables.js
+```
+
+and then copy+paste the JSON string out to your worker as an env variable (could also use Wrangler I think? maybe make this a bash script?)
 
 ## notes
 
