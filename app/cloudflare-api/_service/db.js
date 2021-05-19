@@ -20,16 +20,6 @@ export const dynamodb = options => async (type, params) => {
 			throw Error('AWS credentials not loaded.')
 		}
 		sign = createAwsSigner({ config })
-		// awsClient = got.extend({
-		// 	hooks: {
-		// 		beforeRequest: [
-		// 			async options => {
-		// 				const { authorization } = await sign(options)
-		// 				options.headers.Authorization = authorization
-		// 			}
-		// 		]
-		// 	}
-		// })
 	}
 
 	const request = {
@@ -49,7 +39,10 @@ export const dynamodb = options => async (type, params) => {
 	const { authorization } = await sign(request)
 	request.headers.Authorization = authorization
 
-	const response = await fetching(`https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`, request)
+	const response = await fetching(
+		options.get('DYNAMODB_URL') || `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
+		request,
+	)
 	const data = await response.json()
 
 	if (response.statusCode !== 200 && data.__type) {

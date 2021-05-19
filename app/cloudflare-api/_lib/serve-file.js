@@ -10,7 +10,6 @@ export const serveFile = async ({ filepath }) => {
 	filepath = filepath.endsWith('/')
 		? join(filepath, 'index.html')
 		: filepath
-	console.log('----------------------', filepath)
 	const [ error, file ] = await catchify(fs.readFile(filepath, 'utf8'))
 
 	if (error && error.code === 'EISDIR') {
