@@ -20,10 +20,10 @@ const supportedWriteMethods = [
 
 let router
 
-const errorHandler = error => new Response(JSON.stringify({
+const errorHandler = (status, error) => new Response(JSON.stringify({
 	errors: [ errorFormatter(error) ],
 }), {
-	status: 400,
+	status,
 	headers: new Headers({
 		'content-type': 'application/json',
 	}),
@@ -56,10 +56,10 @@ async function handleRequest(req) {
 			try {
 				request.body = await req.json()
 			} catch (error) {
-				return errorHandler(new BadRequest('Could not parse JSON body of request. Badly formatted JSON string?'))
+				return errorHandler(400, new BadRequest('Could not parse JSON body of request. Badly formatted JSON string?'))
 			}
 		} else {
-			return errorHandler(new BadRequest('Write requests currently only accept JSON, and must have the Content-Type header set.'))
+			return errorHandler(400, new BadRequest('Write requests currently only accept JSON, and must have the Content-Type header set.'))
 		}
 	}
 
@@ -74,9 +74,12 @@ async function handleRequest(req) {
 			json,
 			body,
 		}) => {
-			log.info(`[${requestId}] [END] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
+			const requestMillis = Date.now() - start
+			log.info(`[${requestId}] [END] [COMPLETED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${requestMillis}ms)`)
+			headers = headers || {}
+			headers['api-request-id'] = requestId
+			headers['api-request-ms'] = requestMillis
 			if (json || typeof body === 'object') {
-				headers = headers || {}
 				headers['Content-Type'] = 'application/json'
 				body = JSON.stringify(body)
 			}
@@ -84,5 +87,9 @@ async function handleRequest(req) {
 				status,
 				headers: new Headers(headers),
 			})
+		})
+		.catch(error => {
+			log.error(`[${requestId}] [END] [FAILED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
+			return errorHandler(500, error)
 		})
 }
