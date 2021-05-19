@@ -21,7 +21,7 @@ provider:
 
 resources:
   Resources:
-    usersTable:
+    dataTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: todojournal-${opt:stage}
