@@ -4,6 +4,7 @@
 
 # personal local files
 /configuration.sh
+/configuration-*.sh
 /fiddle.js
 
 # symlinks

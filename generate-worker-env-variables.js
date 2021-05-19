@@ -3,8 +3,13 @@ const requiredEnvironmentVariables = [
 	'AWS_REGION',
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
-	'TJ_TABLE_NAME',
+	'BASE_URL',
+	'LOG_LEVEL',
+	'NODE_ENV',
+	'STAGE',
+	'TJ_ADMIN_EMAIL_ADDRESS',
 	'TJ_API_DOMAIN',
+	'TJ_TABLE_NAME',
 ]
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {
@@ -15,9 +20,6 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 }
 
 const configValues = requiredEnvironmentVariables
-	.concat([
-		'NODE_ENV',
-	])
 	.reduce((map, key) => {
 		map[key] = process.env[key]
 		return map
@@ -26,3 +28,5 @@ const configValues = requiredEnvironmentVariables
 console.log('Copy this JSON out to the environment variable: TODO_JOURNAL_CONFIGURATION')
 
 console.log(JSON.stringify(configValues))
+
+
