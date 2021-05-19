@@ -22,7 +22,7 @@ export LOG_LEVEL="debug"
 
 # Ideally when run locally this would be like "branch-name-123"
 # but for now it's just the develop stage
-export STAGE="dev"
+export STAGE="develop"
 
 # =========================================================
 # The following are application specific, which is why they
@@ -44,3 +44,7 @@ export TJ_API_DOMAIN="todojournal.com"
 # url, or (if running locally) the port.
 export BASE_URL="http://localhost:3000"
 export PORT="3000"
+
+# To run fully locally, with DynamoDB-local running in a Docker
+# container, set this:
+export DYNAMODB_URL="http://localhost:3001"
