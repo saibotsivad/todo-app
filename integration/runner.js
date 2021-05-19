@@ -1,6 +1,14 @@
 /* global globalThis */
 import * as assert from 'uvu/assert'
 
+// eslint-disable-next-line no-import-assign
+assert.isStatus = (response, expected) => {
+	assert.is(response.statusCode, expected, 'gives correct status code')
+	if (response.statusCode !== expected) {
+		assert.equal(response.body, {}, 'this is the full response body')
+	}
+}
+
 const scenarios = [
 	'user-create',
 	'user-login',
