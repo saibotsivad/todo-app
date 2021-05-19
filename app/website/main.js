@@ -18,7 +18,7 @@ routes.forEach(route => {
 		.split('/')
 		.pop()
 		.replace(/\.route\.js$/, '')
-		.replace(/\[([^\]]+)\]/g, ':$1')
+		.replace(/\[([^\]]+)]/g, ':$1')
 	router.addState(route.export)
 })
 
@@ -56,8 +56,8 @@ router.on('stateChangeError', error => {
 			router.go('login', {
 				original: JSON.stringify({
 					name: previousState.state.name,
-					params: previousState.parameters
-				})
+					params: previousState.parameters,
+				}),
 			})
 		} else {
 			router.go('login')

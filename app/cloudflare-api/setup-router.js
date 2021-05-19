@@ -35,7 +35,7 @@ export const setupRouter = (services, router) => {
 			log.debug(method.toUpperCase() + ' ' + path, {
 				request: 'start',
 				userId: request.currentUserId,
-				sessionId: request.currentUserSessionId
+				sessionId: request.currentUserSessionId,
 			})
 			let errors
 			try {
@@ -73,7 +73,7 @@ export const setupRouter = (services, router) => {
 				return {
 					status: statusCode,
 					json: true,
-					body: { errors: errors.map(errorFormatter) }
+					body: { errors: errors.map(errorFormatter) },
 				}
 			}
 		})

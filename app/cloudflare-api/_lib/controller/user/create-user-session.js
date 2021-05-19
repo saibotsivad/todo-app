@@ -21,30 +21,30 @@ export default async ({ db, config }, { user }) => {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Item: {
 			pk: {
-				S: `user|${user.id}`
+				S: `user|${user.id}`,
 			},
 			sk: {
-				S: `session|${sessionId}`
+				S: `session|${sessionId}`,
 			},
 			pw: {
-				S: hashedSecret
+				S: hashedSecret,
 			},
 			e: {
-				S: expirationDate.toISOString()
+				S: expirationDate.toISOString(),
 			},
 			status: {
 				// User sessions are created as active here, but if you
 				// build out 2FA you could create them as not-yet-active.
-				S: 'a' // a = active
+				S: 'a', // a = active
 			},
 			c,
-			u
+			u,
 		},
 		ConditionExpression: 'attribute_not_exists(#SK)',
 		ExpressionAttributeNames: {
-			'#SK': 'sk'
+			'#SK': 'sk',
 		},
-		ReturnValuesOnConditionCheckFailure: 'NONE'
+		ReturnValuesOnConditionCheckFailure: 'NONE',
 	})
 
 	if (itemAlreadyExists(data)) {
@@ -54,6 +54,6 @@ export default async ({ db, config }, { user }) => {
 	return {
 		sessionId,
 		sessionSecret,
-		expirationDate
+		expirationDate,
 	}
 }

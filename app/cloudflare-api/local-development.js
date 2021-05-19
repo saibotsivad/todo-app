@@ -17,7 +17,7 @@ const requiredEnvironmentVariables = [
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
 	'TJ_TABLE_NAME',
-	'TJ_API_DOMAIN'
+	'TJ_API_DOMAIN',
 ]
 
 const port = parseInt(process.env.PORT || '3000', 10)
@@ -31,7 +31,7 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 
 const configValues = requiredEnvironmentVariables
 	.concat([
-		'NODE_ENV'
+		'NODE_ENV',
 	])
 	.reduce((map, key) => {
 		map[key] = process.env[key]
@@ -39,27 +39,27 @@ const configValues = requiredEnvironmentVariables
 	}, {})
 
 const config = {
-	get: key => configValues[key]
+	get: key => configValues[key],
 }
 
 const router = new Trouter()
 
 router.add('GET', '/', async () => ({
 	headers: {
-		'Content-Type': 'text/html'
+		'Content-Type': 'text/html',
 	},
 	body: generateIndex(`http://localhost:${port}/__build__/`),
-	status: 200
+	status: 200,
 }))
 
 const serveDocs = async request => serveFile({
-	filepath: join('deploy/cloudflare-static/public/docs', request.params.path || '/')
+	filepath: join('deploy/cloudflare-static/public/docs', request.params.path || '/'),
 })
 router.add('GET', '/docs/', serveDocs)
 router.add('GET', /docs\/(?<path>.+)$/, serveDocs)
 
 router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
-	filepath: join('deploy/cloudflare-static/public', request.params.path)
+	filepath: join('deploy/cloudflare-static/public', request.params.path),
 }))
 
 setupRouter({ db: dynamodb(config), config, log }, router)
@@ -67,14 +67,13 @@ setupRouter({ db: dynamodb(config), config, log }, router)
 const getBody = req => new Promise(resolve => {
 	let data = ''
 	req.on('data', chunk => {
-		console.log('Data chunk available', chunk)
 		data += chunk
 	})
 	req.on('end', () => {
 		resolve(
 			(req.headers['content-type'] || '').toLowerCase().includes('application/json')
 				? JSON.parse(data)
-				: data
+				: data,
 		)
 	})
 })
@@ -92,7 +91,7 @@ const handleHttpRequest = async (requestId, req, res) => {
 			map[key] = req.headers[key]
 			return map
 		}, {}),
-		body: await getBody(req)
+		body: await getBody(req),
 	}
 
 	if (request.search) {

@@ -15,7 +15,7 @@ export const description = `
 `
 
 export const tags = [
-	auth
+	auth,
 ]
 
 export const parameters = [
@@ -29,11 +29,11 @@ export const parameters = [
 			properties: {
 				email: {
 					type: 'string',
-					required: true
-				}
-			}
-		}
-	}
+					required: true,
+				},
+			},
+		},
+	},
 ]
 
 export const responses = {
@@ -42,19 +42,19 @@ export const responses = {
 			The password reset request was a success. A password reset
 			email has been sent to the provided email address. No other
 			information will be returned.
-		`
+		`,
 	},
 	400: {
 		description: `
 			The email was not supplied.
-		`
+		`,
 	},
 	401: {
 		description: `
 			The password reset request could not be completed. Either the email
 			was invalid or could not be associated with an existing account.
-		`
-	}
+		`,
+	},
 }
 
 export const handler = async (services, req) => {
@@ -70,10 +70,10 @@ export const handler = async (services, req) => {
 		subject: 'Password reset requested?',
 		body: renderEmailTemplate({
 			parameters: {
-				url: `https://${services.config.get('TJ_API_DOMAIN')}/app#/forgotPassword/finalize?token=${passwordResetToken}`
+				url: `https://${services.config.get('TJ_API_DOMAIN')}/app#/forgotPassword/finalize?token=${passwordResetToken}`,
 			},
-			template: (await import('@/lib/email-templates/forgot-password.md')).default
-		})
+			template: (await import('@/lib/email-templates/forgot-password.md')).default,
+		}),
 	})
 	if (!emailSent) {
 		throw new BadRequest('Could not send password reset link to provided email.')
@@ -81,6 +81,6 @@ export const handler = async (services, req) => {
 	return {
 		json: true,
 		status: 201,
-		body: { ok: true }
+		body: { ok: true },
 	}
 }

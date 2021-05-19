@@ -29,15 +29,15 @@ const openapi = {
 	info: {
 		version,
 		title,
-		description: readFileSync('./openapi-description.md', 'utf8')
+		description: readFileSync('./openapi-description.md', 'utf8'),
 	},
 	tags: Object
 		.keys(tags)
 		.map(name => ({
 			name,
-			description: clean(tags[name])
+			description: clean(tags[name]),
 		})),
-	paths: {}
+	paths: {},
 }
 
 routes.forEach(({ path: routePath, export: route }) => {
@@ -68,8 +68,8 @@ routes.forEach(({ path: routePath, export: route }) => {
 				return map
 			}, {}),
 		security: route.security && route.security.map(({ type, scopes }) => ({
-			[type]: scopes
-		}))
+			[type]: scopes,
+		})),
 	}
 })
 
@@ -80,7 +80,7 @@ writeFileSync(
 	html
 		.replace('https://petstore.swagger.io/v2/swagger.json', './swagger.json')
 		.replace('<title>Swagger UI</title>', `<title>Todo App API</title>`),
-	'utf8'
+	'utf8',
 )
 
 writeFileSync(swaggerJsonPath, JSON.stringify(openapi, undefined, 2), 'utf8')

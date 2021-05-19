@@ -10,16 +10,16 @@ test('generating and then parsing a cookie', () => {
 				get: key => {
 					assert.is(key, 'NODE_ENV', 'correct property')
 					return false
-				}
-			}
+				},
+			},
 		},
 		{
 			userId: 'a',
 			sessionId: 'b',
 			sessionSecret: 'c',
 			expirationDate: new Date('2021-04-23T12:34:00.000Z'),
-			currentNow: 1619151240000
-		}
+			currentNow: 1619151240000,
+		},
 	)
 	assert.is(typeof cookie, 'string', 'correct output format')
 	assert.ok(new RegExp('Expires=Fri, 23 Apr 2021 12:34:00 GMT($|;)').test(cookie), 'the date is formatted correctly')

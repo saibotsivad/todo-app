@@ -67,7 +67,7 @@ const STATUS_CODES = {
 	508: 'Loop Detected',              // RFC 5842 7.2
 	509: 'Bandwidth Limit Exceeded',
 	510: 'Not Extended',               // RFC 2774 7
-	511: 'Network Authentication Required' // RFC 6585 6
+	511: 'Network Authentication Required', // RFC 6585 6
 }
 
 function onError(err, req, res) {
@@ -122,7 +122,7 @@ class Polka extends Router {
 					req.url = req._parsedUrl.href
 					req.path = req._parsedUrl.pathname
 					next()
-				}
+				},
 			)
 		}
 		return this // chainable

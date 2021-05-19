@@ -8,10 +8,10 @@ const fourOhFour = () => ({
 			{
 				code: 'NotFound',
 				title: 'The requested resource could not be found.',
-				detail: 'The URL was valid, but no route handler was located.'
-			}
-		]
-	}
+				detail: 'The URL was valid, but no route handler was located.',
+			},
+		],
+	},
 })
 
 /**
@@ -49,7 +49,7 @@ export const routeRequest = async (router, request) => {
 		return {
 			status: parseInt(errors[0].status, 10),
 			json: true,
-			body: { errors }
+			body: { errors },
 		}
 	}
 }

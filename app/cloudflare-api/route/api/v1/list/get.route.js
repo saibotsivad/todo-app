@@ -11,7 +11,7 @@ export const description = `
 `
 
 export const tags = [
-	list
+	list,
 ]
 
 export const responses = {
@@ -19,21 +19,21 @@ export const responses = {
 		description: `
 			The set of \`list\` objects owned by the authenticated
 			request.
-		`
+		`,
 	},
 	401: {
 		description: `
 			The request could not be authenticated.
-		`
-	}
+		`,
+	},
 }
 
 export const security = [
 	{
 		type: cookie,
 		authorize,
-		scopes: []
-	}
+		scopes: [],
+	},
 ]
 
 export const handler = async ({ db, config }, request) => {
@@ -44,10 +44,10 @@ export const handler = async ({ db, config }, request) => {
 			TableName: config.get('TJ_TABLE_NAME'),
 			ExpressionAttributeValues: {
 				':pk': {
-					S: `list|${request.currentUserId}`
-				}
+					S: `list|${request.currentUserId}`,
+				},
 			},
-			KeyConditionExpression: 'pk = :pk'
-		}))
+			KeyConditionExpression: 'pk = :pk',
+		})),
 	}
 }

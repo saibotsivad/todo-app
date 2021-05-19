@@ -20,3 +20,4 @@
 /deploy/cloudflare-static/public/docs
 /deploy/cloudflare-static/worker/build
 /deploy/cloudflare-static/worker/worker
+/deploy/docker-dynamodb/docker
