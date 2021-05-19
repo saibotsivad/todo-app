@@ -48,7 +48,9 @@
     "watch:glob-client-routes": "chokidar \"client/route/**/*.js\" -c \"npm run glob:client-routes\"",
     "watch:glob-server-routes": "chokidar \"server/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
     "watch:glob-server-models": "chokidar \"server/lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
-    "start": "export LOG_LEVEL=debug && node app/cloudflare-api/local-development.js"
+    "start": "run-p start:*",
+    "start:docker": "cd deploy/docker-dynamodb && docker compose up",
+    "start:api": "export LOG_LEVEL=debug && node initialize-local-dynamodb.js && node app/cloudflare-api/local-development.js"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.1.1",
@@ -62,8 +64,10 @@
     "body-parser": "^1.19.0",
     "chokidar-cli": "^2.1.0",
     "compression": "^1.7.4",
+    "dlv": "^1.1.3",
     "glob-module-file": "^3.0.2",
     "got": "^11.8.1",
+    "js-yaml": "^3.14.1",
     "mime": "^2.5.2",
     "mkdirp": "^1.0.4",
     "ncp": "^2.0.0",

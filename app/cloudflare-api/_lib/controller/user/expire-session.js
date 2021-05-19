@@ -1,7 +1,6 @@
 export default async ({ db, config }, { userId, sessionId }) => {
 	const now = new Date().toISOString()
-
-	const { data, status } = await db('UpdateItem', {
+	await db('UpdateItem', {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
@@ -33,6 +32,4 @@ export default async ({ db, config }, { userId, sessionId }) => {
 		},
 		UpdateExpression: 'SET #PASSWORD = :password, #EXPIRATION = :expiration, #STATUS = :status, #UPDATED = :updated',
 	})
-	console.log('----------------', status)
-	console.log('----------------', data)
 }

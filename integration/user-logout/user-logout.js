@@ -2,7 +2,6 @@ import got from 'got'
 
 export default async (test, assert, state) => {
 	test('user-logout: logging out sets expired cookie', async () => {
-		console.log('------------', state.cookie)
 		const response = await got.get(`${state.baseUrl}/api/v1/auth/logout`, {
 			headers: {
 				cookie: state.cookie,
