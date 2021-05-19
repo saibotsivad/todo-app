@@ -39,4 +39,3 @@ jobs:
         STAGE: dev
         BASE_URL: "https://develop.todojournal.com/"
       run: npm run integration
-    - run: echo "TODO deploy to prod if tests pass"

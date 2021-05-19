@@ -23,13 +23,19 @@ jobs:
     - run: npm run build
     - env:
         STAGE: prod
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_ACCOUNT_ID: 985731193180
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIA6LARILFOPZWEKBEX
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        CF_ACCOUNT_ID: bd5d47aef41fb2139f547a3349f5716f
+        CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        LOG_LEVEL: warn
+        TJ_TABLE_NAME: todojournal-production
+        TJ_ADMIN_EMAIL_ADDRESS: admin+production@todojournal.com
+        TJ_API_DOMAIN: todojournal.com
+        BASE_URL: "https://todojournal.com"
       run: npm run release
     - env:
         STAGE: prod
         BASE_URL: "https://todojournal.com/"
       run: npm run integration
-    - run: echo "deploy to prod if tests pass using blue green setup"
