@@ -5,7 +5,17 @@ import * as assert from 'uvu/assert'
 const runnerAssert = Object.assign({}, assert)
 runnerAssert.isStatus = (response, expected, message) => {
 	if (response.statusCode !== expected) {
-		assert.equal(response.body, {}, `[BAD STATUS CODE: expected=${expected}, actual=${response.statusCode}] ${message}`)
+		let responseBody = typeof response.body === 'object'
+			? JSON.stringify(response.body, undefined, 2)
+			: response.body
+		if (typeof response.body === 'string') {
+			try {
+				responseBody = JSON.stringify(JSON.parse(response.body), undefined, 2)
+			} catch (error) {
+				console.log('body was string but not valid json')
+			}
+		}
+		assert.snapshot(responseBody, '!', `[BAD STATUS CODE: expected=${expected}, actual=${response.statusCode}] ${message}`)
 	}
 	assert.is(response.statusCode, expected, message)
 }
