@@ -22,7 +22,8 @@ export LOG_LEVEL="debug"
 
 # Ideally when run locally this would be like "branch-name-123"
 # but for now it's just the develop stage
-export STAGE="develop"
+export STAGE="local"
+export NODE_ENV="$STAGE"
 
 # =========================================================
 # The following are application specific, which is why they
@@ -46,8 +47,7 @@ export BASE_URL="http://localhost:3000"
 export PORT="3000"
 
 # To run fully locally, with DynamoDB-local running in a Docker
-# container, you will need to set this URL. If it is set, running
+# container, you will need to set this URL. When it is set, running
 # `npm run dev` will wait for the Docker container to be live, by
 # trying to make a request to DynamoDB-local until it responds.
-# If you didn't mean to wait for it, you might try `unset DYNAMODB_URL`
-#export DYNAMODB_URL="http://localhost:3001"
+export DYNAMODB_URL="http://localhost:3001"
