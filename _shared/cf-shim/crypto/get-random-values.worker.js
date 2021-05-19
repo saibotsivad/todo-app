@@ -1,1 +1,1 @@
-export default async (...args) => global.crypto.getRandomValues(...args)
+export default async (...args) => crypto.getRandomValues(...args)
