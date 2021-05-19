@@ -12,7 +12,7 @@ export default async (test, assert, state) => {
 				throwHttpErrors: false,
 			},
 		)
-		assert.isStatus(response.statusCode, 201, 'gives correct status code')
+		assert.isStatus(response, 201, 'gives created status code')
 		assert.ok(response.body, 'there is a body response')
 		const user = JSON.parse(response.body).data
 		assert.ok(user.id, 'an id has been set')

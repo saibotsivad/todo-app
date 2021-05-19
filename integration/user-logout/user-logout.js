@@ -7,7 +7,7 @@ export default async (test, assert, state) => {
 				cookie: state.cookie,
 			},
 		})
-		assert.is(response.statusCode, 200, 'gives correct status code')
+		assert.isStatus(response, 200, 'gives ok status code')
 		assert.ok(response.body, 'there is a body response')
 		const data = JSON.parse(response.body)
 		assert.is(data.ok, true, 'just a simple ok response')
@@ -24,6 +24,6 @@ export default async (test, assert, state) => {
 			},
 			throwHttpErrors: false,
 		})
-		assert.is(response.statusCode, 401, 'gives unauthenticated status code')
+		assert.isStatus(response, 401, 'gives unauthenticated status code')
 	})
 }
