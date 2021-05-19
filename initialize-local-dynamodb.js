@@ -6,22 +6,22 @@ import yaml from 'js-yaml'
 
 const TableName = process.env.TJ_TABLE_NAME
 
-if (!TableName) {
-	console.log('The env variable "TJ_TABLE_NAME" must be set.')
-	process.exit(1)
-}
-if (!process.env.DYNAMODB_URL) {
-	console.error('The env variable "DYNAMODB_URL" must be set.')
-	process.exit(1)
-}
-if (!process.env.STAGE || [ 'develop', 'production' ].includes(process.env.STAGE)) {
-	console.error('The env variable "STAGE" must be set, and to something other than "develop" or "production".')
-	process.exit(1)
-}
-
 const db = dynamodb({ get: key => process.env[key] })
 
 const waitForDynamoDbToStart = async () => {
+	if (!TableName) {
+		console.log('The env variable "TJ_TABLE_NAME" must be set.')
+		process.exit(1)
+	}
+	if (!process.env.DYNAMODB_URL) {
+		console.error('The env variable "DYNAMODB_URL" must be set.')
+		process.exit(1)
+	}
+	if (!process.env.STAGE || [ 'develop', 'production' ].includes(process.env.STAGE)) {
+		console.error('The env variable "STAGE" must be set, and to something other than "develop" or "production".')
+		process.exit(1)
+	}
+
 	try {
 		await db('ListTables', {})
 	} catch (error) {
@@ -70,11 +70,13 @@ const initialize = async () => {
 	}
 }
 
-const start = Date.now()
-initialize()
-	.then(() => {
-		console.log(`Completed successfully after ${Date.now() - start}ms`)
-	})
-	.catch(error => {
-		console.log(`Initialization failed after ${Date.now() - start}ms:`, error)
-	})
+if (process.env.DYNAMODB_URL) {
+	const start = Date.now()
+	initialize()
+		.then(() => {
+			console.log(`Completed successfully after ${Date.now() - start}ms`)
+		})
+		.catch(error => {
+			console.log(`Initialization failed after ${Date.now() - start}ms:`, error)
+		})
+}
