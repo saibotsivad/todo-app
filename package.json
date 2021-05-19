@@ -41,16 +41,15 @@
     "---test-integration": "---------------------------------",
     "integration": "uvu integration 'runner.js'",
     "---local": "---------------------------------",
-    "dev": "export DEVELOPMENT=true && run-p watch:*",
+    "dev": "export DEVELOPMENT=true && node initialize-local-dynamodb.js && run-p watch:*",
+    "dynamodb": "cd deploy/docker-dynamodb && docker compose up",
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
     "wrangle:static": "cd deploy/cloudflare-static && wrangler dev --env=local",
     "watch:js": "rollup -c -w",
     "watch:glob-client-routes": "chokidar \"client/route/**/*.js\" -c \"npm run glob:client-routes\"",
     "watch:glob-server-routes": "chokidar \"server/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
     "watch:glob-server-models": "chokidar \"server/lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
-    "start": "run-p start:*",
-    "start:docker": "cd deploy/docker-dynamodb && docker compose up",
-    "start:api": "export LOG_LEVEL=debug && node initialize-local-dynamodb.js && node app/cloudflare-api/local-development.js"
+    "start": "export LOG_LEVEL=debug && node app/cloudflare-api/local-development.js"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.1.1",

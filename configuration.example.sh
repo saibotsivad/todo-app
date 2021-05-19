@@ -46,5 +46,8 @@ export BASE_URL="http://localhost:3000"
 export PORT="3000"
 
 # To run fully locally, with DynamoDB-local running in a Docker
-# container, set this:
-export DYNAMODB_URL="http://localhost:3001"
+# container, you will need to set this URL. If it is set, running
+# `npm run dev` will wait for the Docker container to be live, by
+# trying to make a request to DynamoDB-local until it responds.
+# If you didn't mean to wait for it, you might try `unset DYNAMODB_URL`
+#export DYNAMODB_URL="http://localhost:3001"
