@@ -46,9 +46,9 @@
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
     "wrangle:static": "cd deploy/cloudflare-static && wrangler dev --env=local",
     "watch:js": "rollup -c -w",
-    "watch:glob-client-routes": "chokidar \"client/route/**/*.js\" -c \"npm run glob:client-routes\"",
-    "watch:glob-server-routes": "chokidar \"server/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
-    "watch:glob-server-models": "chokidar \"server/lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
+    "watch:glob-client-routes": "chokidar \"deploy/website/route/**/*.js\" -c \"npm run glob:client-routes\"",
+    "watch:glob-server-routes": "chokidar \"deploy/cloudflare-api/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
+    "watch:glob-server-models": "chokidar \"deploy/cloudflare-api/_lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
     "start": "export LOG_LEVEL=debug && node app/cloudflare-api/local-development.js"
   },
   "dependencies": {
