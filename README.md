@@ -11,6 +11,8 @@ first do `npm run setup`
 
 then whenever you want to dev do `npm run dev`
 
+***TODO:*** actually you need to install docker and setup the dynamodb local docker stuff first
+
 ## notes
 
 collection of notes to organize into a structure

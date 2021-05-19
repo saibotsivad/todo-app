@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  dynamodb-local:
+    # Setting `-inMemory` only writes data to memory, no data is persisted.
+    command: "-jar DynamoDBLocal.jar -inMemory"
+    # If you want data to persist between restarts you need to instead use `-sharedDb`
+    # and set the `-dbPath`
+#    command: "-jar DynamoDBLocal.jar -optimizeDbBeforeStartup -dbPath -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "3001:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
