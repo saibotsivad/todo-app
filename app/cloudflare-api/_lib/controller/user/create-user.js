@@ -3,13 +3,10 @@ import { normalizeEmail } from '@/lib/email.js'
 import { hashPassword } from '@/shared/worker-passwords/main.node.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
 import { ksuid } from '@/lib/ksuid.js'
+import { passwordIsReasonable } from '@/shared/util/password.js'
 
-const passwordIsPseudoReasonable = password => password.length > 10
-	&& /[a-z]/.test(password)
-	&& /[0-9]/.test(password)
-
-export default async ({ db, config }, { email, password }) => {
-	if (!passwordIsPseudoReasonable(password)) {
+export const createUser = async ({ db, config }, { email, password }) => {
+	if (!passwordIsReasonable(password)) {
 		throw new BadRequest('Passwords must contain at least 8 characters, at least 1 letter, and at least 1 number.')
 	}
 
@@ -20,11 +17,9 @@ export default async ({ db, config }, { email, password }) => {
 	const hashedPassword = await hashPassword({ password })
 	email = normalizeEmail(email)
 
-	// 1. write user to dynamodb
-
 	const { data } = await db('TransactWriteItems', {
 		TransactItems: [
-			// user in user collection
+			// user in user collection, for looking at list of all users
 			{
 				Put: {
 					TableName: config.get('TJ_TABLE_NAME'),
@@ -35,6 +30,7 @@ export default async ({ db, config }, { email, password }) => {
 						sk: {
 							S: `user|${userId}`,
 						},
+						// we save the email here so we can view it when listing all users
 						email: {
 							S: email,
 						},
@@ -62,6 +58,8 @@ export default async ({ db, config }, { email, password }) => {
 						password: {
 							S: hashedPassword,
 						},
+						// the "email" here is saved so we can do the reverse lookup for the
+						// document used by the login
 						email: {
 							S: email,
 						},
@@ -113,6 +111,7 @@ export default async ({ db, config }, { email, password }) => {
 		},
 		attributes: {
 			email,
+			password: hashedPassword,
 		},
 	}
 }

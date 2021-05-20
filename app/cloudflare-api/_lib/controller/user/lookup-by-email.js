@@ -1,9 +1,13 @@
-export default async ({ db, config }, { email }) => {
+import { normalizeEmail } from '@/lib/email.js'
+
+export const lookupUserByEmail = async ({ db, config }, { email }) => {
+	email = normalizeEmail(email)
+
 	const { data } = await db('GetItem', {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
-				S: `email|${(email || '').toLowerCase()}`,
+				S: `email|${email}`,
 			},
 			sk: {
 				S: 'email',

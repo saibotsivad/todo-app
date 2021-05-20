@@ -37,7 +37,7 @@ async function handleRequest(req) {
 		const options = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
 		const config = { get: key => options[key] }
 		router = new Trouter()
-		setupRouter({ db: dynamodb(config), log, config }, router)
+		setupRouter({ db: dynamodb(config), log, config, SDate: Date }, router)
 	}
 
 	const url = new URL(req.url)

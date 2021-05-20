@@ -1,9 +1,9 @@
-export default async ({ db, config }, { id }) => {
+export const lookupUserById = async ({ db, config }, { userId }) => {
 	const { data } = await db('GetItem', {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
 			pk: {
-				S: `user|${id}`,
+				S: `user|${userId}`,
 			},
 			sk: {
 				S: 'user',
@@ -16,7 +16,7 @@ export default async ({ db, config }, { id }) => {
 	}
 
 	return {
-		id,
+		id: userId,
 		type: 'user',
 		meta: {
 			created: data.Item.c.S,

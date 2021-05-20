@@ -23,12 +23,14 @@ export const dynamodb = options => async (type, params) => {
 	}
 
 	const request = {
-		url: `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
+		url: options.get('DYNAMODB_URL') || `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		method: 'POST',
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
 			'X-Amz-Target': `DynamoDB_20120810.${type}`,
-			Host: `dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
+			Host: options.get('DYNAMODB_URL')
+				? 'localhost'
+				: `dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		},
 		retry: {
 			limit: 0,
@@ -47,7 +49,7 @@ export const dynamodb = options => async (type, params) => {
 
 	if (response.statusCode !== 200 && data.__type) {
 		if (data.__type.includes('#ValidationException')) {
-			throw new DatabaseValidation('Invalid parameters given to DynamoDB call.', { stacktrace: data.message })
+			throw new DatabaseValidation('Invalid parameters given to DynamoDB call.', { type: data.__type, message: data.Message })
 		}
 	}
 

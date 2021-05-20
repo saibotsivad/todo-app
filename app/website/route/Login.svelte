@@ -19,6 +19,7 @@
 	{#if parameters && parameters.logout && !submitting && !success}
 		<p>success logging out!</p>
 	{/if}
+	<h1>Log In</h1>
 	{#if !submitting && !success}
 		<form disabled={disabled || success} on:submit|preventDefault={() => dispatch('login', { email, password })}>
 			<p>
