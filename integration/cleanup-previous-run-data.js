@@ -2,7 +2,7 @@ import { dynamodb } from '../app/cloudflare-api/_service/db.js'
 import { lookupUserByEmail } from '../app/cloudflare-api/_lib/controller/user/lookup-by-email.js'
 import { removeUser } from '../app/cloudflare-api/_lib/controller/user/remove-user.js'
 import { listSessionsByUserId } from '../app/cloudflare-api/_lib/controller/session/list-sessions-by-user-id.js'
-import { removeUserSession } from '../app/cloudflare-api/_lib/controller/session/remove-user-session'
+import { removeUserSession } from '../app/cloudflare-api/_lib/controller/session/remove-user-session.js'
 
 const config = { get: key => process.env[key] }
 const db = dynamodb(config)
