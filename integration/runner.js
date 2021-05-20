@@ -27,8 +27,8 @@ const scenarios = [
 ]
 
 const mutableState = {
-	userEmail: 'me@site.com',
-	userPassword: 'batteryhorsestaple9001',
+	userEmail: `testuser+${process.env.STAGE || 'local'}@${process.env.TJ_API_DOMAIN || 'localhost'}`,
+	userPassword: 'correct-battery-horse-staple-9001',
 	baseUrl: process.env.BASE_URL || `http://localhost:${process.env.PORT || '3000'}`,
 }
 

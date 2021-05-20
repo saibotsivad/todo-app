@@ -1,7 +1,7 @@
 import { UnauthorizedRequest } from '@/lib/exceptions.js'
 import { parseCookie } from '@/lib/cookie.js'
 import { validatePassword } from '@/shared/worker-passwords/main.node.js'
-import lookupSession from '@/lib/controller/user/lookup-session.js'
+import { getUserSession } from '@/lib/controller/session/get-user-session.js'
 
 export const name = 'cookie'
 
@@ -20,7 +20,7 @@ export const authorize = async ({ db, config }, request) => {
 
 	const { userId, sessionId, sessionSecret } = parseCookie(request.headers.cookie) || {}
 	if (userId && sessionId && sessionSecret) {
-		const session = await lookupSession({ db, config }, { userId, sessionId })
+		const session = await getUserSession({ db, config }, { userId, sessionId })
 		if (session) {
 			const validSessionSecret = await validatePassword({
 				hash: session.attributes.password,

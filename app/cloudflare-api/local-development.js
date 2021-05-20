@@ -32,6 +32,7 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 const configValues = requiredEnvironmentVariables
 	.concat([
 		'NODE_ENV',
+		'DYNAMODB_URL',
 	])
 	.reduce((map, key) => {
 		map[key] = process.env[key]
@@ -62,7 +63,7 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path),
 }))
 
-setupRouter({ db: dynamodb(config), config, log }, router)
+setupRouter({ db: dynamodb(config), config, log, SDate: Date }, router)
 
 const getBody = req => new Promise(resolve => {
 	let data = ''

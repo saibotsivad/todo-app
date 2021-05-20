@@ -1,6 +1,6 @@
 import { BadRequest } from '@/lib/exceptions.js'
 import { auth } from '@/lib/tags.js'
-import createUser from '@/lib/controller/user/create-user.js'
+import { createUser } from '@/lib/controller/user/create-user.js'
 
 export const summary = `
 	Create a new [user] object.

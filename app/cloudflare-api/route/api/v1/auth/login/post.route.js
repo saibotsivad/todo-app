@@ -2,8 +2,8 @@ import { auth } from '@/lib/tags.js'
 import { BadRequest } from '@/lib/exceptions.js'
 import { generateCookie } from '@/lib/cookie.js'
 import { validatePassword } from '@/shared/worker-passwords/main.node.js'
-import createUserSession from '@/lib/controller/user/create-user-session.js'
-import lookupByEmail from '@/lib/controller/user/lookup-by-email.js'
+import { createUserSession } from '@/lib/controller/session/create-user-session.js'
+import { lookupUserByEmail } from '@/lib/controller/user/lookup-by-email.js'
 
 export const summary = `
 	Email and password login.
@@ -67,14 +67,14 @@ export const handler = async (services, req) => {
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to authenticate.')
 	}
-	const user = await lookupByEmail(services, { email })
+	const user = await lookupUserByEmail(services, { email })
 	if (!user || !user.attributes.password) {
 		throw new BadRequest('Could not locate valid user by email.')
 	}
 	if (!(await validatePassword({ hash: user.attributes.password, password }))) {
 		throw new BadRequest('Could not validate password.')
 	}
-	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { user })
+	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { userId: user.id })
 	return {
 		headers: {
 			'Set-Cookie': generateCookie(services, {
