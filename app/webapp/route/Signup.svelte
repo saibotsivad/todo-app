@@ -34,23 +34,22 @@
 	{:else}
 		<form on:submit|preventDefault={() => dispatch('signup', { email, password })}>
 			<p>
-				email
+				Email
 				<input type="text" bind:value={email} placeholder="email@site.com">
 			</p>
 
 			<p>
-				password
+				Password
 				<input type="password" bind:value={password}>
 			</p>
 
 			<p>
 				<button type="submit" {disabled}>
-					sign up
+					Sign Up
 				</button>
 			</p>
 		</form>
 	{/if}
-
 
 	<ErrorList {errors} />
 </Container>

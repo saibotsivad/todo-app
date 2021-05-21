@@ -1,5 +1,5 @@
 /**
- * Simply returns true if the given password is reasonable enough.
+ * Returns true if the given password is reasonable enough.
  * @param {String} password - The supplied password.
  * @returns {boolean} - True if the password is reasonable-ish.
  */
