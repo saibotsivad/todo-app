@@ -21,3 +21,7 @@ jobs:
     - run: npm run setup
     - run: npm run test
     - run: npm run build
+    - run: docker run -p 3001:8000 amazon/dynamodb-local
+    - run: npm run dynamodb-init
+    - run: npm run start
+    - run: npm run integration
