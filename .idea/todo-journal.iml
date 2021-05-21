@@ -11,10 +11,10 @@
       <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/public/docs" />
       <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/dist" />
       <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/worker/worker" />
-      <excludeFolder url="file://$MODULE_DIR$/app/website/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/app/cloudflare-api/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/deploy/cloudflare-static/public/build" />
       <excludeFolder url="file://$MODULE_DIR$/deploy/docker-dynamodb/docker" />
+      <excludeFolder url="file://$MODULE_DIR$/app/webapp/node_modules" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

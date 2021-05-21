@@ -24,7 +24,7 @@ function generateOpenApi() {
 }
 
 const client = {
-	input: 'app/website/main.js',
+	input: 'app/webapp/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',

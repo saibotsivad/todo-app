@@ -8,14 +8,14 @@ links I have found on the subject are:
 
 */
 
-import { encode, decode } from '@/lib/base64uri.js'
+import { encode, decode } from '@/lib/base64url.js'
 
 // The name of the cookie doesn`t matter a whole lot, but it
 // makes sense to have it be related to your application, for
 // easier debugging.
 const COOKIE_NAME = 'todojournal'
 
-// The cookies "value" is a base64uri encoded, JSON
+// The cookies "value" is a base64url encoded, JSON
 // stringified object containing the user id and the
 // session id.
 const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(

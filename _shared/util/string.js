@@ -7,42 +7,42 @@ export const caps = string => string.toUpperCase()
 
 /**
  * Given a normal string, e.g. JSON-ified data or whatnot, give
- * back a base64uri string.
+ * back a base64url string.
  * @param {String} string - The normal string.
- * @returns {String} - The base64uri encoded string.
+ * @returns {String} - The base64url encoded string.
  */
-export const stringToBase64Uri = string => base64ToBase64Uri(btoa(string))
+export const stringToBase64Url = string => base64ToBase64Url(btoa(string))
 
 /**
- * Given a base64uri string, give back the un-encoded string.
- * @param {String} base64Uri - The base64uri encoded string.
+ * Given a base64url string, give back the un-encoded string.
+ * @param {String} base64Url - The base64url encoded string.
  * @returns {String} - The decoded string.
  */
-export const base64UriToString = base64Uri => atob(base64UriToBase64(base64Uri))
+export const base64UrlToString = base64Url => atob(base64UrlToBase64(base64Url))
 
 /**
- * Given a base64 string, turn it into a base64uri string.
+ * Given a base64 string, turn it into a base64url string.
  * @param {String} base64String - The base64 string.
- * @returns {String} - The string turned into base64uri format.
+ * @returns {String} - The string turned into base64url format.
  */
-export const base64ToBase64Uri = base64String => base64String
+export const base64ToBase64Url = base64String => base64String
 	.replace(/\+/g, '-')
 	.replace(/\//g, '_')
 	.replace(/=/g, '')
 
 /**
- * Given a base64uri string, turn it into a base64 string.
- * @param {String} base64UriString - The base64uri string.
- * @returns {String} base64uri - The string turned into base64 format.
+ * Given a base64url string, turn it into a base64 string.
+ * @param {String} base64UrlString - The base64url string.
+ * @returns {String} base64url - The string turned into base64 format.
  */
-export const base64UriToBase64 = base64UriString => base64UriString
+export const base64UrlToBase64 = base64UrlString => base64UrlString
 	.replace(/-/g, '+')
 	.replace(/_/g, '/')
 	// TODO need to re-add `=` buffers?
 
 /**
- * Take a Uint8Array and turn it into a base64uri string.
+ * Take a Uint8Array and turn it into a base64url string.
  * @param {Uint8Array|ArrayBuffer} array - The input array.
  * @returns {String} - The capitalized string.
  */
-export const arrayToBase64Uri = array => base64ToBase64Uri(btoa(String.fromCharCode.apply(null, array)))
+export const arrayToBase64Url = array => base64ToBase64Url(btoa(String.fromCharCode.apply(null, array)))
