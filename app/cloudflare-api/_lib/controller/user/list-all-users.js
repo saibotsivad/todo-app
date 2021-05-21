@@ -37,6 +37,6 @@ export const listAllUsers = async ({ db, config }, { limit, offsetKey } = {}) =>
 				email: item.email.S,
 			},
 		})),
-		offsetKey: data.LastEvaluatedKey && stringToBase64Url(JSON.stringify(data.LastEvaluatedKey)),
+		offsetKey: data && data.LastEvaluatedKey && stringToBase64Url(JSON.stringify(data.LastEvaluatedKey)),
 	}
 }

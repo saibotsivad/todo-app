@@ -18,7 +18,7 @@ const run = async () => {
 	} else {
 		console.log(`Found user: ${user.id}`)
 
-		const sessions = await listSessionsByUserId(services, { userId: user.id })
+		const { data: sessions } = await listSessionsByUserId(services, { userId: user.id })
 		console.log(`Removing ${sessions.length} sessions.`)
 		for (const session of sessions) {
 			console.log('Removing session:', session.id)
