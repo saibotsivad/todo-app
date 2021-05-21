@@ -131,6 +131,7 @@ const cloudflareApi = {
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && npmRun('start'),
+		production && terser(),
 	],
 	watch: {
 		clearScreen: false,
@@ -149,6 +150,7 @@ const cloudflareStatic = {
 			browser: true,
 		}),
 		commonjs(),
+		production && terser(),
 	],
 	watch: {
 		clearScreen: false,

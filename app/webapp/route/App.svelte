@@ -9,7 +9,6 @@
 	const dispatch = createEventDispatcher()
 </script>
 
-
 <Container>
 	<h1>Hello!</h1>
 
