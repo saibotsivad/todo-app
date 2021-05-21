@@ -22,7 +22,7 @@ jobs:
     - run: npm run test
     - run: npm run build
     - env:
-        STAGE: prod
+        STAGE: production
         AWS_ACCOUNT_ID: 985731193180
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA6LARILFOECUCK52P
@@ -36,6 +36,14 @@ jobs:
         BASE_URL: "https://todojournal.com"
       run: npm run release
     - env:
-        STAGE: prod
+        STAGE: production
+        AWS_ACCOUNT_ID: 985731193180
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIA6LARILFOECUCK52P
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TJ_TABLE_NAME: todojournal-production
+      run: npm run integration-cleanup
+    - env:
+        STAGE: production
         BASE_URL: "https://todojournal.com/"
       run: npm run integration

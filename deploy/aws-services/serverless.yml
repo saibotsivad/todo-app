@@ -35,4 +35,7 @@ resources:
             KeyType: HASH
           - AttributeName: sk
             KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
         BillingMode: PAY_PER_REQUEST

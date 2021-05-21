@@ -1,8 +1,8 @@
 import { auth } from '@/lib/tags.js'
 import { BadRequest } from '@/lib/exceptions.js'
 import { sendEmail } from '@/service/email.js'
-import generatePasswordResetToken from '@/lib/controller/user/generate-password-reset-token.js'
-import lookupByEmail from '@/lib/controller/user/lookup-by-email.js'
+import { createUserPasswordResetToken } from '@/lib/controller/user-password/create-password-reset-token.js'
+import { lookupUserByEmail } from '@/lib/controller/user/lookup-by-email.js'
 import renderEmailTemplate from '@/lib/render-email-template.js'
 
 export const summary = `
@@ -62,8 +62,8 @@ export const handler = async (services, req) => {
 	if (!email) {
 		throw new BadRequest('Email must be supplied to send password reset  link.')
 	}
-	const user = await lookupByEmail(services, { email })
-	const passwordResetToken = user && await generatePasswordResetToken(services, { user })
+	const user = await lookupUserByEmail(services, { email })
+	const passwordResetToken = user && await createUserPasswordResetToken(services, { userId: user.id })
 	const emailSent = user && await sendEmail(services, {
 		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,

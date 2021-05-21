@@ -38,7 +38,7 @@ const waitForDynamoDbToStart = async () => {
 
 const createTable = async () => {
 	const serverless = yaml.load(await fs.readFile('./deploy/aws-services/serverless.yml', 'utf8'))
-	const { AttributeDefinitions, KeySchema, BillingMode } = get(serverless, 'resources.Resources.todojournalTable.Properties')
+	const { AttributeDefinitions, KeySchema, BillingMode } = get(serverless, 'resources.Resources.dataTable.Properties')
 
 	const result = await db('CreateTable', {
 		AttributeDefinitions,
@@ -75,8 +75,10 @@ if (process.env.DYNAMODB_URL) {
 	initialize()
 		.then(() => {
 			console.log(`Completed successfully after ${Date.now() - start}ms`)
+			process.exit(0)
 		})
 		.catch(error => {
 			console.log(`Initialization failed after ${Date.now() - start}ms:`, error)
+			process.exit(1)
 		})
 }

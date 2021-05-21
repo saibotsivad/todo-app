@@ -32,6 +32,7 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 const configValues = requiredEnvironmentVariables
 	.concat([
 		'NODE_ENV',
+		'DYNAMODB_URL',
 	])
 	.reduce((map, key) => {
 		map[key] = process.env[key]
@@ -62,7 +63,7 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path),
 }))
 
-setupRouter({ db: dynamodb(config), config, log }, router)
+setupRouter({ db: dynamodb(config), config, log, SDate: Date }, router)
 
 const getBody = req => new Promise(resolve => {
 	let data = ''
@@ -70,11 +71,16 @@ const getBody = req => new Promise(resolve => {
 		data += chunk
 	})
 	req.on('end', () => {
-		resolve(
-			(req.headers['content-type'] || '').toLowerCase().includes('application/json')
+		let output
+		try {
+			output = data && (req.headers['content-type'] || '').toLowerCase().includes('application/json')
 				? JSON.parse(data)
-				: data,
-		)
+				: data
+			resolve(output)
+		} catch (error) {
+			console.error('could not parse data as json', output)
+			resolve(data)
+		}
 	})
 })
 

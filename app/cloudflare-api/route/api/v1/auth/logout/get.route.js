@@ -1,7 +1,7 @@
 import { name as cookie, authorize } from '@/lib/security/cookie.js'
 import { auth } from '@/lib/tags.js'
 import { generateExpiredCookie } from '@/lib/cookie.js'
-import expireSession from '@/lib/controller/user/expire-session.js'
+import { expireUserSession } from '@/lib/controller/session/expire-user-session.js'
 
 export const summary = `
 	Deactivate cookie session.
@@ -43,7 +43,7 @@ export const security = [
 ]
 
 export const handler = async (services, req) => {
-	await expireSession(services, { userId: req.currentUserId, sessionId: req.currentUserSessionId })
+	await expireUserSession(services, { userId: req.currentUserId, sessionId: req.currentUserSessionId })
 	return {
 		headers: {
 			'Set-Cookie': generateExpiredCookie(services),

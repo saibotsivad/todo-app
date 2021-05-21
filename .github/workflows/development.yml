@@ -36,6 +36,14 @@ jobs:
         BASE_URL: "https://develop.todojournal.com"
       run: npm run deploy
     - env:
-        STAGE: dev
+        STAGE: develop
+        AWS_ACCOUNT_ID: 985731193180
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIA6LARILFOADPJH4N2
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TJ_TABLE_NAME: todojournal-develop
+      run: npm run integration-cleanup
+    - env:
+        STAGE: develop
         BASE_URL: "https://develop.todojournal.com/"
       run: npm run integration

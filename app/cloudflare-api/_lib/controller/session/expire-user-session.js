@@ -1,5 +1,5 @@
-export default async ({ db, config }, { userId, sessionId }) => {
-	const now = new Date().toISOString()
+export const expireUserSession = async ({ db, config, SDate }, { userId, sessionId }) => {
+	const now = new SDate().toISOString()
 	await db('UpdateItem', {
 		TableName: config.get('TJ_TABLE_NAME'),
 		Key: {
