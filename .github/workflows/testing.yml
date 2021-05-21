@@ -21,7 +21,7 @@ jobs:
     - run: npm run setup
     - run: npm run test
     - run: npm run build
-    - run: docker run -p 3001:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -optimizeDbBeforeStartup -sharedDb -dbPath ./ & # the "&" backgrounds the task
+    - run: docker run -p 3001:8000 -v "/tmp/docker-dynamodb:/home/dynamodblocal/data" amazon/dynamodb-local -jar DynamoDBLocal.jar -optimizeDbBeforeStartup -sharedDb -dbPath ./ & # the "&" backgrounds the task
     - run: npm run dynamodb-init
     - env:
         STAGE: local

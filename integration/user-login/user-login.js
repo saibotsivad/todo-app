@@ -24,7 +24,7 @@ export default async (test, assert, state) => {
 		const data = JSON.parse(response.body)
 		assert.is(data.ok, true, 'just a simple ok response')
 		assert.ok(response.headers['set-cookie'], 'the cookie exists')
-		const matcher = /todojournal=([^;]+);/.exec(response.headers['set-cookie'])
+		const matcher = /todojournal=([^;]+);/.exec(response.headers['set-cookie'].toString())
 		assert.ok(matcher, 'did find a regex match for cookie')
 		state.cookie = response.headers['set-cookie']
 	})
