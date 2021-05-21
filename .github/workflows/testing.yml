@@ -21,3 +21,18 @@ jobs:
     - run: npm run setup
     - run: npm run test
     - run: npm run build
+    - run: docker run -p 3001:8000 -v "/tmp/docker-dynamodb:/home/dynamodblocal/data" amazon/dynamodb-local -jar DynamoDBLocal.jar -optimizeDbBeforeStartup -sharedDb -dbPath ./ & # the "&" backgrounds the task
+    - run: npm run dynamodb-init
+    - env:
+        STAGE: local
+        AWS_ACCOUNT_ID: 123456789012
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIAEXAMPLEKEY
+        AWS_SECRET_ACCESS_KEY: abc123abc123abc123abc123
+        LOG_LEVEL: debug
+        TJ_TABLE_NAME: todojournal-local
+        TJ_ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
+        TJ_API_DOMAIN: localhost
+        BASE_URL: "http://localhost:3000"
+      run: npm run start & # the "&" backgrounds the task
+    - run: node wait-for-server-to-start.js && npm run integration

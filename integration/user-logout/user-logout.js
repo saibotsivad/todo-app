@@ -6,6 +6,7 @@ export default async (test, assert, state) => {
 			headers: {
 				cookie: state.cookie,
 			},
+			throwHttpErrors: false,
 		})
 		assert.isStatus(response, 200, 'gives ok status code')
 		assert.ok(response.body, 'there is a body response')
