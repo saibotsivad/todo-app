@@ -17,7 +17,7 @@
 
 <Container>
 	{#if parameters && parameters.logout && !submitting && !success}
-		<p>success logging out!</p>
+		<p>Success logging out!</p>
 	{/if}
 	<h1>Log In</h1>
 	{#if !submitting && !success}
@@ -34,7 +34,7 @@
 
 			<p>
 				<button type="submit">
-					log in
+					Log In
 				</button>
 			</p>
 		</form>

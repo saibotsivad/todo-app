@@ -17,10 +17,10 @@
 
 	<p>
 		{#if submitting}
-			logging out, one moment
+			Logging out, one moment...
 		{:else}
 			<button on:click={() => dispatch('logout')} {disabled}>
-				log out
+				Log Out
 			</button>
 		{/if}
 	</p>
