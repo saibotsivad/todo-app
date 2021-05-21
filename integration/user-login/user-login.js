@@ -16,6 +16,7 @@ export default async (test, assert, state) => {
 					email: state.userEmail,
 					password: state.userPassword,
 				},
+				throwHttpErrors: false,
 			},
 		)
 		assert.isStatus(response, 201, 'gives created status code')
@@ -33,6 +34,7 @@ export default async (test, assert, state) => {
 			headers: {
 				cookie: state.cookie,
 			},
+			throwHttpErrors: false,
 		})
 		assert.isStatus(response, 200, 'gives ok status code')
 		assert.ok(response.body, 'there is a body response')
