@@ -31,14 +31,26 @@ export const base64ToBase64Url = base64String => base64String
 	.replace(/=/g, '')
 
 /**
+ * Given a base64url string that's been converted back to base64, we still
+ * need to make sure that the end is padded with '=' characters out to the
+ * correct length.
+ * @param {String} string - The unpadded base64 string.
+ * @returns {String} - The padded base 64 string.
+ */
+const padString = string => {
+	const difference = string.length % 4
+	if (!difference) return string
+	return string.padEnd(string.length + 4 - difference, '=')
+}
+
+/**
  * Given a base64url string, turn it into a base64 string.
  * @param {String} base64UrlString - The base64url string.
  * @returns {String} base64url - The string turned into base64 format.
  */
-export const base64UrlToBase64 = base64UrlString => base64UrlString
+export const base64UrlToBase64 = base64UrlString => padString(base64UrlString
 	.replace(/-/g, '+')
-	.replace(/_/g, '/')
-	// TODO need to re-add `=` buffers?
+	.replace(/_/g, '/'))
 
 /**
  * Take a Uint8Array and turn it into a base64url string.
