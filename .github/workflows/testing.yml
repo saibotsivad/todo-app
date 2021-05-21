@@ -34,5 +34,5 @@ jobs:
         TJ_ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
         TJ_API_DOMAIN: localhost
         BASE_URL: "http://localhost:3000"
-      run: npm run start
-    - run: npm run integration
+      run: npm run start & # the "&" backgrounds the task
+    - run: node wait-for-server-to-start.js && npm run integration
