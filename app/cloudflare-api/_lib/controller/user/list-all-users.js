@@ -1,4 +1,4 @@
-import { stringToBase64Uri, base64UriToString } from '@/shared/util/string.js'
+import { stringToBase64Url, base64UrlToString } from '@/shared/util/string.js'
 
 export const listAllUsers = async ({ db, config }, { limit, offsetKey } = {}) => {
 	const query = {
@@ -17,7 +17,7 @@ export const listAllUsers = async ({ db, config }, { limit, offsetKey } = {}) =>
 		query.Limit = parseInt(limit, 10)
 	}
 	if (offsetKey) {
-		query.ExclusiveStartKey = JSON.parse(base64UriToString(offsetKey))
+		query.ExclusiveStartKey = JSON.parse(base64UrlToString(offsetKey))
 	}
 	const { data } = await db('Query', query)
 
@@ -37,6 +37,6 @@ export const listAllUsers = async ({ db, config }, { limit, offsetKey } = {}) =>
 				email: item.email.S,
 			},
 		})),
-		offsetKey: data.LastEvaluatedKey && stringToBase64Uri(JSON.stringify(data.LastEvaluatedKey)),
+		offsetKey: data && data.LastEvaluatedKey && stringToBase64Url(JSON.stringify(data.LastEvaluatedKey)),
 	}
 }

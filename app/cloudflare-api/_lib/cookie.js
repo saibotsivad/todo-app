@@ -8,17 +8,17 @@ links I have found on the subject are:
 
 */
 
-import { encode, decode } from '@/lib/base64uri.js'
+import { stringToBase64Url, base64UrlToString } from '@/shared/util/string.js'
 
 // The name of the cookie doesn`t matter a whole lot, but it
 // makes sense to have it be related to your application, for
 // easier debugging.
 const COOKIE_NAME = 'todojournal'
 
-// The cookies "value" is a base64uri encoded, JSON
+// The cookies "value" is a base64url encoded, JSON
 // stringified object containing the user id and the
 // session id.
-const generateCookieValue = ({ userId, sessionId, sessionSecret }) => encode(
+const generateCookieValue = ({ userId, sessionId, sessionSecret }) => stringToBase64Url(
 	JSON.stringify({
 		uid: userId,
 		sid: sessionId,
@@ -95,7 +95,7 @@ export const parseCookie = string => {
 			.map(s => s.trim())
 			.find(s => s.startsWith(`${COOKIE_NAME}=`))
 			.split('=')[1]
-		const { uid, sid, pw } = JSON.parse(decode(base64))
+		const { uid, sid, pw } = JSON.parse(base64UrlToString(base64))
 		return {
 			userId: uid,
 			sessionId: sid,

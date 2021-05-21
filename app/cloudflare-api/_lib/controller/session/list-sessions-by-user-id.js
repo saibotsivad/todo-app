@@ -1,5 +1,7 @@
-export const listSessionsByUserId = async ({ db, config }, { userId }) => {
-	const { data } = await db('Query', {
+import { stringToBase64Url, base64UrlToString } from '@/shared/util/string.js'
+
+export const listSessionsByUserId = async ({ db, config }, { userId, limit, offsetKey }) => {
+	const query = {
 		TableName: config.get('TJ_TABLE_NAME'),
 		ExpressionAttributeValues: {
 			':pk': {
@@ -10,7 +12,14 @@ export const listSessionsByUserId = async ({ db, config }, { userId }) => {
 			},
 		},
 		KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
-	})
+	}
+	if (limit) {
+		query.Limit = parseInt(limit, 10)
+	}
+	if (offsetKey) {
+		query.ExclusiveStartKey = JSON.parse(base64UrlToString(offsetKey))
+	}
+	const { data } = await db('Query', query)
 
 	return {
 		data: !data || !data.Items || !data.Items.length
@@ -29,5 +38,6 @@ export const listSessionsByUserId = async ({ db, config }, { userId }) => {
 					expiration: item.e.S,
 				},
 			})),
+		offsetKey: data && data.LastEvaluatedKey && stringToBase64Url(JSON.stringify(data.LastEvaluatedKey)),
 	}
 }

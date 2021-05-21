@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
-import svelte from 'rollup-plugin-svelte'
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
-import json from '@rollup/plugin-json'
-import livereload from 'rollup-plugin-livereload'
-import { terser } from 'rollup-plugin-terser'
-import css from 'rollup-plugin-css-only'
-import { string } from 'rollup-plugin-string'
 import alias from '@rollup/plugin-alias'
+import commonjs from '@rollup/plugin-commonjs'
+import css from 'rollup-plugin-css-only'
+import json from '@rollup/plugin-json'
+import resolve from '@rollup/plugin-node-resolve'
+import livereload from 'rollup-plugin-livereload'
 import npmRun from 'rollup-plugin-npm-run'
+import svelte from 'rollup-plugin-svelte'
+import { string } from 'rollup-plugin-string'
+import { terser } from 'rollup-plugin-terser'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -24,7 +24,7 @@ function generateOpenApi() {
 }
 
 const client = {
-	input: 'app/website/main.js',
+	input: 'app/webapp/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
@@ -54,7 +54,7 @@ const client = {
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
+		!production && livereload('deploy/cloudflare-static/public'),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
@@ -131,6 +131,7 @@ const cloudflareApi = {
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && npmRun('start'),
+		production && terser(),
 	],
 	watch: {
 		clearScreen: false,
@@ -149,6 +150,7 @@ const cloudflareStatic = {
 			browser: true,
 		}),
 		commonjs(),
+		production && terser(),
 	],
 	watch: {
 		clearScreen: false,
