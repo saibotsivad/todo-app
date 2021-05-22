@@ -44,6 +44,7 @@
     "---local": "---------------------------------",
     "dev": "export DEVELOPMENT=true && node initialize-local-dynamodb.js && run-p watch:*",
     "dynamodb": "cd deploy/docker-dynamodb && docker compose up",
+    "dynamodb-init": "node ./initialize-local-dynamodb.js",
     "dynamodb-cleanup": "rm ./deploy/docker-dynamodb/docker/dynamodb/*.db",
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
     "wrangle:static": "cd deploy/cloudflare-static && wrangler dev --env=local",
