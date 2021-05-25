@@ -1,10 +1,12 @@
 import { BadRequest } from '@/lib/exceptions.js'
-import { auth, user } from '@/lib/tags.js'
+import { auth, session, user } from '@/lib/tags.js'
 import { createUser } from '@/lib/controller/user/create-user.js'
 import { generateCookie } from '@/lib/cookie.js'
 import { sendEmail } from '@/service/email.js'
 import { createUserSession } from '@/lib/controller/session/create-user-session.js'
 import renderEmailTemplate from '@/lib/render-email-template.js'
+import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
+import { USER_CREATED } from '@/lib/controller/email-template/static/_template-ids.js'
 
 export const summary = `
 	Create a new [user] object.
@@ -24,6 +26,7 @@ export const description = `
 
 export const tags = [
 	auth,
+	session,
 	user,
 ]
 
@@ -74,14 +77,14 @@ export const handler = async (services, req) => {
 		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Welcome to the Todo Journal 🎉',
-		body: renderEmailTemplate({
-			parameters: {
+		body: renderEmailTemplate(
+			await getEmailTemplate(services, { name: USER_CREATED }),
+			{
 				domain: services.config.get('TJ_API_DOMAIN'),
 				email,
 				user,
 			},
-			template: (await import('@/lib/email-templates/user-created.md')).default,
-		}),
+		),
 	})
 
 	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { userId: user.id })

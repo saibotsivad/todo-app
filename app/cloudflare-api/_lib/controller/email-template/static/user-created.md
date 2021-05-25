@@ -1,5 +1,9 @@
 ---
 parameters:
+  baseUrl:
+    type: string
+    required: true
+    description: The link to the password reset page.
 ---
 
 Hey there, looks like you just created an account at [TodoJournal.com](https://{{domain}}/).
