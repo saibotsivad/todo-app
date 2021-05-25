@@ -1,4 +1,6 @@
+import snarkdown from 'snarkdown'
+import templite from 'templite'
+
 export default (emailTemplate, parameters) => {
-	// TODO render the markdown
-	return emailTemplate + JSON.stringify(parameters)
+	return snarkdown(templite(emailTemplate, parameters))
 }
