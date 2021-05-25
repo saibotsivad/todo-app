@@ -78,7 +78,7 @@ export const handler = async (services, req) => {
 		toAddress: email,
 		subject: 'Welcome to the Todo Journal 🎉',
 		body: renderEmailTemplate(
-			await getEmailTemplate(services, { name: USER_CREATED }),
+			await getEmailTemplate(services, { id: USER_CREATED }),
 			{
 				domain: services.config.get('TJ_API_DOMAIN'),
 				email,

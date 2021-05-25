@@ -72,7 +72,7 @@ export const handler = async (services, req) => {
 		toAddress: email,
 		subject: 'Password reset requested?',
 		body: renderEmailTemplate(
-			await getEmailTemplate(services, { name: FORGOT_PASSWORD }),
+			await getEmailTemplate(services, { id: FORGOT_PASSWORD }),
 			{
 				domain: services.config.get('TJ_API_DOMAIN'),
 				token: stringToBase64Url(JSON.stringify({ i: tokenId, s: tokenSecret, u: user.id })),
