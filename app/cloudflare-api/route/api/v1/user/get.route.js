@@ -1,5 +1,5 @@
 import { name as cookie, authorize } from '@/lib/security/cookie.js'
-import { auth } from '@/lib/tags.js'
+import { user } from '@/lib/tags.js'
 import { lookupUserById } from '@/lib/controller/user/lookup-by-id.js'
 
 export const summary = `
@@ -13,7 +13,7 @@ export const description = `
 `
 
 export const tags = [
-	auth,
+	user,
 ]
 
 export const responses = {

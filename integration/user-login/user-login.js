@@ -2,7 +2,7 @@ import got from 'got'
 
 export default async (test, assert, state) => {
 	test('user-login: no authentication means no user', async () => {
-		const response = await got.get(`${state.baseUrl}/api/v1/auth/user`, {
+		const response = await got.get(`${state.baseUrl}/api/v1/user`, {
 			throwHttpErrors: false,
 		})
 		assert.isStatus(response, 401, 'gives unauthenticated status code')
@@ -10,7 +10,7 @@ export default async (test, assert, state) => {
 
 	test('user-login: logging in works', async () => {
 		const response = await got.post(
-			`${state.baseUrl}/api/v1/auth/login`,
+			`${state.baseUrl}/api/v1/sessions`,
 			{
 				json: {
 					email: state.userEmail,
@@ -30,7 +30,7 @@ export default async (test, assert, state) => {
 	})
 
 	test('user-login: user can fetch self', async () => {
-		const response = await got.get(`${state.baseUrl}/api/v1/auth/user`, {
+		const response = await got.get(`${state.baseUrl}/api/v1/user`, {
 			headers: {
 				cookie: state.cookie,
 			},

@@ -3,7 +3,7 @@ import got from 'got'
 export default async (test, assert, state) => {
 	await test('user-create: creating a new user works', async () => {
 		const response = await got.post(
-			`${state.baseUrl}/api/v1/auth/user`,
+			`${state.baseUrl}/api/v1/user`,
 			{
 				json: {
 					email: state.userEmail,

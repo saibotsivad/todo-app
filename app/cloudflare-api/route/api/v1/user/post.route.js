@@ -1,6 +1,10 @@
 import { BadRequest } from '@/lib/exceptions.js'
-import { auth } from '@/lib/tags.js'
+import { auth, user } from '@/lib/tags.js'
 import { createUser } from '@/lib/controller/user/create-user.js'
+import { generateCookie } from '@/lib/cookie.js'
+import { sendEmail } from '@/service/email.js'
+import { createUserSession } from '@/lib/controller/session/create-user-session.js'
+import renderEmailTemplate from '@/lib/render-email-template.js'
 
 export const summary = `
 	Create a new [user] object.
@@ -12,11 +16,15 @@ export const description = `
 	address containing a link (with a single-use token) used to verify
 	ownership of that address.
 
-	If the email is already used, an error will be returned.
+	A cookie session will be created for this user, giving them access to
+	the website, and that session will be set on the response headers.
+
+	If the email is already in use, an error will be returned.
 `
 
 export const tags = [
 	auth,
+	user,
 ]
 
 export const parameters = [
@@ -59,11 +67,38 @@ export const handler = async (services, req) => {
 	if (!email || !password) {
 		throw new BadRequest('Email and password must be supplied to create an account.')
 	}
+
+	const user = await createUser(services, { email, password })
+
+	await sendEmail(services, {
+		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
+		toAddress: email,
+		subject: 'Welcome to the Todo Journal 🎉',
+		body: renderEmailTemplate({
+			parameters: {
+				domain: services.config.get('TJ_API_DOMAIN'),
+				email,
+				user,
+			},
+			template: (await import('@/lib/email-templates/user-created.md')).default,
+		}),
+	})
+
+	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { userId: user.id })
+
 	return {
+		headers: {
+			'Set-Cookie': generateCookie(services, {
+				userId: user.id,
+				sessionId,
+				sessionSecret,
+				expirationDate,
+			}),
+		},
 		json: true,
 		status: 201,
 		body: {
-			data: await createUser(services, { email, password }),
+			data: user,
 		},
 	}
 }

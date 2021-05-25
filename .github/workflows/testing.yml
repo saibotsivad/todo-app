@@ -1,3 +1,10 @@
+#
+# The "testing" workflow will run all the normal static tests (linting, unit, etc.) and
+# make sure the build completes successfully. It will then launch DynamoDB-local[1]
+# and launch the server locally, running the full integration test suite against the
+# locally running services.
+#
+
 name: testing-deploy
 
 on:

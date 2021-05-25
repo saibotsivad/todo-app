@@ -1,19 +1,20 @@
 import { name as cookie, authorize } from '@/lib/security/cookie.js'
-import { auth } from '@/lib/tags.js'
+import { auth, session } from '@/lib/tags.js'
 import { generateExpiredCookie } from '@/lib/cookie.js'
 import { expireUserSession } from '@/lib/controller/session/expire-user-session.js'
 
 export const summary = `
-	Deactivate cookie session.
+	Expire current cookie session.
 `
 
 export const description = `
-	If a cookie is set, for normal browser sessions, that cookie's session
-	will be deactivated and the cookie will be expired.
+	If a cookie is set on the request, e.g. for normal browser sessions, that cookie's
+	session will be deactivated and the cookie will be sent back as expired.
 `
 
 export const tags = [
 	auth,
+	session,
 ]
 
 export const responses = {
