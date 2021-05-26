@@ -1,4 +1,4 @@
-import { auth } from '@/lib/tags.js'
+import { auth, session } from '@/lib/tags.js'
 import { BadRequest } from '@/lib/exceptions.js'
 import { generateCookie } from '@/lib/cookie.js'
 import { validatePassword } from '@/shared/worker-passwords/main.node.js'
@@ -16,6 +16,7 @@ export const description = `
 
 export const tags = [
 	auth,
+	session,
 ]
 
 export const parameters = [

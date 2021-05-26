@@ -31,7 +31,9 @@ export const createUserPasswordResetToken = async ({ db, config, SDate }, { user
 				S: expirationDate.toISOString(),
 			},
 			// DynamoDB TTL is configured on this table, so that means "eventually"
-			// after the expiration date the document will be deleted.
+			// after the expiration date the document will be deleted. This means
+			// that we can't count on the document not existing to determine its
+			// validity: we must check the expiration.
 			ttl: {
 				N: expirationDate.getTime(),
 			},

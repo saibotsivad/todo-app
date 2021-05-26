@@ -2,7 +2,7 @@ import got from 'got'
 
 export default async (test, assert, state) => {
 	test('user-logout: logging out sets expired cookie', async () => {
-		const response = await got.get(`${state.baseUrl}/api/v1/auth/logout`, {
+		const response = await got.get(`${state.baseUrl}/api/v1/logout`, {
 			headers: {
 				cookie: state.cookie,
 			},
@@ -19,7 +19,7 @@ export default async (test, assert, state) => {
 	})
 
 	test('user-logout: logged out user cannot fetch self', async () => {
-		const response = await got.get(`${state.baseUrl}/api/v1/auth/user`, {
+		const response = await got.get(`${state.baseUrl}/api/v1/user`, {
 			headers: {
 				cookie: state.cookie,
 			},
