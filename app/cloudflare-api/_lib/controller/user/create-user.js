@@ -5,12 +5,12 @@ import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
 import { ksuid } from '@/lib/ksuid.js'
 import { passwordIsReasonable } from '@/shared/util/password.js'
 
-export const createUser = async ({ db, config }, { email, password }) => {
+export const createUser = async ({ db, config, SDate }, { email, password }) => {
 	if (!passwordIsReasonable(password)) {
 		throw new BadRequest('Passwords must contain at least 8 characters, at least 1 letter, and at least 1 number.')
 	}
 
-	const now = new Date().toISOString()
+	const now = new SDate().toISOString()
 	const c = { S: now } // created
 	const u = { S: now } // updated
 	const userId = ksuid()
