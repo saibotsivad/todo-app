@@ -51,6 +51,7 @@ jobs:
         API_DOMAIN: localhost
         BASE_URL: "http://localhost:3000"
         DYNAMODB_URL: "http://localhost:3001"
+        LOCAL_SES_FOLDER: /tmp/todo-journal-ses
     - run: node wait-for-server-to-start.js && npm run integration
       env:
         STAGE: local
