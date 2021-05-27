@@ -47,3 +47,13 @@ export class UnauthorizedRequest extends Error {
 		this.meta = meta
 	}
 }
+
+export class UnexpectedServiceResponse extends Error {
+	constructor(message, meta) {
+		super(message)
+		this.status = 502
+		this.title = 'The external service used by this API returned an unexpected error.'
+		this.detail = message
+		this.meta = meta
+	}
+}

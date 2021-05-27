@@ -1,7 +1,7 @@
 export const expireUserSession = async ({ db, config, SDate }, { userId, sessionId }) => {
 	const now = new SDate().toISOString()
 	await db('UpdateItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Key: {
 			pk: {
 				S: `user|${userId}`,

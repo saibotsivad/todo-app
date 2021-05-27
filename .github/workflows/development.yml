@@ -31,9 +31,9 @@ jobs:
         CF_ACCOUNT_ID: bd5d47aef41fb2139f547a3349f5716f
         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         LOG_LEVEL: debug
-        TJ_TABLE_NAME: todojournal-develop
-        TJ_ADMIN_EMAIL_ADDRESS: admin+develop@todojournal.com
-        TJ_API_DOMAIN: develop.todojournal.com
+        DYNAMODB_TABLE_NAME: todojournal-develop
+        ADMIN_EMAIL_ADDRESS: admin+develop@todojournal.com
+        API_DOMAIN: develop.todojournal.com
         BASE_URL: "https://develop.todojournal.com"
     - run: node ./set-email-templates.js
       env:
@@ -42,7 +42,7 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA6LARILFOADPJH4N2
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TJ_TABLE_NAME: todojournal-develop
+        DYNAMODB_TABLE_NAME: todojournal-develop
     - run: npm run integration-cleanup
       env:
         STAGE: develop
@@ -50,7 +50,7 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA6LARILFOADPJH4N2
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TJ_TABLE_NAME: todojournal-develop
+        DYNAMODB_TABLE_NAME: todojournal-develop
     - run: npm run integration
       env:
         STAGE: develop

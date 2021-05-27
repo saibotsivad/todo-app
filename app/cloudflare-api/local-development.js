@@ -2,10 +2,12 @@ import 'source-map-support/register.js'
 import { setupRouter } from './setup-router.js'
 import { generateIndex } from '../cloudflare-static/generate-index.js'
 import { dynamodb } from '@/service/db.js'
+import { ses } from '@/service/email.js'
 import { routeRequest } from '@/lib/route-request.js'
 import { ksuid } from '@/lib/ksuid.js'
 import { serveFile } from '@/lib/serve-file.js'
 import { join } from 'path'
+import fs from 'fs/promises'
 import log from '@/service/log.js'
 import Trouter from 'trouter'
 import http from 'http'
@@ -16,8 +18,8 @@ const requiredEnvironmentVariables = [
 	'AWS_REGION',
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
-	'TJ_TABLE_NAME',
-	'TJ_API_DOMAIN',
+	'DYNAMODB_TABLE_NAME',
+	'API_DOMAIN',
 ]
 
 const port = parseInt(process.env.PORT || '3000', 10)
@@ -29,18 +31,20 @@ if (!requiredEnvironmentVariables.every(key => process.env[key])) {
 	process.exit(1)
 }
 
-const configValues = requiredEnvironmentVariables
-	.concat([
-		'NODE_ENV',
-		'DYNAMODB_URL',
-	])
-	.reduce((map, key) => {
-		map[key] = process.env[key]
-		return map
-	}, {})
-
 const config = {
-	get: key => configValues[key],
+	get: key => process.env[key],
+}
+
+if (process.env.LOCAL_SES_FOLDER) {
+	config.ses = async (action, parameters) => {
+		if (action !== 'SendEmail') {
+			throw new Error('local running currently only supports SendEmail')
+		}
+		const requestId = ksuid()
+		await fs.mkdir(process.env.LOCAL_SES_FOLDER, { recursive: true })
+		await fs.writeFile(join(process.env.LOCAL_SES_FOLDER, `./ses-send-email-${requestId}.json`), JSON.stringify(parameters, undefined, 2), 'utf-8')
+		return { success: true, data: { requestId: `localhost:${requestId}` } }
+	}
 }
 
 const router = new Trouter()
@@ -63,7 +67,7 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path),
 }))
 
-setupRouter({ db: dynamodb(config), config, log, SDate: Date }, router)
+setupRouter({ db: dynamodb(config), email: ses(config), config, log, SDate: Date }, router)
 
 const getBody = req => new Promise(resolve => {
 	let data = ''
@@ -105,8 +109,9 @@ const handleHttpRequest = async (requestId, req, res) => {
 	}
 
 	let { status, headers, json, body } = await routeRequest(router, request)
+	headers = headers || {}
+	headers['api-request-id'] = request.id
 	if (json || typeof body === 'object') {
-		headers = headers || {}
 		headers['Content-Type'] = 'application/json'
 	}
 	if (headers) {

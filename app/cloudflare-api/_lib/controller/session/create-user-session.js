@@ -16,7 +16,7 @@ export const createUserSession = async ({ db, config, SDate }, { userId }) => {
 	const hashedSecret = await hashPassword({ password: sessionSecret })
 
 	await db('PutItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Item: {
 			pk: {
 				S: `user|${userId}`,

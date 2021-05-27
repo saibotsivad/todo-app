@@ -2,7 +2,7 @@ import { dynamodb } from '@/service/db.js'
 
 const config = { get: key => process.env[key] }
 const db = dynamodb(config)
-const TableName = process.env.TJ_TABLE_NAME
+const TableName = process.env.DYNAMODB_TABLE_NAME
 
 export const services = { config, db, SDate: Date }
 

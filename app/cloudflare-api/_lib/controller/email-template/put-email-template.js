@@ -4,7 +4,7 @@ export const putEmailTemplate = async ({ config, db, SDate }, { id, attributes: 
 	const u = { S: now } // updated
 
 	await db('PutItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Item: {
 			pk: {
 				S: `system`,

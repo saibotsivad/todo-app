@@ -16,7 +16,7 @@ export const createUserPasswordResetToken = async ({ db, config, SDate }, { user
 	const hashedSecret = await hashPassword({ password: tokenSecret })
 
 	await db('PutItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Item: {
 			pk: {
 				S: `user|${userId}`,

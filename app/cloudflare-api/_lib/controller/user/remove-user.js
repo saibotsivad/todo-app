@@ -1,7 +1,7 @@
 import { lookupUserById } from '@/lib/controller/user/lookup-by-id.js'
 
 export const removeUser = async ({ db, config }, { userId, email }) => {
-	const TableName = config.get('TJ_TABLE_NAME')
+	const TableName = config.get('DYNAMODB_TABLE_NAME')
 
 	if (!email) {
 		const user = await lookupUserById({ db, config }, { userId })
