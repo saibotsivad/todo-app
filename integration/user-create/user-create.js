@@ -20,12 +20,14 @@ export default async (test, assert, state) => {
 		assert.is(user.type, 'user', 'correct type')
 		assert.is(user.attributes.email, state.userEmail, 'correct email set')
 		state.user = user
+		assert.ok(response.headers['api-request-id'], 'the request id is set on the response header')
 
 		const email = await fetchEmail({
-			username: '',
-			password: '',
-			hostname: '',
-			body: 'request-id', // TODO get the request-id from the response header I think?
+			username: process.env.JMAP_USERNAME,
+			password: process.env.JMAP_PASSWORD,
+			hostname: process.env.JMAP_HOSTNAME,
+			body: response.headers['api-request-id'],
 		})
+		assert.ok(email, 'the email was found eventually')
 	})
 }
