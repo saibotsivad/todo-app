@@ -4,8 +4,8 @@ let generateRequest
 let extract
 
 export const ses = options => async (action, parameters) => {
-	if (options.RUNNING_OFFLINE) {
-		return options.RUNNING_OFFLINE.ses(action, parameters)
+	if (options.get('LOCAL_SES_FOLDER') && options.ses) {
+		return options.ses(action, parameters)
 	}
 
 	if (!generateRequest) {

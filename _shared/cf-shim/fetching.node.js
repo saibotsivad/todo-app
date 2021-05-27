@@ -1,7 +1,7 @@
 import got from 'got'
 
 const intercept = (...args) => {
-	console.log('making a request using `got`:', ...args)
+	// console.log('making a request using `got`:', ...args)
 	return got(...args)
 }
 

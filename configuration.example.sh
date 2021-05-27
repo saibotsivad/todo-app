@@ -57,3 +57,4 @@ export DYNAMODB_URL="http://localhost:3001"
 export JMAP_USERNAME="user@site.com"
 export JMAP_PASSWORD="abc123abc123abc123abc123"
 export JMAP_HOSTNAME="betajmap.fastmail.com"
+export LOCAL_SES_FOLDER="/tmp/todo-journal-ses" # to use jmap mocks instead of SES
