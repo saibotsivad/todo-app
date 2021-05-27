@@ -22,12 +22,14 @@ export default async (test, assert, state) => {
 		state.user = user
 		assert.ok(response.headers['api-request-id'], 'the request id is set on the response header')
 
-		const email = await fetchEmail({
-			username: process.env.JMAP_USERNAME,
-			password: process.env.JMAP_PASSWORD,
-			hostname: process.env.JMAP_HOSTNAME,
-			body: response.headers['api-request-id'],
-		})
+		const email = process.env.RUNNING_OFFLINE
+			? todo_read_from_disk_presumably(response.headers['api-request-id'])
+			: await fetchEmail({
+				username: process.env.JMAP_USERNAME,
+				password: process.env.JMAP_PASSWORD,
+				hostname: process.env.JMAP_HOSTNAME,
+				body: response.headers['api-request-id'],
+			})
 		assert.ok(email, 'the email was found eventually')
 	})
 }

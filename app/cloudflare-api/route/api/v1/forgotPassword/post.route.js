@@ -68,7 +68,7 @@ export const handler = async (services, req) => {
 		throw new NotFound('Could not locate user by email address provided.')
 	}
 
-	const { tokenId, tokenSecret, expirationDate } = await createUserPasswordResetToken(services, { userId: user.id }) || {}
+	const { tokenId, tokenSecret } = await createUserPasswordResetToken(services, { userId: user.id }) || {}
 
 	await sendEmailTemplate(services, {
 		fromAddress: services.config.get('ADMIN_EMAIL_ADDRESS'),
@@ -76,9 +76,8 @@ export const handler = async (services, req) => {
 		subject: 'Password reset requested?',
 		templateId: FORGOT_PASSWORD,
 		parameters: {
-			domain: services.config.get('API_DOMAIN'),
-			token: stringToBase64Url(JSON.stringify({ i: tokenId, s: tokenSecret, u: user.id })),
-			expirationDate,
+			baseUrl: services.config.get('BASE_URL'),
+			tokenUrl: `${services.config.get('BASE_URL')}#/passwordReset?token=${stringToBase64Url(JSON.stringify({ i: tokenId, s: tokenSecret, u: user.id }))}`,
 			requestId: req.id,
 		},
 	})

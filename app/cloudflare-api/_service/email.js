@@ -4,6 +4,9 @@ let generateRequest
 let extract
 
 export const ses = options => async (action, parameters) => {
+	if (options.RUNNING_OFFLINE) {
+		return options.RUNNING_OFFLINE.ses(action, parameters)
+	}
 
 	if (!generateRequest) {
 		const { awsSes, extractResponse } = await import('@saibotsivad/aws-ses')

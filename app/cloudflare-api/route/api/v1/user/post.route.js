@@ -77,8 +77,7 @@ export const handler = async (services, req) => {
 		subject: 'Welcome to the Todo Journal 🎉',
 		templateId: USER_CREATED,
 		parameters: {
-			domain: services.config.get('API_DOMAIN'),
-			email,
+			baseUrl: services.config.get('BASE_URL'),
 			user,
 			requestId: req.id,
 		},

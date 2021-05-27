@@ -42,6 +42,15 @@ const configValues = requiredEnvironmentVariables
 
 const config = {
 	get: key => configValues[key],
+	RUNNING_OFFLINE: {
+		ses: async (action, parameters) => {
+			if (action !== 'SendEmail') {
+				throw new Error('local running currently only supports SendEmail')
+			}
+			// TODO save to disk presumably
+			return { success: true, data: { requestId: 'localhost-mock' } }
+		},
+	},
 }
 
 const router = new Trouter()
