@@ -2,7 +2,7 @@ import { validatePassword } from '@/shared/worker-passwords/main.node.js'
 
 export const verifyPasswordResetToken = async ({ db, config, SDate }, { userId, tokenId, tokenSecret }) => {
 	const { data } = await db('GetItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Key: {
 			pk: {
 				S: `user|${userId}`,

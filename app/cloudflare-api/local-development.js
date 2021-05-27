@@ -2,6 +2,7 @@ import 'source-map-support/register.js'
 import { setupRouter } from './setup-router.js'
 import { generateIndex } from '../cloudflare-static/generate-index.js'
 import { dynamodb } from '@/service/db.js'
+import { ses } from '@/service/email.js'
 import { routeRequest } from '@/lib/route-request.js'
 import { ksuid } from '@/lib/ksuid.js'
 import { serveFile } from '@/lib/serve-file.js'
@@ -16,8 +17,8 @@ const requiredEnvironmentVariables = [
 	'AWS_REGION',
 	'AWS_ACCESS_KEY_ID',
 	'AWS_SECRET_ACCESS_KEY',
-	'TJ_TABLE_NAME',
-	'TJ_API_DOMAIN',
+	'DYNAMODB_TABLE_NAME',
+	'API_DOMAIN',
 ]
 
 const port = parseInt(process.env.PORT || '3000', 10)
@@ -63,7 +64,7 @@ router.add('GET', /__build__\/(?<path>.+)$/, async request => serveFile({
 	filepath: join('deploy/cloudflare-static/public', request.params.path),
 }))
 
-setupRouter({ db: dynamodb(config), config, log, SDate: Date }, router)
+setupRouter({ db: dynamodb(config), email: ses(config), config, log, SDate: Date }, router)
 
 const getBody = req => new Promise(resolve => {
 	let data = ''

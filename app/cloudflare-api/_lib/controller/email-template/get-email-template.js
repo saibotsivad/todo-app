@@ -1,6 +1,6 @@
 export const getEmailTemplate = async ({ config, db }, { id }) => {
 	const { data } = await db('GetItem', {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		Key: {
 			pk: {
 				S: `system`,

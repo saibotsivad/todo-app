@@ -7,9 +7,9 @@ const requiredEnvironmentVariables = [
 	'LOG_LEVEL',
 	'NODE_ENV',
 	'STAGE',
-	'TJ_ADMIN_EMAIL_ADDRESS',
-	'TJ_API_DOMAIN',
-	'TJ_TABLE_NAME',
+	'ADMIN_EMAIL_ADDRESS',
+	'API_DOMAIN',
+	'DYNAMODB_TABLE_NAME',
 ]
 
 if (!requiredEnvironmentVariables.every(key => process.env[key])) {

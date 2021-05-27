@@ -30,16 +30,16 @@ export NODE_ENV="$STAGE"
 # use the `TJ_` (aka todojournal) prefix.
 
 # The name of the DynamoDB table that stores all the data.
-export TJ_TABLE_NAME="todojournal-$STAGE"
+export DYNAMODB_TABLE_NAME="todojournal-$STAGE"
 
 # The email address used to send out password reset and user
 # confirmation emails.
-export TJ_ADMIN_EMAIL_ADDRESS="admin+$STAGE@todojournal.com"
+export ADMIN_EMAIL_ADDRESS="admin+$STAGE@todojournal.com"
 
 # The domain where the app is run, e.g. `todojournal.com` or
 # a sub-domain during testing, e.g. `testing.todojournal.com`
 # or locally `localhost:3000`
-export TJ_API_DOMAIN="todojournal.com"
+export API_DOMAIN="todojournal.com"
 
 # To run the integration tests, you either need to set the base
 # url, or (if running locally) the port.
@@ -51,3 +51,9 @@ export PORT="3000"
 # `npm run dev` will wait for the Docker container to be live, by
 # trying to make a request to DynamoDB-local until it responds.
 export DYNAMODB_URL="http://localhost:3001"
+
+# To run the integration test involving sending and receiving
+# email, you will need to set these properties.
+export JMAP_USERNAME="user@site.com"
+export JMAP_PASSWORD="abc123abc123abc123abc123"
+export JMAP_HOSTNAME="betajmap.fastmail.com"

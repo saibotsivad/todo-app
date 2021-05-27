@@ -1,4 +1,5 @@
 import got from 'got'
+import { fetchEmail } from 'jmap-fetch-test-email'
 
 export default async (test, assert, state) => {
 	await test('user-create: creating a new user works', async () => {
@@ -19,5 +20,12 @@ export default async (test, assert, state) => {
 		assert.is(user.type, 'user', 'correct type')
 		assert.is(user.attributes.email, state.userEmail, 'correct email set')
 		state.user = user
+
+		const email = await fetchEmail({
+			username: '',
+			password: '',
+			hostname: '',
+			body: 'request-id', // TODO get the request-id from the response header I think?
+		})
 	})
 }

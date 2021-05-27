@@ -5,10 +5,6 @@ import { fetching } from '@/shared/cf-shim/fetching.node.js'
 let sign
 
 export const dynamodb = options => async (type, params) => {
-	// This is lazy instantiation, but it still imports even if
-	// you never use DynamoDB. So far all the Lambda functions
-	// use DynamoDB so this is fine, but if there's ever a Lambda
-	// function that doesn't, this will need to be revisited.
 	if (!sign) {
 		const config = {
 			service: 'dynamodb',

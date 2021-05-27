@@ -4,13 +4,13 @@ import get from 'dlv'
 import timers from 'timers/promises'
 import yaml from 'js-yaml'
 
-const TableName = process.env.TJ_TABLE_NAME
+const TableName = process.env.DYNAMODB_TABLE_NAME
 
 const db = dynamodb({ get: key => process.env[key] })
 
 const waitForDynamoDbToStart = async () => {
 	if (!TableName) {
-		console.log('The env variable "TJ_TABLE_NAME" must be set.')
+		console.log('The env variable "DYNAMODB_TABLE_NAME" must be set.')
 		process.exit(1)
 	}
 	if (!process.env.DYNAMODB_URL) {

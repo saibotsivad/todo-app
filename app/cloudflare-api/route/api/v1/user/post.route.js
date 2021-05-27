@@ -2,10 +2,8 @@ import { BadRequest } from '@/lib/exceptions.js'
 import { auth, session, user } from '@/lib/tags.js'
 import { createUser } from '@/lib/controller/user/create-user.js'
 import { generateCookie } from '@/lib/cookie.js'
-import { sendEmail } from '@/service/email.js'
+import { sendEmailTemplate } from '@/lib/controller/email-template/send-email-template.js'
 import { createUserSession } from '@/lib/controller/session/create-user-session.js'
-import renderEmailTemplate from '@/lib/render-email-template.js'
-import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
 import { USER_CREATED } from '@/lib/controller/email-template/static/_template-ids.js'
 
 export const summary = `
@@ -73,18 +71,17 @@ export const handler = async (services, req) => {
 
 	const user = await createUser(services, { email, password })
 
-	await sendEmail(services, {
-		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
+	await sendEmailTemplate(services, {
+		fromAddress: services.config.get('ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Welcome to the Todo Journal 🎉',
-		body: renderEmailTemplate(
-			await getEmailTemplate(services, { id: USER_CREATED }),
-			{
-				domain: services.config.get('TJ_API_DOMAIN'),
-				email,
-				user,
-			},
-		),
+		templateId: USER_CREATED,
+		parameters: {
+			domain: services.config.get('API_DOMAIN'),
+			email,
+			user,
+			requestId: req.id,
+		},
 	})
 
 	const { sessionId, sessionSecret, expirationDate } = await createUserSession(services, { userId: user.id })

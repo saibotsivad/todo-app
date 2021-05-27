@@ -36,7 +36,7 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIAEXAMPLEKEY
         AWS_SECRET_ACCESS_KEY: abc123abc123abc123abc123
-        TJ_TABLE_NAME: todojournal-local
+        DYNAMODB_TABLE_NAME: todojournal-local
         DYNAMODB_URL: "http://localhost:3001"
     - run: npm run start & # the "&" backgrounds the task
       env:
@@ -46,15 +46,15 @@ jobs:
         AWS_ACCESS_KEY_ID: AKIAEXAMPLEKEY
         AWS_SECRET_ACCESS_KEY: abc123abc123abc123abc123
         LOG_LEVEL: debug
-        TJ_TABLE_NAME: todojournal-local
-        TJ_ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
-        TJ_API_DOMAIN: localhost
+        DYNAMODB_TABLE_NAME: todojournal-local
+        ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
+        API_DOMAIN: localhost
         BASE_URL: "http://localhost:3000"
         DYNAMODB_URL: "http://localhost:3001"
     - run: node wait-for-server-to-start.js && npm run integration
       env:
         STAGE: local
         LOG_LEVEL: debug
-        TJ_ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
-        TJ_API_DOMAIN: localhost
+        ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
+        API_DOMAIN: localhost
         BASE_URL: "http://localhost:3000"
