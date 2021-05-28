@@ -19,6 +19,7 @@ export const dynamodb = options => async (type, params) => {
 	}
 
 	const request = {
+		url: options.get('DYNAMODB_URL') || `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		method: 'POST',
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
@@ -33,8 +34,12 @@ export const dynamodb = options => async (type, params) => {
 	request.headers.Authorization = authorization
 
 	const response = await fetching(
-		options.get('DYNAMODB_URL') || `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
-		request,
+		request.url,
+		{
+			headers: request.headers,
+			method: request.post,
+			body: request.body,
+		},
 	)
 	const data = await response.json()
 
