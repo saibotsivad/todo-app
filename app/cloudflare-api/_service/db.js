@@ -45,7 +45,7 @@ export const dynamodb = options => async (type, params) => {
 
 	if (response.statusCode !== 200 && data.__type) {
 		if (data.__type.includes('#ValidationException')) {
-			throw new DatabaseValidation('Invalid parameters given to DynamoDB call.', { type: data.__type, message: data.Message, params })
+			throw new DatabaseValidation('Invalid parameters given to DynamoDB call.', { type: data.__type, message: data.Message, params, request })
 		}
 	}
 
