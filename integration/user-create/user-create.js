@@ -31,8 +31,9 @@ export default async (test, assert, state) => {
 				username: process.env.JMAP_USERNAME,
 				password: process.env.JMAP_PASSWORD,
 				hostname: process.env.JMAP_HOSTNAME,
-				body: requestId,
+				onRetry: count => { console.log('retrying looking for email', count) },
+				find: emails => JSON.stringify(emails).includes(requestId),
 			})
-		assert.ok(email, 'the email was found eventually')
+		assert.ok(email, 'the email was found eventually ' + requestId)
 	})
 }
