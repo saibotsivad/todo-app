@@ -37,7 +37,7 @@ export const dynamodb = options => async (type, params) => {
 		request.url,
 		{
 			headers: request.headers,
-			method: request.post,
+			method: request.method,
 			body: request.body,
 		},
 	)
