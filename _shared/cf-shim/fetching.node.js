@@ -7,9 +7,14 @@ const intercept = (...args) => {
 
 export const fetching = async (url, options) => intercept(
 	Object.assign(
-		{ url },
-		options,
-		{ throwHttpErrors: false },
+		options || {},
+		{
+			url,
+			retry: {
+				limit: 0,
+			},
+			throwHttpErrors: false,
+		},
 	),
 ).then(response => {
 	response.json = async () => JSON.parse(response.body)

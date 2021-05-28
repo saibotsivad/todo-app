@@ -19,7 +19,6 @@ export const dynamodb = options => async (type, params) => {
 	}
 
 	const request = {
-		url: options.get('DYNAMODB_URL') || `https://dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		method: 'POST',
 		headers: {
 			'content-type': 'application/x-amz-json-1.0',
@@ -28,10 +27,6 @@ export const dynamodb = options => async (type, params) => {
 				? 'localhost'
 				: `dynamodb.${options.get('AWS_REGION')}.amazonaws.com`,
 		},
-		retry: {
-			limit: 0,
-		},
-		throwHttpErrors: false,
 		body: JSON.stringify(params),
 	}
 	const { authorization } = await sign(request)
