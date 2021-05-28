@@ -9,7 +9,7 @@ export default async (test, assert, state) => {
 			{
 				json: {
 					email: state.userEmail,
-					password: state.userPassword,
+					password: state.userWebappPassword,
 				},
 				throwHttpErrors: false,
 			},
