@@ -2,15 +2,15 @@
 parameters:
   baseUrl:
     type: string
-    required: true
     description: The fully qualified URL to the main website.
   tokenUrl:
     type: string
-    required: true
     description: The fully qualified link to the password reset page.
+  emailId:
+    type: string
+    description: The identifier of this email, used for API lookups.
   requestId:
     type: string
-    required: true
     description: The request identifier that initiated this password reset.
 ---
 
@@ -26,4 +26,13 @@ Keep on journaling,
 
 –Tobias, for the [todojournal.com]({{baseUrl}}) crew
 
-<!-- requestId={{requestId}} -->
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Thing",
+  "name": "Password Reset",
+  "identifier": "{{emailId}}",
+  "url": "{{baseUrl}}/api/emails/{{emailId}}?requestId={{requestId}}"
+}
+</script>
