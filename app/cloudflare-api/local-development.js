@@ -14,6 +14,8 @@ import http from 'http'
 import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
 import { checkEnvironmentVariables } from '@/lib/environment-variables.js'
 
+/* global process */
+
 const port = parseInt(process.env.PORT || '3000', 10)
 
 const notSet = checkEnvironmentVariables(process.env)

@@ -35,6 +35,7 @@ export const serveFile = async ({ filepath }) => {
 		body: file,
 		headers: {
 			'content-type': mime.getType(extname(filepath).replace(/^\./, '')),
+			/* global Buffer */
 			'content-length': Buffer.byteLength(file),
 		},
 	}

@@ -1,5 +1,7 @@
 import { dynamodb } from '@/service/db.js'
 
+/* global process */
+
 const config = { get: key => process.env[key] }
 const db = dynamodb(config)
 const TableName = process.env.DYNAMODB_TABLE_NAME
