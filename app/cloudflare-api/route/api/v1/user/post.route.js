@@ -71,7 +71,7 @@ export const handler = async (services, req) => {
 
 	const user = await createUser(services, { email, password })
 
-	await sendEmailTemplate(services, {
+	const sentEmail = await sendEmailTemplate(services, {
 		fromAddress: services.config.get('ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Welcome to the Todo Journal 🎉',
@@ -98,6 +98,13 @@ export const handler = async (services, req) => {
 		status: 201,
 		body: {
 			data: user,
+			included: [
+				{
+					id: sentEmail.id,
+					type: sentEmail.type,
+					meta: sentEmail.meta,
+				},
+			],
 		},
 	}
 }

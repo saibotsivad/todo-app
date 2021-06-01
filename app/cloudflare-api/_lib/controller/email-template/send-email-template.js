@@ -1,6 +1,7 @@
 import { UnexpectedServiceResponse } from '@/lib/exceptions.js'
 import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
 import { Remarkable } from 'remarkable'
+import { ksuid } from '@/lib/ksuid.js'
 import templite from 'templite'
 
 const Charset = 'UTF-8'
@@ -14,6 +15,7 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 	if (!emailTemplate) {
 		throw new Error(`Could not locate template by id "${templateId}", this is a developer error.`)
 	}
+	const emailId = ksuid()
 
 	if (!md) {
 		md = new Remarkable({
@@ -33,7 +35,10 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 		})
 	}
 
-	const markdown = templite(emailTemplate.attributes.view, parameters)
+	const markdown = templite(emailTemplate.attributes.view, {
+		...parameters,
+		emailId,
+	})
 	const html = md.render(markdown)
 
 	const { success, data, response } = await email('SendEmail', {
@@ -53,5 +58,23 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 
 	if (!success) {
 		throw new UnexpectedServiceResponse('Error while sending email through SES.', { data, fromAddress, toAddress, templateId, response })
+	}
+
+	// TODO here we should save a record of the exact email sent
+	const now = new Date().toISOString()
+	return {
+		id: emailId,
+		type: 'email',
+		attributes: {
+			fromAddress,
+			toAddress,
+			html,
+			markdown,
+			parameters,
+		},
+		meta: {
+			created: now,
+			updated: now,
+		},
 	}
 }

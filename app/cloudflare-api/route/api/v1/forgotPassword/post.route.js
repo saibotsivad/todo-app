@@ -70,7 +70,7 @@ export const handler = async (services, req) => {
 
 	const { tokenId, tokenSecret } = await createUserPasswordResetToken(services, { userId: user.id }) || {}
 
-	await sendEmailTemplate(services, {
+	const sentEmail = await sendEmailTemplate(services, {
 		fromAddress: services.config.get('ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Password reset requested?',
@@ -85,6 +85,14 @@ export const handler = async (services, req) => {
 	return {
 		json: true,
 		status: 201,
-		body: { ok: true },
+		body: {
+			included: [
+				{
+					id: sentEmail.id,
+					type: sentEmail.type,
+					meta: sentEmail.meta,
+				},
+			],
+		},
 	}
 }

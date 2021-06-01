@@ -3,12 +3,15 @@ parameters:
   baseUrl:
     type: string
     description: The fully qualified URL to the main website.
-  requestId:
-    type: string
-    description: The request identifier that initiated this password reset.
   user:
     type: object
     description: The `user` object that was just created, e.g. `{ id, type, attributes }`.
+  emailId:
+    type: string
+    description: The identifier of this email, used for API lookups.
+  requestId:
+    type: string
+    description: The request identifier that initiated this password reset.
 ---
 
 Hey there, looks like you just created an account at [Todo Journal]({{baseUrl}}).
@@ -20,4 +23,13 @@ Welcome to the journaling experience!
 
 –Tobias, for the [todojournal.com]({{baseUrl}}) crew
 
-<!-- requestId={{requestId}} -->
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Thing",
+  "name": "User Created",
+  "identifier": "{{emailId}}",
+  "url": "{{baseUrl}}/api/emails/{{emailId}}?requestId={{requestId}}"
+}
+</script>
