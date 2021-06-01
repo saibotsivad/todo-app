@@ -22,9 +22,11 @@ export const ses = options => async (action, parameters) => {
 
 	const { url, headers, body } = await generateRequest(action, parameters)
 	const response = await fetching(url, { headers, body, method: 'POST' })
+	const text = await response.text()
 
 	return {
 		success: response.statusCode === 200,
-		data: extract(await response.text()),
+		data: extract(text),
+		response: text,
 	}
 }
