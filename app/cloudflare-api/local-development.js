@@ -12,22 +12,13 @@ import log from '@/service/log.js'
 import Trouter from 'trouter'
 import http from 'http'
 import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
-
-const requiredEnvironmentVariables = [
-	'AWS_ACCOUNT_ID',
-	'AWS_REGION',
-	'AWS_ACCESS_KEY_ID',
-	'AWS_SECRET_ACCESS_KEY',
-	'DYNAMODB_TABLE_NAME',
-	'API_DOMAIN',
-]
+import { checkEnvironmentVariables } from '@/lib/environment-variables.js'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 
-if (!requiredEnvironmentVariables.every(key => process.env[key])) {
-	console.log('Some environment variables are not set.')
-	console.log('Required: ' + requiredEnvironmentVariables.join(', '))
-	console.log('Not set: ' + requiredEnvironmentVariables.filter(key => !process.env[key]).join(', '))
+const notSet = checkEnvironmentVariables(process.env)
+if (notSet) {
+	console.log(notSet)
 	process.exit(1)
 }
 

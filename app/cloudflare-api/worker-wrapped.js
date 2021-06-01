@@ -8,6 +8,7 @@ import errorFormatter from '@/lib/error-formatter.js'
 import log from '@/service/log.js'
 import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
 import Trouter from 'trouter'
+import { checkEnvironmentVariables } from '@/lib/environment-variables.js'
 
 // eslint-disable-next-line no-undef
 addEventListener('fetch', event => {
@@ -34,8 +35,14 @@ async function handleRequest(req) {
 	if (!router) {
 		// The configuration settings are loaded once per instantiation, so if you
 		// change them midway you'll have to wait until the instances go away.
-		/* global TODO_JOURNAL_CONFIGURATION */
-		const options = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
+		/* global API_CONFIGURATION */
+		const options = JSON.parse(await API_CONFIGURATION)
+		const notSet = checkEnvironmentVariables(options)
+		if (notSet) {
+			return new Response(notSet, {
+				status: 500,
+			})
+		}
 		const config = { get: key => options[key] }
 		router = new Trouter()
 		setupRouter({ db: dynamodb(config), email: ses(config), log, config, SDate: Date }, router)
