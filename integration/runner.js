@@ -27,12 +27,25 @@ const scenarios = [
 ]
 
 const mutableState = {
-	userEmail: `testuser+${process.env.STAGE || 'local'}@${process.env.TJ_API_DOMAIN || 'localhost'}`,
-	userPassword: 'correct-battery-horse-staple-9001',
+	// integrationtesting+todojournal-develop@tobiaslabs.com
+	userEmail: `integrationtesting+todojournal-${process.env.STAGE || 'local'}@tobiaslabs.com`,
+	userWebappPassword: 'correct-battery-horse-staple-9001',
 	baseUrl: process.env.BASE_URL || `http://localhost:${process.env.PORT || '3000'}`,
 }
 
 console.log('Running integration tests for:', mutableState.baseUrl)
+
+const jmapProps = [
+	'JMAP_USERNAME',
+	'JMAP_PASSWORD',
+	'JMAP_HOSTNAME',
+]
+if (!jmapProps.every(prop => process.env[prop])) {
+	console.log('Some JMAP properties were not set as environment variables.')
+	console.log('Required: ' + jmapProps.join(', '))
+	console.log('Not set: ' + jmapProps.filter(prop => !process.env[prop]).join(', '))
+	process.exit(1)
+}
 
 const run = async () => {
 	// Note the reference to `globalThis.UVU_*` is to manage suite

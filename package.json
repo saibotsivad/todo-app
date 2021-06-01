@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "engines": {
-    "node": "16.0.0"
+    "node": "16.2.0"
   },
   "type": "module",
   "scripts": {
@@ -61,6 +61,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
+    "@saibotsivad/aws-ses": "^1.0.0",
     "@saibotsivad/blockdown": "^1.2.1",
     "abstract-state-router": "^6.1.0",
     "ajv": "^6.12.6",
@@ -70,13 +71,14 @@
     "dlv": "^1.1.3",
     "glob-module-file": "^3.0.2",
     "got": "^11.8.1",
+    "httpie": "^1.1.2",
+    "jmap-fetch-test-email": "^1.0.0",
     "js-yaml": "^3.14.1",
     "mime": "^2.5.2",
     "mkdirp": "^1.0.4",
     "ncp": "^2.0.0",
     "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
-    "polka": "^0.5.2",
     "querystring": "^0.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.42.0",
@@ -88,7 +90,7 @@
     "rollup-plugin-terser": "^7.0.0",
     "rollup-pluginutils": "^2.8.2",
     "serve-static": "^1.14.1",
-    "serverless": "^2.39.2",
+    "serverless": "^2.43.1",
     "serverless-http": "^2.7.0",
     "sign-aws-requests": "^1.0.1",
     "sirv": "^1.0.11",

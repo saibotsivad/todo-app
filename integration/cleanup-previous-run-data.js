@@ -7,7 +7,7 @@ import { removeUserSession } from '../app/cloudflare-api/_lib/controller/session
 const config = { get: key => process.env[key] }
 const db = dynamodb(config)
 const services = { config, db }
-const email = `testuser+${process.env.STAGE || 'local'}@${process.env.TJ_API_DOMAIN || 'localhost'}`
+const email = `integrationtesting+todojournal-${process.env.STAGE || 'local'}@tobiaslabs.com`
 
 const [ , , force ] = [ ...process.argv ]
 
@@ -32,7 +32,7 @@ const run = async () => {
 	}
 
 	if (force === 'force') {
-		const TableName = process.env.TJ_TABLE_NAME
+		const TableName = process.env.DYNAMODB_TABLE_NAME
 		const allData = await db('Scan', { TableName })
 		console.log(`Found ${allData.data.Items && allData.data.Items.length || 0} items to remove.`)
 		for (const item of (allData.data && allData.data.Items || [])) {

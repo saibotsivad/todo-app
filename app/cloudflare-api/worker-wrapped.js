@@ -2,11 +2,13 @@ import { BadRequest } from '@/lib/exceptions.js'
 import { setupRouter } from './setup-router.js'
 import { dynamodb } from '@/service/db.js'
 import { routeRequest } from '@/lib/route-request.js'
+import { ses } from '@/service/email.js'
 import { ksuid } from '@/lib/ksuid.js'
 import errorFormatter from '@/lib/error-formatter.js'
 import log from '@/service/log.js'
 import remapPairsToMap from '@/lib/remap-pairs-to-map.js'
 import Trouter from 'trouter'
+import { checkEnvironmentVariables } from '@/lib/environment-variables.js'
 
 // eslint-disable-next-line no-undef
 addEventListener('fetch', event => {
@@ -33,11 +35,17 @@ async function handleRequest(req) {
 	if (!router) {
 		// The configuration settings are loaded once per instantiation, so if you
 		// change them midway you'll have to wait until the instances go away.
-		/* global TODO_JOURNAL_CONFIGURATION */
-		const options = JSON.parse(await TODO_JOURNAL_CONFIGURATION)
+		/* global API_CONFIGURATION */
+		const options = JSON.parse(await API_CONFIGURATION)
+		const notSet = checkEnvironmentVariables(options)
+		if (notSet) {
+			return new Response(notSet, {
+				status: 500,
+			})
+		}
 		const config = { get: key => options[key] }
 		router = new Trouter()
-		setupRouter({ db: dynamodb(config), log, config, SDate: Date }, router)
+		setupRouter({ db: dynamodb(config), email: ses(config), log, config, SDate: Date }, router)
 	}
 
 	const url = new URL(req.url)
@@ -64,8 +72,8 @@ async function handleRequest(req) {
 	}
 
 	const start = Date.now()
-	const requestId = ksuid()
-	log.info(`[${requestId}] [START] ${request.method} ${request.pathname}${request.search || ''}`)
+	request.id = ksuid()
+	log.info(`[${request.id}] [START] ${request.method} ${request.pathname}${request.search || ''}`)
 
 	return routeRequest(router, request)
 		.then(({
@@ -75,9 +83,9 @@ async function handleRequest(req) {
 			body,
 		}) => {
 			const requestMillis = Date.now() - start
-			log.info(`[${requestId}] [END] [COMPLETED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${requestMillis}ms)`)
+			log.info(`[${request.id}] [END] [COMPLETED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${requestMillis}ms)`)
 			headers = headers || {}
-			headers['api-request-id'] = requestId
+			headers['api-request-id'] = request.id
 			headers['api-request-ms'] = requestMillis
 			if (json || typeof body === 'object') {
 				headers['Content-Type'] = 'application/json'
@@ -89,7 +97,7 @@ async function handleRequest(req) {
 			})
 		})
 		.catch(error => {
-			log.error(`[${requestId}] [END] [FAILED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
+			log.error(`[${request.id}] [END] [FAILED] ${request.method} ${request.pathname}${request.search || ''} (${status} after ${Date.now() - start}ms)`)
 			return errorHandler(500, error)
 		})
 }

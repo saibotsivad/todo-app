@@ -1,11 +1,9 @@
 import { auth } from '@/lib/tags.js'
-import { BadRequest } from '@/lib/exceptions.js'
-import { sendEmail } from '@/service/email.js'
+import { BadRequest, NotFound } from '@/lib/exceptions.js'
+import { sendEmailTemplate } from '@/lib/controller/email-template/send-email-template.js'
 import { createUserPasswordResetToken } from '@/lib/controller/user-password/create-password-reset-token.js'
 import { lookupUserByEmail } from '@/lib/controller/user/lookup-by-email.js'
-import renderEmailTemplate from '@/lib/render-email-template.js'
 import { stringToBase64Url } from '@/shared/util/string.js'
-import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
 import { FORGOT_PASSWORD } from '@/lib/controller/email-template/static/_template-ids.js'
 
 export const summary = `
@@ -66,23 +64,24 @@ export const handler = async (services, req) => {
 		throw new BadRequest('Email must be supplied to send password reset  link.')
 	}
 	const user = await lookupUserByEmail(services, { email })
-	const { tokenId, tokenSecret, expirationDate } = user && await createUserPasswordResetToken(services, { userId: user.id }) || {}
-	const emailSent = user && await sendEmail(services, {
-		fromAddress: services.config.get('TJ_ADMIN_EMAIL_ADDRESS'),
+	if (!user) {
+		throw new NotFound('Could not locate user by email address provided.')
+	}
+
+	const { tokenId, tokenSecret } = await createUserPasswordResetToken(services, { userId: user.id }) || {}
+
+	await sendEmailTemplate(services, {
+		fromAddress: services.config.get('ADMIN_EMAIL_ADDRESS'),
 		toAddress: email,
 		subject: 'Password reset requested?',
-		body: renderEmailTemplate(
-			await getEmailTemplate(services, { id: FORGOT_PASSWORD }),
-			{
-				domain: services.config.get('TJ_API_DOMAIN'),
-				token: stringToBase64Url(JSON.stringify({ i: tokenId, s: tokenSecret, u: user.id })),
-				expirationDate,
-			},
-		),
+		templateId: FORGOT_PASSWORD,
+		parameters: {
+			baseUrl: services.config.get('BASE_URL'),
+			tokenUrl: `${services.config.get('BASE_URL')}#/passwordReset?token=${stringToBase64Url(JSON.stringify({ i: tokenId, s: tokenSecret, u: user.id }))}`,
+			requestId: req.id,
+		},
 	})
-	if (!emailSent) {
-		throw new BadRequest('Could not send password reset link to provided email.')
-	}
+
 	return {
 		json: true,
 		status: 201,

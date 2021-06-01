@@ -2,7 +2,7 @@ import { stringToBase64Url, base64UrlToString } from '@/shared/util/string.js'
 
 export const listSessionsByUserId = async ({ db, config }, { userId, limit, offsetKey }) => {
 	const query = {
-		TableName: config.get('TJ_TABLE_NAME'),
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
 		ExpressionAttributeValues: {
 			':pk': {
 				S: `user|${userId}`,

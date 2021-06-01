@@ -31,9 +31,9 @@ jobs:
         CF_ACCOUNT_ID: bd5d47aef41fb2139f547a3349f5716f
         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         LOG_LEVEL: warn
-        TJ_TABLE_NAME: todojournal-production
-        TJ_ADMIN_EMAIL_ADDRESS: admin+production@todojournal.com
-        TJ_API_DOMAIN: todojournal.com
+        DYNAMODB_TABLE_NAME: todojournal-production
+        ADMIN_EMAIL_ADDRESS: admin+production@todojournal.com
+        API_DOMAIN: todojournal.com
         BASE_URL: "https://todojournal.com"
     - run: node ./set-email-templates.js
       env:
@@ -42,7 +42,7 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA6LARILFOECUCK52P
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TJ_TABLE_NAME: todojournal-production
+        DYNAMODB_TABLE_NAME: todojournal-production
     - run: npm run integration-cleanup
       env:
         STAGE: production
@@ -50,9 +50,11 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA6LARILFOECUCK52P
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TJ_TABLE_NAME: todojournal-production
+        DYNAMODB_TABLE_NAME: todojournal-production
     - run: npm run integration
       env:
         STAGE: production
         BASE_URL: "https://todojournal.com/"
-
+        JMAP_USERNAME: "integrationtesting@tobiaslabs.com"
+        JMAP_PASSWORD: ${{ secrets.JMAP_PASSWORD }}
+        JMAP_HOSTNAME: "betajmap.fastmail.com"

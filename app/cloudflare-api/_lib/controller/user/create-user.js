@@ -22,7 +22,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 			// user in user collection, for looking at list of all users
 			{
 				Put: {
-					TableName: config.get('TJ_TABLE_NAME'),
+					TableName: config.get('DYNAMODB_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: 'user',
@@ -47,7 +47,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 			// user-by-id collection, for profile, details, session, etc
 			{
 				Put: {
-					TableName: config.get('TJ_TABLE_NAME'),
+					TableName: config.get('DYNAMODB_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: `user|${userId}`,
@@ -71,7 +71,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 			// email maps to one user id, for lookup during login
 			{
 				Put: {
-					TableName: config.get('TJ_TABLE_NAME'),
+					TableName: config.get('DYNAMODB_TABLE_NAME'),
 					Item: {
 						pk: {
 							S: `email|${email}`,
