@@ -25,8 +25,7 @@ export const ses = options => async (action, parameters) => {
 	const text = await response.text()
 
 	return {
-		success: response.statusCode === 200,
-		statusCode: response.statusCode,
+		success: response.status === 200,
 		data: extract(text),
 		response: text,
 	}

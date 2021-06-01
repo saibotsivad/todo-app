@@ -19,5 +19,7 @@ export const fetching = async (url, options) => intercept(
 ).then(response => {
 	response.json = async () => JSON.parse(response.body)
 	response.text = async () => response.body
+	response.status = response.statusCode
+	delete response.statusCode
 	return response
 })
