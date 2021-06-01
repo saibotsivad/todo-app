@@ -7,7 +7,7 @@ import { removeUserSession } from '../app/cloudflare-api/_lib/controller/session
 const config = { get: key => process.env[key] }
 const db = dynamodb(config)
 const services = { config, db }
-const email = `testuser+${process.env.STAGE || 'local'}@${process.env.API_DOMAIN || 'localhost'}`
+const email = `integrationtesting+todojournal-${process.env.STAGE || 'local'}@tobiaslabs.com`
 
 const [ , , force ] = [ ...process.argv ]
 
