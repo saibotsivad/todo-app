@@ -26,6 +26,7 @@ export const ses = options => async (action, parameters) => {
 
 	return {
 		success: response.statusCode === 200,
+		statusCode: response.statusCode,
 		data: extract(text),
 		response: text,
 	}

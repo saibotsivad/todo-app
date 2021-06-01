@@ -16,7 +16,7 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 	const markdown = templite(emailTemplate.attributes.view, parameters)
 	const html = snarkdown(markdown)
 
-	const { success, data, response } = await email('SendEmail', {
+	const { success, data, response, statusCode } = await email('SendEmail', {
 		Destination: { ToAddresses: [ toAddress ] },
 		ReplyToAddresses: [ fromAddress ],
 		Source: fromAddress,
@@ -32,6 +32,6 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 	log.info('sent email template', { success, data, fromAddress, toAddress, templateId })
 
 	if (!success) {
-		throw new UnexpectedServiceResponse('Error while sending email through SES.', { data, fromAddress, toAddress, templateId, response })
+		throw new UnexpectedServiceResponse('Error while sending email through SES.', { statusCode, statusCodeType: typeof statusCode, data, fromAddress, toAddress, templateId, response })
 	}
 }
