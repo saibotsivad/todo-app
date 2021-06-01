@@ -34,6 +34,12 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						email: {
 							S: email,
 						},
+						// all users have the ability to read their own self
+						scopes: {
+							SS: [
+								`read:${userId}`,
+							],
+						},
 						c,
 						u,
 					},
@@ -58,6 +64,11 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						password: {
 							S: hashedPassword,
 						},
+						scopes: {
+							SS: [
+								`read:${userId}`,
+							],
+						},
 						// the "email" here is saved so we can do the reverse lookup for the
 						// document used by the login
 						email: {
@@ -81,6 +92,11 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						},
 						userId: {
 							S: userId,
+						},
+						scopes: {
+							SS: [
+								`read:${userId}`,
+							],
 						},
 						password: {
 							S: hashedPassword,
@@ -112,6 +128,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 		attributes: {
 			email,
 			password: hashedPassword,
+			scopes: [ `read:${userId}` ],
 		},
 	}
 }
