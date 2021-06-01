@@ -3,6 +3,11 @@ export const auth = `
 	creating new user accounts.
 `
 
+export const sentEmail = `
+	Emails that have been sent out to users, either by an automated
+	process or manual.
+`
+
 export const session = `
 	User-specific cookie-based login.
 `

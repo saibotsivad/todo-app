@@ -9,12 +9,15 @@ const Charset = 'UTF-8'
 let md
 
 export const sendEmailTemplate = async (services, { fromAddress, toAddress, subject, templateId, parameters }) => {
-	const { email, log } = services
+	const { config, db, email, log, SDate } = services
 
 	const emailTemplate = await getEmailTemplate(services, { id: templateId })
 	if (!emailTemplate) {
 		throw new Error(`Could not locate template by id "${templateId}", this is a developer error.`)
 	}
+
+	const now = new SDate().toISOString()
+	const c = { S: now } // created
 	const emailId = ksuid()
 
 	if (!md) {
@@ -60,21 +63,55 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 		throw new UnexpectedServiceResponse('Error while sending email through SES.', { data, fromAddress, toAddress, templateId, response })
 	}
 
-	// TODO here we should save a record of the exact email sent
-	const now = new Date().toISOString()
+	await db('PutItem', {
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
+		Item: {
+			pk: {
+				S: 'sentEmail',
+			},
+			sk: {
+				S: `sentEmail|${emailId}`,
+			},
+			toAddress: {
+				S: toAddress,
+			},
+			fromAddress: {
+				S: fromAddress,
+			},
+			html: {
+				S: html,
+			},
+			markdown: {
+				S: markdown,
+			},
+			templateId: {
+				S: templateId,
+			},
+			parameters: {
+				M: Object
+					.keys(parameters)
+					.reduce((map, key) => {
+						map[key] = { S: JSON.stringify(parameters[key]) }
+						return map
+					}, {}),
+			},
+			c,
+		},
+	})
+
 	return {
 		id: emailId,
-		type: 'email',
+		type: 'sentEmail',
 		attributes: {
 			fromAddress,
 			toAddress,
 			html,
 			markdown,
 			parameters,
+			templateId,
 		},
 		meta: {
 			created: now,
-			updated: now,
 		},
 	}
 }

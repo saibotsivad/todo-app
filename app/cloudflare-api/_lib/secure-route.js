@@ -50,7 +50,7 @@ export default async (services, security, request) => {
 		let successfulSectionCount = 0
 		for (const section of block) {
 			try {
-				await section.authorize(services, request)
+				await section.authorize(services, request, section.scopes)
 				successfulSectionCount++
 			} catch (error) {
 				// the security routes have the potential to pollute
