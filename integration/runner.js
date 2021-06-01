@@ -35,6 +35,18 @@ const mutableState = {
 
 console.log('Running integration tests for:', mutableState.baseUrl)
 
+const jmapProps = [
+	'JMAP_USERNAME',
+	'JMAP_PASSWORD',
+	'JMAP_HOSTNAME',
+]
+if (!jmapProps.every(prop => process.env[prop])) {
+	console.log('Some JMAP properties were not set as environment variables.')
+	console.log('Required: ' + jmapProps.join(', '))
+	console.log('Not set: ' + jmapProps.filter(prop => !process.env[prop]).join(', '))
+	process.exit(1)
+}
+
 const run = async () => {
 	// Note the reference to `globalThis.UVU_*` is to manage suite
 	// flow, since `uvu` doesn't fully support that yet.
