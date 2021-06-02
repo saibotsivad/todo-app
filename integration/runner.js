@@ -40,8 +40,8 @@ const jmapProps = [
 	'JMAP_PASSWORD',
 	'JMAP_HOSTNAME',
 ]
-if (!jmapProps.every(prop => process.env[prop])) {
-	console.log('Some JMAP properties were not set as environment variables.')
+if (!process.env.LOCAL_SES_FOLDER && !jmapProps.every(prop => process.env[prop])) {
+	console.log('You either need to set LOCAL_SES_FOLDER for offline testing, or set all JMAP properties.')
 	console.log('Required: ' + jmapProps.join(', '))
 	console.log('Not set: ' + jmapProps.filter(prop => !process.env[prop]).join(', '))
 	process.exit(1)
