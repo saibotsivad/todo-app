@@ -1,4 +1,4 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
 import { auth, session } from '@/lib/tags.js'
 import { generateExpiredCookie } from '@/lib/cookie.js'
 import { expireUserSession } from '@/lib/controller/session/expire-user-session.js'
@@ -17,6 +17,14 @@ export const tags = [
 	session,
 ]
 
+export const security = [
+	{
+		[cookie]: {
+			authorize,
+		},
+	},
+]
+
 export const responses = {
 	200: {
 		description: `
@@ -32,16 +40,6 @@ export const responses = {
 		`,
 	},
 }
-
-export const security = [
-	[
-		{
-			type: cookie,
-			authorize,
-			scopes: [],
-		},
-	],
-]
 
 export const handler = async (services, req) => {
 	await expireUserSession(services, { userId: req.currentUserId, sessionId: req.currentUserSessionId })

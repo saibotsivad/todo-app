@@ -1,4 +1,4 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
 import { user } from '@/lib/tags.js'
 import { lookupUserById } from '@/lib/controller/user/lookup-by-id.js'
 
@@ -16,6 +16,14 @@ export const tags = [
 	user,
 ]
 
+export const security = [
+	{
+		[cookie]: {
+			authorize,
+		},
+	},
+]
+
 export const responses = {
 	200: {
 		description: `
@@ -29,16 +37,6 @@ export const responses = {
 		`,
 	},
 }
-
-export const security = [
-	[
-		{
-			type: cookie,
-			authorize,
-			scopes: [],
-		},
-	],
-]
 
 export const handler = async (services, req) => {
 	return {

@@ -9,22 +9,22 @@ import thing2 from 'path/to/thing2.js'
 import thing3 from 'path/to/thing3.js'
 
 export const security = [
-	// block 0
-	[
-		{
-			type: thing1,
-			scopes: []
+	// block 1
+	{
+		thing1: {
+			authorize: thing1,
+			roles: []
 		}
 	],
-	// block 1
-	[
-		{
-			type: thing2,
-			scopes: []
+	// block 2
+	{
+		thing2: {
+			authorize: thing2,
+			roles: []
 		},
-		{
-			type: thing3,
-			scopes: []
+		thing3: {
+			authorize: thing3,
+			roles: []
 		}
 	]
 ]
@@ -34,10 +34,10 @@ Following the OpenAPI specs, the security blocks are evaluated
 first to last: any passing block will short-circuit, but any
 block must pass all inner blocks.
 
-So for the above example, block 0 would evaluate first, and if
+So for the above example, block 1 would evaluate first, and if
 the `thing1` succeeded the route would be considered secure.
 If it failed, we would need to evaluate both `thing2` and `thing3`
-and both of those would need to succeed for block 1 to pass.
+and both of those would need to succeed for block 2 to pass.
 
 The authorize functions are responsible for adding to and mutating
 the request object.
@@ -48,9 +48,9 @@ export default async (services, security, request) => {
 	const errors = []
 	for (const block of security) {
 		let successfulSectionCount = 0
-		for (const section of block) {
+		for (const blockName in block) {
 			try {
-				await section.authorize(services, request, section.scopes)
+				await block[blockName].authorize(services, request, block[blockName].roles)
 				successfulSectionCount++
 			} catch (error) {
 				// the security routes have the potential to pollute

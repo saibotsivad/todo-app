@@ -1,5 +1,6 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
 import { sentEmail } from '@/lib/tags.js'
+import { readAllSentEmails } from '@/lib/roles.js'
 import { lookupSentEmailById } from '@/lib/controller/sent-email/lookup-by-id.js'
 
 export const summary = `
@@ -27,6 +28,17 @@ export const parameters = [
 	},
 ]
 
+export const security = [
+	{
+		[cookie]: {
+			authorize,
+			roles: [
+				readAllSentEmails,
+			],
+		},
+	},
+]
+
 export const responses = {
 	200: {
 		description: `
@@ -49,18 +61,6 @@ export const responses = {
 		`,
 	},
 }
-
-export const security = [
-	[
-		{
-			type: cookie,
-			authorize,
-			scopes: [
-				'read:sentEmails',
-			],
-		},
-	],
-]
 
 export const handler = async (services, req) => {
 	return {

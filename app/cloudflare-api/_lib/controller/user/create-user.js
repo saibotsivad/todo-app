@@ -35,6 +35,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 							S: email,
 						},
 						// all users have the ability to read their own self
+						// TODO all these user controllers need updated
 						scopes: {
 							SS: [
 								`read:${userId}`,

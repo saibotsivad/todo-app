@@ -5,7 +5,7 @@ export const auth = `
 
 export const sentEmail = `
 	Emails that have been sent out to users, either by an automated
-	process or manual.
+	process or manually.
 `
 
 export const session = `

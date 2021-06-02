@@ -1,4 +1,4 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
 import { session } from '@/lib/tags.js'
 import { listSessionsByUserId } from '@/lib/controller/session/list-sessions-by-user-id.js'
 import { paginatedLinks } from '@/lib/paginated-links.js'
@@ -15,6 +15,14 @@ export const tags = [
 	session,
 ]
 
+export const security = [
+	{
+		[cookie]: {
+			authorize,
+		},
+	},
+]
+
 export const responses = {
 	200: {
 		description: `
@@ -22,16 +30,6 @@ export const responses = {
 		`,
 	},
 }
-
-export const security = [
-	[
-		{
-			type: cookie,
-			authorize,
-			scopes: [],
-		},
-	],
-]
 
 export const handler = async (services, req) => {
 	const { data, offsetKey } = await listSessionsByUserId(services, {
