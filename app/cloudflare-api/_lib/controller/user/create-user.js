@@ -4,12 +4,14 @@ import { hashPassword } from '@/shared/worker-passwords/main.node.js'
 import { itemAlreadyExists } from '@/lib/dynamodb-helpers.js'
 import { ksuid } from '@/lib/ksuid.js'
 import { passwordIsReasonable } from '@/shared/util/password.js'
+import { readSelfUser } from '@/lib/roles.js'
 
-export const createUser = async ({ db, config, SDate }, { email, password }) => {
+export const createUser = async ({ db, config, SDate }, { email, password, roles }) => {
 	if (!passwordIsReasonable(password)) {
 		throw new BadRequest('Passwords must contain at least 8 characters, at least 1 letter, and at least 1 number.')
 	}
 
+	const TableName = config.get('DYNAMODB_TABLE_NAME')
 	const now = new SDate().toISOString()
 	const c = { S: now } // created
 	const u = { S: now } // updated
@@ -17,12 +19,18 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 	const hashedPassword = await hashPassword({ password })
 	email = normalizeEmail(email)
 
+	// all users have the ability to read their own self
+	roles = roles || []
+	if (!roles.includes(readSelfUser.urn)) {
+		roles.push(readSelfUser.urn)
+	}
+
 	const { data } = await db('TransactWriteItems', {
 		TransactItems: [
 			// user in user collection, for looking at list of all users
 			{
 				Put: {
-					TableName: config.get('DYNAMODB_TABLE_NAME'),
+					TableName,
 					Item: {
 						pk: {
 							S: 'user',
@@ -34,12 +42,8 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						email: {
 							S: email,
 						},
-						// all users have the ability to read their own self
-						// TODO all these user controllers need updated
-						scopes: {
-							SS: [
-								`read:${userId}`,
-							],
+						roles: {
+							SS: roles,
 						},
 						c,
 						u,
@@ -54,7 +58,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 			// user-by-id collection, for profile, details, session, etc
 			{
 				Put: {
-					TableName: config.get('DYNAMODB_TABLE_NAME'),
+					TableName,
 					Item: {
 						pk: {
 							S: `user|${userId}`,
@@ -65,10 +69,8 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						password: {
 							S: hashedPassword,
 						},
-						scopes: {
-							SS: [
-								`read:${userId}`,
-							],
+						roles: {
+							SS: roles,
 						},
 						// the "email" here is saved so we can do the reverse lookup for the
 						// document used by the login
@@ -83,7 +85,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 			// email maps to one user id, for lookup during login
 			{
 				Put: {
-					TableName: config.get('DYNAMODB_TABLE_NAME'),
+					TableName,
 					Item: {
 						pk: {
 							S: `email|${email}`,
@@ -93,11 +95,6 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 						},
 						userId: {
 							S: userId,
-						},
-						scopes: {
-							SS: [
-								`read:${userId}`,
-							],
 						},
 						password: {
 							S: hashedPassword,
@@ -129,7 +126,7 @@ export const createUser = async ({ db, config, SDate }, { email, password }) => 
 		attributes: {
 			email,
 			password: hashedPassword,
-			scopes: [ `read:${userId}` ],
+			roles,
 		},
 	}
 }

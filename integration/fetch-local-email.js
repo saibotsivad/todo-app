@@ -51,7 +51,15 @@ const synthesizeJmapEmail = obj => ({
 	_html: obj.Message.Body.Html.Data,
 })
 
-// TODO add explanation here
+/*
+In order to make fully-local tests run, we write emails to disk
+as JSON files. Here, we do a very inefficient lookup, by iterating
+over every JSON file and looking for the request identifier in
+the raw JSON text.
+
+This is not optimized at all, but for the purposes of offline
+integration tests, it's "good enough".
+ */
 export const fetchLocalEmail = async ({ requestId }) => {
 	for (const { text, json } of await getEmails()) {
 		if (text.includes(requestId)) {
