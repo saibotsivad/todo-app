@@ -61,7 +61,7 @@ export default async (services, security, request) => {
 				errors.push(error)
 			}
 		}
-		if (successfulSectionCount === block.length) {
+		if (successfulSectionCount === Object.keys(block).length) {
 			return null
 		}
 	}
