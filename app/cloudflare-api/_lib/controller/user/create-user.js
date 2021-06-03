@@ -82,7 +82,8 @@ export const createUser = async ({ db, config, SDate }, { email, password, roles
 					},
 				},
 			},
-			// email maps to one user id, for lookup during login
+			// Email maps to one user id, for lookup during login.
+			// Note: no roles are set on this user.
 			{
 				Put: {
 					TableName,

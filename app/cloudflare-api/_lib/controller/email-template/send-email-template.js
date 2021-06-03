@@ -1,12 +1,11 @@
 import { UnexpectedServiceResponse } from '@/lib/exceptions.js'
 import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
-import { Remarkable } from 'remarkable'
 import { ksuid } from '@/lib/ksuid.js'
-import templite from 'templite'
 
 const Charset = 'UTF-8'
 
-let md
+let remark
+let renderView
 
 export const sendEmailTemplate = async (services, { fromAddress, toAddress, subject, templateId, parameters }) => {
 	const { config, db, email, log, SDate } = services
@@ -20,8 +19,13 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 	const c = { S: now } // created
 	const emailId = ksuid()
 
-	if (!md) {
-		md = new Remarkable({
+	if (!remark || !renderView) {
+		const [{ Remarkable }, templite ] = Promise.all([
+			import('remarkable'),
+			import('templite'),
+		])
+		renderView = templite
+		remark = new Remarkable({
 			// Set to true to enable HTML tags in the source markdown
 			html: true,
 			// Set to true to use '/' to close single tags (<br />)
@@ -33,16 +37,16 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 			// Enable some language-neutral replacement + quotes beautification
 			typographer: true,
 			// Double + single quotes replacement pairs, when typographer enabled,
-			// and smartquotes on. Set doubles to '«»' for Russian, '„“' for German.
+			// and smart quotes on. E.g., set doubles to '«»' for Russian, '„“' for German.
 			quotes: '“”‘’',
 		})
 	}
 
-	const markdown = templite(emailTemplate.attributes.view, {
+	const markdown = renderView(emailTemplate.attributes.view, {
 		...parameters,
 		emailId,
 	})
-	const html = md.render(markdown)
+	const html = remark.render(markdown)
 
 	const { success, data, response } = await email('SendEmail', {
 		Destination: { ToAddresses: [ toAddress ] },
