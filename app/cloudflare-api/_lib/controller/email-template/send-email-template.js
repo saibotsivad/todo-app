@@ -24,7 +24,7 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 			import('remarkable'),
 			import('templite'),
 		])
-		renderView = imported.default.templite
+		renderView = imported.default
 		remark = new imported.Remarkable({
 			// Set to true to enable HTML tags in the source markdown
 			html: true,
