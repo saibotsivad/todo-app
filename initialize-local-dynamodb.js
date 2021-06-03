@@ -81,4 +81,7 @@ if (process.env.DYNAMODB_URL) {
 			console.log(`Initialization failed after ${Date.now() - start}ms:`, error)
 			process.exit(1)
 		})
+} else {
+	console.log('No need to initialize.')
+	process.exit(0)
 }

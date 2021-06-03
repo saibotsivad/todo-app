@@ -20,12 +20,12 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 	const emailId = ksuid()
 
 	if (!remark || !renderView) {
-		const [{ Remarkable }, templite ] = Promise.all([
+		const imported = await Promise.all([
 			import('remarkable'),
 			import('templite'),
 		])
-		renderView = templite
-		remark = new Remarkable({
+		renderView = imported.default.templite
+		remark = new imported.Remarkable({
 			// Set to true to enable HTML tags in the source markdown
 			html: true,
 			// Set to true to use '/' to close single tags (<br />)
