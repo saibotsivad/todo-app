@@ -24,8 +24,8 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 			import('remarkable'),
 			import('templite'),
 		])
-		renderView = imported.default
-		remark = new imported.Remarkable({
+		renderView = imported[1].default
+		remark = new imported[0].Remarkable({
 			// Set to true to enable HTML tags in the source markdown
 			html: true,
 			// Set to true to use '/' to close single tags (<br />)
