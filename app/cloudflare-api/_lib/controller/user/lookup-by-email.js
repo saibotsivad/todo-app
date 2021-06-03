@@ -25,7 +25,7 @@ export const lookupUserByEmail = async ({ db, config }, { email }) => {
 		attributes: {
 			email: data.Item.pk.S.split('|')[1],
 			password: data.Item.password.S,
-			roles: data.Item.roles.SS,
+			// Note: looking up by email does not give you the `roles` property.
 		},
 		meta: {
 			created: data.Item.c.S,
