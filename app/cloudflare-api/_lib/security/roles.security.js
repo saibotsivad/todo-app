@@ -7,7 +7,7 @@ export const name = 'roles'
 
 export const definition = {
 	type: 'apiKey',
-	name: 'cookie',
+	name: 'roles',
 	in: 'header',
 }
 

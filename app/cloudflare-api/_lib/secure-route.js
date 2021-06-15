@@ -67,7 +67,7 @@ export default async (services, security, request) => {
 	const errors = []
 	for (const block of security) {
 		let successfulSectionCount = 0
-		const orderedBlockNames = block.$order || Object.keys(block)
+		const orderedBlockNames = block.$order || Object.keys(block || {})
 		for (const blockName of orderedBlockNames) {
 			try {
 				await block[blockName].authorize(services, request, block[blockName].roles)
@@ -81,7 +81,7 @@ export default async (services, security, request) => {
 				errors.push(error)
 			}
 		}
-		if (successfulSectionCount === Object.keys(block).length) {
+		if (successfulSectionCount === (Object.keys(block).length - (block.$order ? 1 : 0))) {
 			return null
 		}
 	}
