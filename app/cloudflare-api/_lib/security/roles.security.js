@@ -28,6 +28,10 @@ export const authorize = async (services, request, routeRequiredRoles) => {
 	if (!request.currentUserId) {
 		throw new Error('The roles security block requires an authorization block prior to it which sets the requesting user id. This is a developer error.')
 	}
+	// TODO is this correct? I would think the request would be new each time
+	if (request.currentUser) {
+		throw new Error('The current user is already loaded. How did that happen?????' + JSON.stringify(request.currentUser))
+	}
 
 	request.currentUser = request.currentUser || await lookupUserById(services, { userId: request.currentUserId })
 
