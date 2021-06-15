@@ -29,7 +29,7 @@ jobs:
     - run: npm run test
     - run: npm run build
     - run: mkdir -p /tmp/docker-dynamodb && cd /tmp/docker-dynamodb && docker run -p 3001:8000 -w "/home/dynamodblocal" -v "/tmp/docker-dynamodb:/home/dynamodblocal/data" amazon/dynamodb-local -jar DynamoDBLocal.jar -optimizeDbBeforeStartup -sharedDb -dbPath ./ & # the "&" backgrounds the task
-    - run: npm run dynamodb-init
+    - run: node ./initialize-local-dynamodb.js && node ./set-email-templates.js
       env:
         STAGE: local
         AWS_ACCOUNT_ID: 123456789012
