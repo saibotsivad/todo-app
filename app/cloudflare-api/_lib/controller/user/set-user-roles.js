@@ -9,7 +9,7 @@ export const setUserRoles = async ({ db, config, SDate }, { userId, updatedRoles
 		roles.SS.push(readSelfUser.urn)
 	}
 
-	const result = await db('TransactWriteItems', {
+	await db('TransactWriteItems', {
 		TransactItems: [
 			// user in user collection, for looking at list of all users
 			{
@@ -61,7 +61,4 @@ export const setUserRoles = async ({ db, config, SDate }, { userId, updatedRoles
 			},
 		],
 	})
-
-	// TODO remove this
-	console.log('set-user-roles', result.status, result.data)
 }
