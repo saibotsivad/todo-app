@@ -23,6 +23,7 @@ runnerAssert.isStatus = (response, expected, message) => {
 const scenarios = [
 	'user-create',
 	'user-login',
+	'user-roles',
 	'user-logout',
 ]
 

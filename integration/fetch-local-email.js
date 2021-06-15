@@ -25,16 +25,16 @@ This is an example SES message structure:
 	  "Message": {
 		"Subject": {
 		  "Charset": "UTF-8",
-		  "Data": "Welcome to the Todo Journal 🎉"
+		  "Data": "Welcome to the $SITE_NAME 🎉"
 		},
 		"Body": {
 		  "Text": {
 			"Charset": "UTF-8",
-			"Data": "\nHey there, looks like you just created an account at [Todo Journal](http://localhost:3000).\n\nI'm glad to have you here! If you have any questions, go ahead and email me directly, this\naddress goes to my direct inbox.\n\nWelcome to the journaling experience!\n\n–Tobias, for the [todojournal.com](http://localhost:3000) crew\n\n<!-- requestId=DT26dmhXJeVUoWUZUmehIPTTyMY -->\n"
+			"Data": "\nHey there, looks like you just created an account at [$SITE_NAME](http://localhost:3000).\n\nI'm glad to have you here! If you have any questions, go ahead and email me directly, this\naddress goes to my direct inbox.\n\nWelcome to the journaling experience!\n\n–Tobias, for the [todojournal.com](http://localhost:3000) crew\n\n<!-- requestId=DT26dmhXJeVUoWUZUmehIPTTyMY -->\n"
 		  },
 		  "Html": {
 			"Charset": "UTF-8",
-			"Data": "Hey there, looks like you just created an account at <a href=\"http://localhost:3000\">Todo Journal</a>.<br />I'm glad to have you here! If you have any questions, go ahead and email me directly, this\naddress goes to my direct inbox.<br />Welcome to the journaling experience!<br />–Tobias, for the <a href=\"http://localhost:3000\">todojournal.com</a> crew<br /><!-- requestId=DT26dmhXJeVUoWUZUmehIPTTyMY -->"
+			"Data": "Hey there, looks like you just created an account at <a href=\"http://localhost:3000\">$SITE_NAME</a>.<br />I'm glad to have you here! If you have any questions, go ahead and email me directly, this\naddress goes to my direct inbox.<br />Welcome to the journaling experience!<br />–Tobias, for the <a href=\"http://localhost:3000\">todojournal.com</a> crew<br /><!-- requestId=DT26dmhXJeVUoWUZUmehIPTTyMY -->"
 		  }
 		}
 	  }

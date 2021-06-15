@@ -48,7 +48,7 @@
     "dev": "export DEVELOPMENT=true && rollup -c -w",
     "---devtools": "---------------------------------",
     "dynamodb": "cd deploy/docker-dynamodb && docker compose up",
-    "dynamodb-cleanup": "rm ./deploy/docker-dynamodb/docker/dynamodb/*.db",
+    "dynamodb-cleanup": "rm -f ./deploy/docker-dynamodb/docker/dynamodb/*.db",
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
     "wrangle:static": "cd deploy/cloudflare-static && wrangler dev --env=local",
     "watch:dynamodb-local": "node ./watch-dynamodb-local.js",

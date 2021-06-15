@@ -36,5 +36,7 @@ export default async (test, assert, state) => {
 				find: emails => JSON.stringify(emails).includes(requestId),
 			})
 		assert.ok(email, 'the email was found eventually ' + requestId)
+		state.userCreateEmailData = JSON.parse(email._html.split('<script type="application/ld+json">')[1].split('</script>')[0])
+		assert.ok(state.userCreateEmailData.url.includes(requestId), 'the LD-JSON `url` contains the request id')
 	})
 }

@@ -30,6 +30,6 @@ Welcome to the journaling experience!
   "@type": "Thing",
   "name": "User Created",
   "identifier": "{{emailId}}",
-  "url": "{{baseUrl}}/api/emails/{{emailId}}?requestId={{requestId}}"
+  "url": "{{baseUrl}}/api/v1/sentEmails/{{emailId}}?requestId={{requestId}}"
 }
 </script>
