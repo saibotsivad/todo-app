@@ -1,12 +1,14 @@
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import { readFileSync, writeFileSync } from 'fs'
-import routes from './app/cloudflare-api/globbed-routes.js'
+import globbedRoutes from './app/cloudflare-api/globbed-routes.js'
+import globbedSecurity from './app/cloudflare-api/globbed-security.js'
 import * as tags from './app/cloudflare-api/_lib/tags.js'
+import * as roles from './app/cloudflare-api/_lib/roles.js'
 
 const pathToRepo = dirname(fileURLToPath(import.meta.url))
 const swaggerHtmlPath = join(pathToRepo, 'deploy/cloudflare-static/public/docs/index.html')
-const swaggerJsonPath = join(pathToRepo, 'deploy/cloudflare-static/public/docs/swagger.json')
+const swaggerJsonPath = join(pathToRepo, 'deploy/cloudflare-static/public/docs/openapi.json')
 const { name: title, version } = JSON.parse(readFileSync(join(pathToRepo, 'package.json'), 'utf8'))
 
 const clean = string => string && string
@@ -24,6 +26,14 @@ const tagDescriptionToKey = Object
 		return map
 	}, {})
 
+// Note: this counts on role URNs being unique.
+const allPossibleRoles = Object
+	.keys(roles)
+	.reduce((map, key) => {
+		map[roles[key].urn] = roles[key].description
+		return map
+	}, {})
+
 const openapi = {
 	swagger: '2.0',
 	info: {
@@ -38,9 +48,17 @@ const openapi = {
 			description: clean(tags[name]),
 		})),
 	paths: {},
+	securityDefinitions: globbedSecurity.reduce((map, securityDefinition) => {
+		const { name, definition } = securityDefinition.export
+		// Note: this counts on the security names being unique.
+		map[name] = definition
+		// Note: in OpenAPI 3, the naming of this changes
+		map[name].scopes = allPossibleRoles
+		return map
+	}, {}),
 }
 
-routes.forEach(({ path: routePath, export: route }) => {
+globbedRoutes.forEach(({ path: routePath, export: route }) => {
 	let path = (
 		routePath
 			.replace(/^route\//, '')
@@ -67,18 +85,23 @@ routes.forEach(({ path: routePath, export: route }) => {
 				}
 				return map
 			}, {}),
-		security: route.security && route.security.map(({ type, scopes }) => ({
-			[type]: scopes,
-		})),
+		security: route.security && route.security.map(block => {
+			return Object
+				.keys(block)
+				.filter(blockName => !blockName.startsWith('$'))
+				.reduce((map, blockName) => {
+					map[blockName] = (block[blockName].roles || []).map(({ urn }) => urn)
+					return map
+				}, {})
+		}),
 	}
 })
 
-// https://petstore.swagger.io/v2/swagger.json
 const html = readFileSync(swaggerHtmlPath, 'utf8')
 writeFileSync(
 	swaggerHtmlPath,
 	html
-		.replace('https://petstore.swagger.io/v2/swagger.json', './swagger.json')
+		.replace('https://petstore.swagger.io/v2/swagger.json', './openapi.json')
 		.replace('<title>Swagger UI</title>', `<title>Todo App API</title>`),
 	'utf8',
 )

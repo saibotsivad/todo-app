@@ -48,6 +48,16 @@ export class UnauthorizedRequest extends Error {
 	}
 }
 
+export class ForbiddenRequest extends Error {
+	constructor(message, meta) {
+		super(message)
+		this.status = 403
+		this.title = 'Requesting user does not have sufficient permissions to make this request.'
+		this.detail = message
+		this.meta = meta
+	}
+}
+
 export class UnexpectedServiceResponse extends Error {
 	constructor(message, meta) {
 		super(message)

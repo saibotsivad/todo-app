@@ -1,4 +1,4 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.js'
+import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
 import { session } from '@/lib/tags.js'
 import { removeUserSession } from '@/lib/controller/session/remove-user-session.js'
 
@@ -27,6 +27,14 @@ export const parameters = [
 	},
 ]
 
+export const security = [
+	{
+		[cookie]: {
+			authorize,
+		},
+	},
+]
+
 export const responses = {
 	200: {
 		description: `
@@ -40,16 +48,6 @@ export const responses = {
 		`,
 	},
 }
-
-export const security = [
-	[
-		{
-			type: cookie,
-			authorize,
-			scopes: [],
-		},
-	],
-]
 
 export const handler = async (services, req) => {
 	await removeUserSession(services, { userId: req.currentUserId, sessionId: req.params.sessionId })

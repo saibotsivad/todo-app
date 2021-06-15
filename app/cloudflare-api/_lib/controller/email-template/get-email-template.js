@@ -12,7 +12,7 @@ export const getEmailTemplate = async ({ config, db }, { id }) => {
 	})
 
 	if (!data || !data.Item) {
-		throw new Error(`Cannot request an email template that does not exist! (name=${id})`)
+		return null
 	}
 
 	return {

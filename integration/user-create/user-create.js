@@ -20,6 +20,7 @@ export default async (test, assert, state) => {
 		assert.ok(user.id, 'an id has been set')
 		assert.is(user.type, 'user', 'correct type')
 		assert.is(user.attributes.email, state.userEmail, 'correct email set')
+		assert.equal(user.attributes.roles, [ 'user:read:{{currentUserId}}' ], 'there is only the default role')
 		state.user = user
 
 		const requestId = response.headers['api-request-id']
@@ -32,8 +33,11 @@ export default async (test, assert, state) => {
 				password: process.env.JMAP_PASSWORD,
 				hostname: process.env.JMAP_HOSTNAME,
 				onRetry: count => { console.log('retrying looking for email', count) },
-				find: emails => JSON.stringify(emails).includes(requestId),
+				find: emails => emails.find(email => JSON.stringify(email).includes(requestId)),
 			})
 		assert.ok(email, 'the email was found eventually ' + requestId)
+		assert.ok(email._html, 'the email has an html thingy')
+		state.userCreateEmailData = JSON.parse(email._html.split('<script type="application/ld+json">')[1].split('</script>')[0])
+		assert.ok(state.userCreateEmailData.url.includes(requestId), 'the LD-JSON `url` contains the request id')
 	})
 }
