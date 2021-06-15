@@ -8,8 +8,9 @@ const SESSION_SECONDS = 7776000 // 90 days = 90 * 24 * 60 * 60
 export const createUserSession = async ({ db, config, SDate }, { userId }) => {
 
 	const now = new SDate()
-	const c = { S: now.toISOString() } // created
-	const u = { S: now.toISOString() } // updated
+	const nowString = now.toISOString()
+	const c = { S: nowString } // created
+	const u = { S: nowString } // updated
 	const expirationDate = new SDate(now.getTime() + (SESSION_SECONDS * 1000))
 	const sessionId = ksuid()
 	const sessionSecret = await generatePassword()

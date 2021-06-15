@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "engines": {
-    "node": "16.2.0"
+    "node": "16.3.0"
   },
   "type": "module",
   "scripts": {
@@ -18,6 +18,7 @@
     "setup:webapp": "rimraf app/webapp/node_modules && mkdirp app/webapp/node_modules/@ && symlink _shared app/webapp/node_modules/@/shared && cd app/webapp && symlink _lib node_modules/@/lib && symlink _component node_modules/@/component && symlink _service node_modules/@/service",
     "setup:swagger-ui": "rimraf deploy/cloudflare-static/public/docs && ncp node_modules/swagger-ui-dist deploy/cloudflare-static/public/docs",
     "glob:server-routes": "glob-module-file --cwd=\"app/cloudflare-api\" --pattern=\"route/**/*.route.js\" --format=es --exportWithPath --importStar --pathPrefix=\"./\" --outputPath=\"app/cloudflare-api/globbed-routes.js\"",
+    "glob:server-security": "glob-module-file --cwd=\"app/cloudflare-api\" --pattern=\"_lib/security/*.security.js\" --format=es --exportWithPath --importStar --pathPrefix=\"./\" --outputPath=\"app/cloudflare-api/globbed-security.js\"",
     "glob:client-routes": "glob-module-file --cwd=\"app/webapp\" --pattern=\"route/**/*.route.js\" --format=es --exportWithPath --pathPrefix=\"./\" --outputPath=\"app/webapp/globbed-routes.js\"",
     "---build": "---------------------------------",
     "prebuild": "npm run setup",
@@ -42,15 +43,18 @@
     "integration-cleanup": "node integration/cleanup-previous-run-data.js",
     "integration": "uvu integration 'runner.js'",
     "---local": "---------------------------------",
-    "dev": "export DEVELOPMENT=true && node initialize-local-dynamodb.js && run-p watch:*",
+    "db": "npm run dynamodb-cleanup && npm run dynamodb",
+    "watch": "npm run setup && run-p watch:*",
+    "dev": "export DEVELOPMENT=true && rollup -c -w",
+    "---devtools": "---------------------------------",
     "dynamodb": "cd deploy/docker-dynamodb && docker compose up",
-    "dynamodb-init": "node ./initialize-local-dynamodb.js && node ./set-email-templates.js",
-    "dynamodb-cleanup": "rm ./deploy/docker-dynamodb/docker/dynamodb/*.db",
+    "dynamodb-cleanup": "rm -f ./deploy/docker-dynamodb/docker/dynamodb/*.db",
     "wrangle:api": "cd deploy/cloudflare-api && wrangler dev --env=local",
     "wrangle:static": "cd deploy/cloudflare-static && wrangler dev --env=local",
-    "watch:js": "rollup -c -w",
+    "watch:dynamodb-local": "node ./watch-dynamodb-local.js",
     "watch:glob-client-routes": "chokidar \"deploy/webapp/route/**/*.js\" -c \"npm run glob:client-routes\"",
     "watch:glob-server-routes": "chokidar \"deploy/cloudflare-api/route/**/*.js\" -c \"npm run glob:server-routes && node generate-openapi.js\"",
+    "watch:glob-server-security": "chokidar \"deploy/cloudflare-api/_lib/security/*.security.js\" -c \"npm run glob:server-security && node generate-openapi.js\"",
     "watch:glob-server-models": "chokidar \"deploy/cloudflare-api/_lib/model/**/*.js\" -c \"npm run glob:server-models && node generate-openapi.js\"",
     "start": "export LOG_LEVEL=debug && node app/cloudflare-api/local-development.js"
   },

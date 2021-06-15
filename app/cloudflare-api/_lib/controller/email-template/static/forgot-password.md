@@ -33,6 +33,6 @@ Keep on journaling,
   "@type": "Thing",
   "name": "Password Reset",
   "identifier": "{{emailId}}",
-  "url": "{{baseUrl}}/api/emails/{{emailId}}?requestId={{requestId}}"
+  "url": "{{baseUrl}}/api/v1/sentEmails/{{emailId}}?requestId={{requestId}}"
 }
 </script>

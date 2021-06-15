@@ -25,6 +25,7 @@ export const lookupUserById = async ({ db, config }, { userId }) => {
 		attributes: {
 			email: data.Item.email.S,
 			password: data.Item.password.S,
+			roles: data.Item.roles.SS,
 		},
 	}
 }

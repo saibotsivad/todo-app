@@ -1,24 +1,31 @@
 import { UnexpectedServiceResponse } from '@/lib/exceptions.js'
 import { getEmailTemplate } from '@/lib/controller/email-template/get-email-template.js'
-import { Remarkable } from 'remarkable'
 import { ksuid } from '@/lib/ksuid.js'
-import templite from 'templite'
 
 const Charset = 'UTF-8'
 
-let md
+let remark
+let renderView
 
 export const sendEmailTemplate = async (services, { fromAddress, toAddress, subject, templateId, parameters }) => {
-	const { email, log } = services
+	const { config, db, email, log, SDate } = services
 
 	const emailTemplate = await getEmailTemplate(services, { id: templateId })
 	if (!emailTemplate) {
 		throw new Error(`Could not locate template by id "${templateId}", this is a developer error.`)
 	}
+
+	const now = new SDate().toISOString()
+	const c = { S: now } // created
 	const emailId = ksuid()
 
-	if (!md) {
-		md = new Remarkable({
+	if (!remark || !renderView) {
+		const imported = await Promise.all([
+			import('remarkable'),
+			import('templite'),
+		])
+		renderView = imported[1].default
+		remark = new imported[0].Remarkable({
 			// Set to true to enable HTML tags in the source markdown
 			html: true,
 			// Set to true to use '/' to close single tags (<br />)
@@ -30,16 +37,16 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 			// Enable some language-neutral replacement + quotes beautification
 			typographer: true,
 			// Double + single quotes replacement pairs, when typographer enabled,
-			// and smartquotes on. Set doubles to '«»' for Russian, '„“' for German.
+			// and smart quotes on. E.g., set doubles to '«»' for Russian, '„“' for German.
 			quotes: '“”‘’',
 		})
 	}
 
-	const markdown = templite(emailTemplate.attributes.view, {
+	const markdown = renderView(emailTemplate.attributes.view, {
 		...parameters,
 		emailId,
 	})
-	const html = md.render(markdown)
+	const html = remark.render(markdown)
 
 	const { success, data, response } = await email('SendEmail', {
 		Destination: { ToAddresses: [ toAddress ] },
@@ -60,21 +67,55 @@ export const sendEmailTemplate = async (services, { fromAddress, toAddress, subj
 		throw new UnexpectedServiceResponse('Error while sending email through SES.', { data, fromAddress, toAddress, templateId, response })
 	}
 
-	// TODO here we should save a record of the exact email sent
-	const now = new Date().toISOString()
+	await db('PutItem', {
+		TableName: config.get('DYNAMODB_TABLE_NAME'),
+		Item: {
+			pk: {
+				S: 'sentEmail',
+			},
+			sk: {
+				S: `sentEmail|${emailId}`,
+			},
+			toAddress: {
+				S: toAddress,
+			},
+			fromAddress: {
+				S: fromAddress,
+			},
+			html: {
+				S: html,
+			},
+			markdown: {
+				S: markdown,
+			},
+			templateId: {
+				S: templateId,
+			},
+			parameters: {
+				M: Object
+					.keys(parameters)
+					.reduce((map, key) => {
+						map[key] = { S: JSON.stringify(parameters[key]) }
+						return map
+					}, {}),
+			},
+			c,
+		},
+	})
+
 	return {
 		id: emailId,
-		type: 'email',
+		type: 'sentEmail',
 		attributes: {
 			fromAddress,
 			toAddress,
 			html,
 			markdown,
 			parameters,
+			templateId,
 		},
 		meta: {
 			created: now,
-			updated: now,
 		},
 	}
 }
