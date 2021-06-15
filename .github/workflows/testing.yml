@@ -45,9 +45,9 @@ jobs:
         AWS_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIAEXAMPLEKEY
         AWS_SECRET_ACCESS_KEY: abc123abc123abc123abc123
+        DYNAMODB_TABLE_NAME: todojournal-local
         LOG_LEVEL: debug
         NODE_ENV: local
-        DYNAMODB_TABLE_NAME: todojournal-local
         ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
         API_DOMAIN: localhost
         BASE_URL: "http://localhost:3000"
@@ -57,6 +57,11 @@ jobs:
       timeout-minutes: 1
       env:
         STAGE: local
+        AWS_ACCOUNT_ID: 123456789012
+        AWS_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIAEXAMPLEKEY
+        AWS_SECRET_ACCESS_KEY: abc123abc123abc123abc123
+        DYNAMODB_TABLE_NAME: todojournal-local
         LOG_LEVEL: debug
         ADMIN_EMAIL_ADDRESS: admin+local@todojournal.com
         API_DOMAIN: localhost

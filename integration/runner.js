@@ -1,5 +1,8 @@
 /* global globalThis */
 import * as assert from 'uvu/assert'
+import { dynamodb } from '../app/cloudflare-api/_service/db.js'
+import { ses } from '../app/cloudflare-api/_service/email.js'
+import log from '../app/cloudflare-api/_service/log.js'
 
 // eslint-disable-next-line no-import-assign
 const runnerAssert = Object.assign({}, assert)
@@ -28,13 +31,17 @@ const scenarios = [
 ]
 
 const mutableState = {
-	// integrationtesting+todojournal-develop@tobiaslabs.com
 	userEmail: `integrationtesting+todojournal-${process.env.STAGE || 'local'}@tobiaslabs.com`,
 	userWebappPassword: 'correct-battery-horse-staple-9001',
 	baseUrl: process.env.BASE_URL || `http://localhost:${process.env.PORT || '3000'}`,
 }
 
 console.log('Running integration tests for:', mutableState.baseUrl)
+
+const logProps = props => {
+	console.log('Required: ' + props.join(', '))
+	console.log('Not set: ' + props.filter(prop => !process.env[prop]).join(', '))
+}
 
 const jmapProps = [
 	'JMAP_USERNAME',
@@ -43,9 +50,30 @@ const jmapProps = [
 ]
 if (!process.env.LOCAL_SES_FOLDER && !jmapProps.every(prop => process.env[prop])) {
 	console.log('You either need to set LOCAL_SES_FOLDER for offline testing, or set all JMAP properties.')
-	console.log('Required: ' + jmapProps.join(', '))
-	console.log('Not set: ' + jmapProps.filter(prop => !process.env[prop]).join(', '))
+	logProps(jmapProps)
 	process.exit(1)
+}
+
+const awsProps = [
+	'AWS_REGION',
+	'AWS_SECRET_ACCESS_KEY',
+	'AWS_ACCESS_KEY_ID',
+	'DYNAMODB_TABLE_NAME',
+]
+if (!awsProps.every(prop => process.env[prop])) {
+	console.log('To run some of the integration tests, such as the user-roles tests, you need read+write access to DynamoDB.')
+	logProps(awsProps)
+	process.exit(1)
+}
+
+const config = { get: key => process.env[key] }
+
+const services = {
+	db: dynamodb(config),
+	email: ses(config),
+	config,
+	log,
+	SDate: Date,
 }
 
 const run = async () => {
@@ -59,7 +87,7 @@ const run = async () => {
 		globalThis.UVU_INDEX = count - 1
 		const test = uvu.suite(scenario)
 		const run = await import(`./${scenario}/${scenario}.js`)
-		run.default(test, runnerAssert, mutableState)
+		run.default(test, runnerAssert, mutableState, services)
 		test.run()
 	}
 	return uvu.exec()

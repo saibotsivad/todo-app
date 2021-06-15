@@ -1,8 +1,7 @@
-import { UnauthorizedRequest, ForbiddenRequest } from '@/lib/exceptions.js'
+import { UnauthorizedRequest } from '@/lib/exceptions.js'
 import { parseCookie } from '@/lib/cookie.js'
 import { validatePassword } from '@/shared/worker-passwords/main.node.js'
 import { getUserSession } from '@/lib/controller/session/get-user-session.js'
-import { lookupUserById } from '@/lib/controller/user/lookup-by-id.js'
 
 export const name = 'cookie'
 
@@ -18,11 +17,9 @@ export const definition = {
  *
  * @param {object} services - The services object.
  * @param {object} request - The request object.
- * @param {Array} [roles] - List of roles the route requires. Setting this will load the [user] from the
- *                          database and set it on [request.currentUser].
  * @returns {Promise<void>} - The request is mutated or an error is thrown.
  */
-export const authorize = async (services, request, roles) => {
+export const authorize = async (services, request) => {
 	let valid = false
 
 	const { userId, sessionId, sessionSecret } = parseCookie(request.headers.cookie) || {}
@@ -41,17 +38,6 @@ export const authorize = async (services, request, roles) => {
 	}
 
 	if (valid) {
-		if (roles && roles.length) {
-			request.currentUser = await lookupUserById(services, { userId })
-			const userRoles = request.currentUser.attributes.roles || []
-			const hasRolePermission = roles.every(role => userRoles.includes(role))
-			if (!hasRolePermission) {
-				throw new ForbiddenRequest('User does not have sufficient role permissions.', {
-					requiredRoles: roles,
-					userRoles,
-				})
-			}
-		}
 		request.currentUserId = userId
 		request.currentUserSessionId = sessionId
 	} else {

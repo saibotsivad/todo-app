@@ -1,4 +1,5 @@
-import { name as cookie, authorize } from '@/lib/security/cookie.security.js'
+import { name as cookie, authorize as authorizeCookie } from '@/lib/security/cookie.security.js'
+import { name as roles, authorize as authorizeRoles } from '@/lib/security/roles.security.js'
 import { sentEmail } from '@/lib/tags.js'
 import { readAllSentEmails } from '@/lib/roles.js'
 import { lookupSentEmailById } from '@/lib/controller/sent-email/lookup-by-id.js'
@@ -30,8 +31,12 @@ export const parameters = [
 
 export const security = [
 	{
+		$order: [ cookie, roles ],
 		[cookie]: {
-			authorize,
+			authorize: authorizeCookie,
+		},
+		[roles]: {
+			authorize: authorizeRoles,
 			roles: [
 				readAllSentEmails,
 			],
@@ -67,7 +72,8 @@ export const handler = async (services, req) => {
 		json: true,
 		status: 200,
 		body: {
-			data: await lookupSentEmailById(services, { sentEmailId: req.sentEmailId }),
+			data: await lookupSentEmailById(services, { sentEmailId: req.params.sentEmailId }),
+			meta: { id: req.params.sentEmailId },
 		},
 	}
 }

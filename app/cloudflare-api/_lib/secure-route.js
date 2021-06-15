@@ -42,13 +42,33 @@ and both of those would need to succeed for block 2 to pass.
 The authorize functions are responsible for adding to and mutating
 the request object.
 
+If the order of evaluation matters within a block, you must set
+the property `$order` as an array of property names, e.g.:
+
+```js
+export const security = [
+	{
+		$order: [ 'thing2', 'thing3' ],
+		thing2: {
+			authorize: thing2,
+			roles: []
+		},
+		thing3: {
+			authorize: thing3,
+			roles: []
+		}
+	]
+]
+```
+
 */
 
 export default async (services, security, request) => {
 	const errors = []
 	for (const block of security) {
 		let successfulSectionCount = 0
-		for (const blockName in block) {
+		const orderedBlockNames = block.$order || Object.keys(block)
+		for (const blockName of orderedBlockNames) {
 			try {
 				await block[blockName].authorize(services, request, block[blockName].roles)
 				successfulSectionCount++

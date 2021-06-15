@@ -1,6 +1,6 @@
 import { readSelfUser } from '@/lib/roles.js'
 
-export const createUser = async ({ db, config, SDate }, { userId, updatedRoles }) => {
+export const setUserRoles = async ({ db, config, SDate }, { userId, updatedRoles }) => {
 
 	const TableName = config.get('DYNAMODB_TABLE_NAME')
 	const updated = { S: new SDate().toISOString() }
@@ -32,7 +32,7 @@ export const createUser = async ({ db, config, SDate }, { userId, updatedRoles }
 						':ro': roles,
 					},
 					ReturnValues: 'NONE',
-					UpdateExpression: 'SET #UP = :up, #RO = :r',
+					UpdateExpression: 'SET #UP = :up, #RO = :ro',
 				},
 			},
 			// user-by-id collection, for profile, details, session, etc
@@ -56,7 +56,7 @@ export const createUser = async ({ db, config, SDate }, { userId, updatedRoles }
 						':ro': roles,
 					},
 					ReturnValues: 'NONE',
-					UpdateExpression: 'SET #UP = :up, #RO = :r',
+					UpdateExpression: 'SET #UP = :up, #RO = :ro',
 				},
 			},
 		],

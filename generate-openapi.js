@@ -48,8 +48,8 @@ const openapi = {
 			description: clean(tags[name]),
 		})),
 	paths: {},
-	securityDefinitions: globbedSecurity.reduce((map, foo) => {
-		const { name, definition } = foo.export
+	securityDefinitions: globbedSecurity.reduce((map, securityDefinition) => {
+		const { name, definition } = securityDefinition.export
 		// Note: this counts on the security names being unique.
 		map[name] = definition
 		// Note: in OpenAPI 3, the naming of this changes
@@ -86,10 +86,13 @@ globbedRoutes.forEach(({ path: routePath, export: route }) => {
 				return map
 			}, {}),
 		security: route.security && route.security.map(block => {
-			return Object.keys(block).reduce((map, blockName) => {
-				map[blockName] = (block[blockName].roles || []).map(({ urn }) => urn)
-				return map
-			}, {})
+			return Object
+				.keys(block)
+				.filter(blockName => !blockName.startsWith('$'))
+				.reduce((map, blockName) => {
+					map[blockName] = (block[blockName].roles || []).map(({ urn }) => urn)
+					return map
+				}, {})
 		}),
 	}
 })
